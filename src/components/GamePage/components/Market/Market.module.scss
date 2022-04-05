@@ -1,0 +1,22 @@
+.market{
+  background-color: rgb(1, 106, 37);
+  border: 6px solid black;
+  width: 40.5rem;
+  margin: auto;
+
+  .marketContainer{
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: content-box;
+    padding-top: 1rem;
+    padding-left: 0.94rem;
+    padding-right: 0.94rem;
+    background-size: 100%;
+    width: 38rem;
+
+    .normalMarketContainer{
+      box-sizing: content-box;
+      width: 38rem;
+    }
+  }
+}

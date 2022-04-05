@@ -1,0 +1,57 @@
+
+.cardscontainer {
+  display: flex;
+  padding: 1.5rem;
+
+  .cardBorder{
+    margin: 0.5rem;
+    border-radius: 12px;
+    width: 11rem;
+
+    .card {
+      border-radius: 12px;
+      display: flex;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+      border: 10px solid #eeeeee;
+      justify-content: center;
+      cursor: pointer;
+  
+      .title {
+        margin-left: 1px;
+        margin-right: 1px;
+        margin-top: 1rem;
+        text-align: center;
+        font-size: large;
+        font-weight: 700;
+      }
+  
+      .imagen {
+        width: 7rem;
+        margin: auto;
+      }
+    }
+
+    .card[select='true'] {
+      border: 5px solid #eeeeee;
+    } 
+    
+    .card[type='Computer Science'] {
+      background-color: #ff9999;
+    }
+    .card[type='Mathematics'] {
+      background-color: #99ff99;
+    }
+    .card[type='Domain'] {
+      background-color: #ff9999;
+    }
+
+  }
+  
+  .cardBorder[select='true'] {
+    border: 5px solid #414141;
+  }
+}
+
+
+
