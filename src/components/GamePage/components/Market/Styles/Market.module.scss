@@ -1,8 +1,10 @@
 .market{
   background-color: rgb(1, 106, 37);
   border: 6px solid black;
-  width: 40.5rem;
-  margin: auto;
+  justify-content: center;
+  width: 42.5rem;
+  display: grid;
+  margin: 20px auto 20px auto ;
 
   .marketContainer{
     display: flex;
@@ -18,5 +20,20 @@
       box-sizing: content-box;
       width: 38rem;
     }
+  }
+}
+
+.modal {
+  width: 500px;
+  padding: 20px;
+  text-align: center;
+  
+  h1 {
+    color: rgb(177, 0, 0);
+  }
+
+  .text { 
+    font-size: 1rem;
+    margin-top: 2rem;
   }
 }

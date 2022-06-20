@@ -1,16 +1,26 @@
+import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import store from './Store/Store';
 import { Provider } from 'react-redux';
-import store from './Store/StoreContent';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import reportWebVitals from './reportWebVitals';
+import GamePage from './components/GamePage/Main';
+import HomePage from './components/MainPage/HomePage';
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+initializeIcons()
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path='Game' element={<GamePage />} />
+        </Routes>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

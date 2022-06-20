@@ -1,0 +1,122 @@
+.backdrop {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.modal {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: rgb(255, 255, 255);
+  height: fit-content;
+  width: 1260px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin: 0px;
+
+  .closebutton {
+    width: 40px;
+    height: 40px;
+    margin: 10px;
+    display: flex;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(141, 3, 3);
+    background-color: rgb(141, 3, 3);
+
+    &:hover {
+      color:black;
+      background-color: rgb(255, 255, 255);
+    }
+  }
+}
+
+.modalContainer {
+  justify-content: center;
+  align-content: center;
+
+  .playersContainer {
+    display: flex;
+    flex-wrap: wrap;
+
+    .playerContainer {
+      width: 580px;
+      height: 300px;
+      margin: 10px 20px;
+      border-radius: 10px;
+      box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+      
+      &[type='0'] {
+        background-color: rgba(236, 0, 0, 0.8);
+      }
+      &[type='1']  {
+        background-color: rgba(0, 236, 0, 0.8);
+      }
+      &[type='2'] {
+        background-color: rgba(0, 0, 236, 0.8);
+      }
+      &[type='3']  {
+        background-color: rgba(255, 217, 0, 0.8);
+      }
+
+      .playerCardsContainer {
+        margin-top: 20px;
+        width: 580px;
+        height: 230px;
+      }
+      .title {
+        margin-left: 30px;
+        margin-top: 10px;
+        color: white;
+        font-weight: 700;
+        -webkit-text-stroke: 0.7px black;
+      }
+
+    }
+  }
+  
+  .modalbuttoncontainer {
+    justify-content: space-evenly;
+    display: flex;
+    
+    .closebutton {
+      font-size: large;
+      border-color: rgb(141, 3, 3);
+      padding: 20px;
+      margin: 10px;
+      border-radius: 5px;
+      background-color: rgb(141, 3, 3);
+      color: white;
+  
+      &:hover {
+        color: black;
+        background-color: white;
+      }
+    }
+
+    .button {
+      font-size: large;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 5px;
+      color: white;
+      border-color: #016a25;
+      background-color: #016a25;
+
+      &:hover {
+        color:black;
+        background-color: rgb(255, 255, 255);
+      }
+      
+      &[select='true'] {
+        background-color: rgb(141, 3, 3);
+      }
+    }
+  }
+}
