@@ -4,19 +4,23 @@ import random
 from Cards import *
 from slabs import *
 from Player import *
+from utils import *
+
+def toJSON(obj):
+  return json.loads(json.dumps(obj, default=lambda o: getattr(o, '__dict__', str(o))))
 
 def genCards():
   res = []
   for i in range(4):
-    res += [Card(['Mathematics', 'Fast Model']),
-            Card(['Mathematics', 'Simple Model']),
-            Card(['Mathematics', 'Right Model']),
-            Card(['Computer Science', 'New Technology']),
-            Card(['Computer Science', 'Antivirus']),
-            Card(['Computer Science', 'Open Source']),
-            Card(['Domain', 'Data Base']),
-            Card(['Domain', 'Protected Data']),
-            Card(['Domain', 'Team Spirit'])]
+    res = res + [Card(1 + (9 * i), False, ['Mathematics', 'Fast Model']),
+            Card(2 + (9 * i), False, ['Mathematics', 'Simple Model']),
+            Card(3 + (9 * i), False, ['Mathematics', 'Right Model']),
+            Card(4 + (9 * i), False, ['Computer Science', 'New Technology']),
+            Card(5 + (9 * i), False, ['Computer Science', 'Antivirus']),
+            Card(6 + (9 * i), False, ['Computer Science', 'Open Source']),
+            Card(7 + (9 * i), False, ['Domain', 'Data Base']),
+            Card(8 + (9 * i), False, ['Domain', 'Protected Data']),
+            Card(9 + (9 * i), False, ['Domain', 'Team Spirit'])]
   random.shuffle(res);
   return res
 
@@ -40,9 +44,9 @@ def genSlabs():
   + [SpecialRed(i) for i in range(3)] \
   + [SpecialBlue(i) for i in range(3)] \
   + [SpecialGreen(i) for i in range(3)] \
-  + [SpecialYellow(i) for i in range(3)] \
-    \
-  + [Risk('Complex Model', 'Use Simple Model to fix the risk', 2),
+  + [SpecialYellow(i) for i in range(3)]
+    
+  risk = [Risk('Complex Model', 'Use Simple Model to fix the risk', 2),
     Risk('Danger Data', 'Use Protected Data to fix the risk', 1),
     Risk('No Data', 'Use Data Base to fix the risk', 2),
     Risk('Old Software', 'Use Open Source to fix the risk', 1),
@@ -52,11 +56,14 @@ def genSlabs():
     Risk('Working Alone', 'Use Team Spirit to fix the risk', 1),
     Risk('Wrong Model', 'Use Right Model to fix the risk', 2)]
   
+  random.shuffle(risk)
+  res += risk[:4]
   random.shuffle(res)
   return res
 
 class Game:
-  def __init__(self, start = 1):
+  def __init__(self, id, start = 1):
+    self.id = id
     self.cards = genCards()
     self.slabs = genSlabs()
     self.normalMarket = []
@@ -72,9 +79,9 @@ class Game:
     self.players = []
     for i in range(4):
       cards = []
-      for i in range(4):
+      for j in range(4):
         cards.append(self.cards.pop(0))
-      self.players.append(Player(i, 'Player '+ str(i), start, cards))
+      self.players.append(Player(i, 'Player '+ str(i + 1), start, cards))
     self.actualPlayer = 0
     self.start = start
     self.pos = [start, 0, 0]
@@ -84,62 +91,67 @@ class Game:
     self.start = start
     self.pos = [start, 0, 0]
     for i in range(4):
-      self.players[i] = Player(i, players[i]['name'], start, self.players[i].cards, players[i]['type'])
+      name, type = players[i].values()
+      cards = self.cards[:4]
+      self.cards = self.cards[4:]
+      self.players[i] = Player(i, name, start, cards, type)
     
   def nextTurn(self):
-    if (self.actualplayer == 3):
-      auxPos = self.pos
-      if (pos[0] == 0 and pos[1] == 2):
-        self.players[auxPos[2]].board[self.start][0].isHere = True
-        auxPos = [self.start, 0, auxPos[2] + 1]
-        self.finished = auxPos[2] == 4
+    if (self.actualPlayer == 3):
+      if (self.pos[0] == 0 and self.pos[1] == 2):
+        self.players[self.pos[2]].board[self.start][0].isHere = True
+        self.finished = self.pos[2] == 4
+        self.pos = [self.start, 0, self.pos[2] + 1]
       else:
-        mov = self.players[auxPos[2]].whereCanBePlace(
-          self.players[pos[2]].board[pos[0]][pos[1]],
-          [pos[0], pos[1]],
+        mov = self.players[self.pos[2]].whereCanBePlace(
+          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]],
+          [self.pos[0], self.pos[1]],
           True,
         )
         if(mov == 1):
-          auxPos = [pos[0] - 1, pos[1], pos[2]];
-          players[pos[2]].tablero[pos[0]][pos[1]].wasHere = True;
+          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]].wasHere = True
+          self.pos = [self.pos[0] - 1, self.pos[1], self.pos[2]]
         elif(mov == 2):
-          auxPos = [pos[0], pos[1] + 1, pos[2]];
-          players[pos[2]].tablero[pos[0]][pos[1]].wasHere = True;
+          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]].wasHere = True
+          self.pos = [self.pos[0], self.pos[1] + 1, self.pos[2]]
         elif(mov == 3):
-          auxPos = [pos[0] + 1, pos[1], pos[2]];
-          players[pos[2]].tablero[pos[0]][pos[1]].wasHere = True;
+          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]].wasHere = True
+          self.pos = [self.pos[0] + 1, self.pos[1], self.pos[2]]
         elif(mov == 4):
-          auxPos = [pos[0], pos[1] - 1, pos[2]];
-          players[pos[2]].tablero[pos[0]][pos[1]].wasHere = True;
+          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]].wasHere = True
+          self.pos = [self.pos[0], self.pos[1] - 1, self.pos[2]]
 
-    for player in self.players:
-      self.cards += player.cards
-      player.cards = [];
-      player.hasBougth = False;
-      for i in range(4):
-        player.cards += cartasGenerales.pop(0);
+      for i in range(len(self.players)):
+        self.cards += self.players[i].cards
+        self.players[i].cards = []
+        self.players[i].hasBougth = False
+        x = 4 - len(self.players.cards)
+        self.cards = self.cards[x:]
+        self.players[i].cards += self.cards[:x]
 
-    self.slabs += self.normalMarket
-    self.normalMarket = []
+      self.slabs += self.normalMarket
+      self.normalMarket = []
 
-    while (len(self.normalMarket) < 4):
-      slab = self.slabs.pop(0)
-      if (not slab.isSpecial):
-        self.normalMarket += slab
-      elif (self.specialMarket.length < 4):
-        self.specialMarket += slab
-      else:
-        self.slabs += slab
-    self.actualPlayer = self.actualPlayer + 1 % 4
+      while (len(self.normalMarket) < 4):
+        slab = self.slabs.pop(0)
+        if (not slab.isSpecial):
+          self.normalMarket.append(slab)
+        elif (len(self.specialMarket) < 4):
+          self.specialMarket.append(slab)
+        else:
+          self.slabs.append(slab)
+    self.actualPlayer = (self.actualPlayer + 1) % 4
     
-  def moveSlab(self, origin, destiny, cards):
-    if (origin > 3):
+  def moveSlab(self, origin, destiny, rotation, cards):
+    if (origin < 4):
       market = self.normalMarket
       realOrigin = origin
     else:
       market = self.specialMarket
       realOrigin = origin - 4
-    slab = self.specialMarket[realOrigin]
+  
+    slab = market[realOrigin]
+    slab.rotation = rotation
     player = self.players[self.actualPlayer]
     self.cards.append(player.buy(slab, cards))
     player.putSlab(slab, destiny)
@@ -149,16 +161,29 @@ class Game:
     if (len(cards1) != len(cards2)):
       raise Exception('The trade must be equivalent')
     
-    for i in range(4):
-      if (len(self.players[player1ID].cards) > i):
-        for j in range(len(cards1)):
-          if (self.players[player1ID].cards[i].id == cards1[j].id):
-            self.players[player1ID].cards.pop(i)
-          if (self.players[player2ID].cards[i].id == cards2[j].id):
-            self.players[player2ID].cards.pop(i)
+    for i in range(len(cards1)):
+      index1 = find(self.players[player1ID].cards, cards1[i])
+      if (index1 != -1):
+        self.players[player2ID].cards.append(self.players[player1ID].cards.pop(index1))
+        
+      index2 = find(self.players[player2ID].cards, cards2[i])
+      if (index2 != -1):
+        self.players[player1ID].cards.append(self.players[player2ID].cards.pop(index2))
 
-    self.players[player1ID].cards.append(cards2)
-    self.players[player2ID].cards.append(cards1)
+  def fix(self, index, cards):
+    slab = self.specialMarket[index]
+    for i in range(len(cards)):
+      index1 = find(self.players[self.actualPlayer].cards, cards[i])
+      if (index1 != -1):
+        self.cards.append(self.players[self.actualPlayer].cards.pop(index1))
+    self.specialMarket.pop(index)
     
+  def discard(self, cardID):
+    index = findById(self.players[self.actualPlayer].cards, cardID)
+    if (index != -1):
+      self.cards.append(self.players[self.actualPlayer].cards.pop(index))
+
+
   def toJSON(self):
-    return json.loads(json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o))))
+    return toJSON(self)
+  

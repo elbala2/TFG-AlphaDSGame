@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './Styles/RiskContainer.module.scss';
 import { Tooltip } from '@material-ui/core';
+import { fixRisk } from '../../../../utils/ApiConf';
 
 const canbebougth = (cartas, costes, type) => {
   switch (type) {
@@ -32,18 +33,18 @@ const canbebougth = (cartas, costes, type) => {
 };
 
 const RiskContainer = ({ slab, index }) => {
-  const { actualPlayer } = useSelector(state => state);
+  const { actualPlayer, id } = useSelector(state => state);
   const cards = useSelector(state => state.players[actualPlayer].cards);
   const dispatch = useDispatch();
 
-  const { costes, type, description } = slab;
-  const canbuy = canbebougth(cards, costes, type, actualPlayer);
+  const { costs, type, description } = slab;
+  const canbuy = canbebougth(cards, costs, type, actualPlayer);
   return (
     <div className={`${styles.marketContainer}`} key={index}>
       <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`}>
         <h1 className={styles.title}>{type}</h1>
         <Tooltip title={<p className={styles.descriptionTooltip}>{description}</p>}>
-          <p className={styles.cost}>{costes}</p>
+          <p className={styles.cost}>{costs}</p>
         </Tooltip>
         <input
           alt={`img`}
@@ -57,7 +58,7 @@ const RiskContainer = ({ slab, index }) => {
         disabled={!canbuy}
         text='Fix'
         className={styles.button}
-        onClick={() => dispatch(fix(index))}
+        onClick={() => fixRisk(id, index - 4, cards.filter(f => f.selected)).then((calbackRes) => dispatch(fix(calbackRes)))}
       />
     </div>
   );

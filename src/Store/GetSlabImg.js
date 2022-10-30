@@ -53,87 +53,90 @@ import WorkingAlone from '../resources/Risks/Working Alone.png';
 import WrongModel from '../resources/Risks/Wrong Model.png';
 
 export const getSlabImg = (slab) => {
-  if (slab)
-    switch (slab.type) {
-      case 'normal':
-        switch (JSON.stringify(slab.linker)) {
-          case JSON.stringify([0,1,0,1]):
-            return normal_0101;
-          case JSON.stringify([1,0,1,1]):
-            return normal_1011;
-          case JSON.stringify([0,1,1,0]):
-            return normal_0110;
-          case JSON.stringify([1,1,1,1]):
-            return normal_1111;
-          default:
-            break;
-        }
-        break;
-      case 'gold':
-        switch (JSON.stringify(slab.linker)) {
-          case JSON.stringify([0,1,0,1]):
-            return gold_0101;
-          case JSON.stringify([1,0,1,1]):
-            return gold_1011;
-          case JSON.stringify([0,1,1,0]):
-            return gold_0110;
-          case JSON.stringify([1,1,1,1]):
-            return gold_1111;
-          default:
-            break;
-        }
-        break;
-      case 'silver':
-        switch (JSON.stringify(slab.linker)) {
-          case JSON.stringify([0,1,0,1]):
-            return silver_0101;
-          case JSON.stringify([1,0,1,1]):
-            return silver_1011;
-          case JSON.stringify([0,1,1,0]):
-            return silver_0110;
-          case JSON.stringify([1,1,1,1]):
-            return silver_1111;
-          default:
-            break;
-        }
-        break;
-      case 'red':
-        return red_mision; 
-      case 'redStart':
-        return red_start;
-      case 'blue':
-        return blue_mision;
-      case 'blueStart':
-        return blue_start;
-      case 'yellow':
-        return yellow_mision;
-      case 'yellowStart':
-        return yellow_start;
-      case 'green':
-        return green_mision;
-      case 'greenStart':
-        return green_start;
-      case 'Complex Model':
-        return ComplexModel;
-      case 'Danger Data':
-        return DangerData;
-      case 'No Data':
-        return NoData;
-      case 'Old Software':
-        return OldSW;
-      case 'Old Technology':
-        return OldTech;
-      case 'Slow Model':
-        return SlowModel;
-      case 'Virus':
-        return Virus;
-      case 'Working Alone':
-        return WorkingAlone;
-      case 'Wrong Model':
-        return WrongModel;
-      default:
-        return'';
-    }
+  switch (slab.type) {
+    case 'NORMAL':
+      switch (JSON.stringify(slab.links)) {
+        case JSON.stringify([0,1,0,1]):
+          return normal_0101;
+        case JSON.stringify([1,0,1,1]):
+          return normal_1011;
+        case JSON.stringify([0,1,1,0]):
+          return normal_0110;
+        case JSON.stringify([1,1,1,1]):
+          return normal_1111;
+        default:
+          break;
+      }
+      break;
+    case 'GOLD':
+      switch (JSON.stringify(slab.links)) {
+        case JSON.stringify([0,1,0,1]):
+          return gold_0101;
+        case JSON.stringify([1,0,1,1]):
+          return gold_1011;
+        case JSON.stringify([0,1,1,0]):
+          return gold_0110;
+        case JSON.stringify([1,1,1,1]):
+          return gold_1111;
+        default:
+          break;
+      }
+      break;
+    case 'SILVER':
+      switch (JSON.stringify(slab.links)) {
+        case JSON.stringify([0,1,0,1]):
+          return silver_0101;
+        case JSON.stringify([1,0,1,1]):
+          return silver_1011;
+        case JSON.stringify([0,1,1,0]):
+          return silver_0110;
+        case JSON.stringify([1,1,1,1]):
+          return silver_1111;
+        default:
+          break;
+      }
+      break;
+    case 'RED':
+      return red_mision; 
+    case 'redStart':
+    case 'Start_0':
+      return red_start;
+    case 'BLUE':
+      return blue_mision;
+    case 'blueStart':
+    case 'Start_2':
+      return blue_start;
+    case 'YELLOW':
+      return yellow_mision;
+    case 'yellowStart':
+    case 'Start_3':
+      return yellow_start;
+    case 'GREEN':
+      return green_mision;
+    case 'greenStart':
+    case 'Start_1':
+      return green_start;
+    case 'Complex Model':
+      return ComplexModel;
+    case 'Danger Data':
+      return DangerData;
+    case 'No Data':
+      return NoData;
+    case 'Old Software':
+      return OldSW;
+    case 'Old Technology':
+      return OldTech;
+    case 'Slow Model':
+      return SlowModel;
+    case 'Virus':
+      return Virus;
+    case 'Working Alone':
+      return WorkingAlone;
+    case 'Wrong Model':
+      return WrongModel;
+    default:
+      return'';
+  }
 };
 
 export const getCardIMG = (type) => {
@@ -171,13 +174,13 @@ export const getCardIMG = (type) => {
 
 export const getMision = (type, completed) => {
   switch(type) {
-    case 'red':
+    case 0:
       return !completed ? Mision_Red : Mision_Red_Completed;
-    case 'green':
+    case 1:
       return !completed ? Mision_Green : Mision_Green_Completed;
-    case 'blue':
+    case 2:
       return !completed ? Mision_Blue : Mision_Blue_Completed;
-    case 'yellow':
+    case 3:
       return !completed ? Mision_Yellow : Mision_Yellow_Completed;
     default:
   }

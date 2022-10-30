@@ -1,5 +1,6 @@
 
 const initialState = {
+  id: 0,
   normalMarket: [],
   specialMarket: [],
   start: 1,
@@ -9,7 +10,9 @@ const initialState = {
   finished: false,
   actualPlayer: 0,
   pos: null,
-  players: [],
+  players: [
+    { name: 'Player 1', cards: [], board: [] }
+  ],
 }
 
 export default initialState;

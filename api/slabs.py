@@ -16,13 +16,11 @@ def getPointsValue(slab):
 
 
 def getCosts():
-  blue = random.randint(0, 4)
-  red = random.randint(0, 4 - blue)
-  green = random.randint(0, 4 - blue - red)
-  if (blue + red + green == 0):
-    return [1, 0, 1]
-  else:
-    return [blue, red, green]
+  total = random.randint(1, 4)
+  blue = random.randint(0, total)
+  red = random.randint(0, total - blue)
+  green = random.randint(0, total - blue - red)
+  return [blue, red, green]
 
 def getRiskFixCardType(type):
   if type == 'Complex Model':
@@ -56,23 +54,24 @@ class Risk:
     self.isSpecial = True
 
 class Slab:
-  def __init__(self, linkers, type = ''):
-    self.puntos = getPointsValue(self)
+  def __init__(self, links, type = ''):
+    self.points = getPointsValue(self)
     self.costs = getCosts()
-    self.rotacion = 0
+    self.rotation = 0
     self.isHere = False
-    self.linkers = linkers
+    self.wasHere = False
+    self.links = links
     self.type = type
     self.isRisk = False
     self.isSpecial = False
 
   def ApplyRotation(self):
     #arriba,derecha,abajo,izquierda
-    result = self.linkers.copy()
+    result = self.links.copy()
     for i in range(self.rotation):
-      result = result[1:] + result[0:]
+      result.insert(0, result.pop(-1))
     return result
-  
+
   def toJSON(self):
     return json.loads(json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o))))
 
@@ -80,17 +79,17 @@ class Slab:
 class NormalSlab(Slab):
   def __init__(self, linkers):
     super().__init__(linkers)
-    self.type = 'Normal'
+    self.type = 'NORMAL'
 
 class SilverSlab(Slab):
   def __init__(self, linkers):
     super().__init__(linkers)
-    self.type = 'Silver'
+    self.type = 'SILVER'
 
 class GoldSlab(Slab):
   def __init__(self, linkers):
     super().__init__(linkers)
-    self.type = 'Gold'
+    self.type = 'GOLD'
 
 class SpecialSlab(Slab):
   def __init__(self, title, description, costs):
@@ -108,7 +107,7 @@ blueCosts = [[2, 1, 0], [1, 0, 1], [2, 0, 2]]
 class SpecialBlue(SpecialSlab):
   def __init__(self, type):
     super().__init__(blueTitle[type], blueDescription[type], blueCosts[type])
-    self.type = 'blue'
+    self.type = 'BLUE'
 
 redTitle = ['Pattern Recognition', 'Outlier Detection', 'Model Evaluation']
 redDescription = ['Looking for patterns in your data', 'Looking for strange data in your data', 'How good is the model?']
@@ -117,7 +116,7 @@ redCosts = [[0, 1, 2], [1, 0, 1], [2, 1, 1]]
 class SpecialRed(SpecialSlab):
   def __init__(self, type):
     super().__init__(redTitle[type], redDescription[type], redCosts[type])
-    self.type = 'red'
+    self.type = 'RED'
 
 yellowTitle = ['Graphical exploring', 'Numerical Exploring', 'Data Cleaning']
 yellowDescription = ['Using graphical tools to view your data', 'Using mathematical tools to view your data', 'Preparing your data for analysis']
@@ -126,7 +125,7 @@ yellowCosts = [[0, 1, 1], [0, 1, 2], [1, 2, 1]]
 class SpecialYellow(SpecialSlab):
   def __init__(self, type):
     super().__init__(yellowTitle[type], yellowDescription[type], yellowCosts[type])
-    self.type = 'yellow'
+    self.type = 'YELLOW'
 
 greenTitle = ['Mobile Application', 'Storytelling', 'Deployment']
 greenDescription = ['An app for your mobile phone', 'To present the results to the users', 'To develop the final product']
@@ -135,4 +134,4 @@ greenCosts = [[1, 2, 0], [2, 1, 1], [0, 1, 1]]
 class SpecialGreen(SpecialSlab):
   def __init__(self, type):
     super().__init__(greenTitle[type], greenDescription[type], greenCosts[type])
-    self.type = 'green'
+    self.type = 'GREEN'

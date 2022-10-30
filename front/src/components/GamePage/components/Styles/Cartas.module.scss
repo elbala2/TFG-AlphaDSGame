@@ -1,0 +1,83 @@
+
+.cardscontainer {
+  display: inline-flex;
+  width: 100%;
+  height: 100%;
+  padding: 1%;
+  padding-top: 0px;
+
+  .card{
+    margin: 1%;
+    width: 24%;
+    display: flex;
+    cursor: pointer;
+    flex-wrap: wrap;
+    position: relative;
+    border-radius: 12px;
+    border-radius: 14px;
+    box-sizing: border-box;
+    justify-content: center;
+    border: 10px solid #d8d8d8;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+
+    .title {
+      margin-left: 1px;
+      margin-right: 1px;
+      margin-top: 1.5rem;
+      text-align: center;
+      //font-size: medium;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    .closebutton {
+      top: 6px;
+      right: 2px;
+      width: 24px;
+      height: 24px;
+      user-select: none;
+      font-size: medium;
+      position: absolute;
+      text-align: center;
+      border-radius: 5px;
+      opacity: 0.3;
+      background-color: transparent;
+  
+      &:hover {
+        opacity: 1;
+        color: white;
+        background-color: rgb(141, 3, 3);
+      }
+    }
+
+    .imagen {
+      user-select: none;
+      width: 72%;
+      margin: auto;
+    }
+
+    &[select='true'] {
+      border: 5px solid #eeeeee;
+    }
+
+    &[type='Computer Science'] {
+      background-color: #ff9999;
+    }
+
+    &[type='Mathematics'] {
+      background-color: #99ff99;
+    }
+
+    &[type='Domain'] {
+      background-color: rgb(153, 153, 255);
+    }
+    
+    &[select='true'] {
+      border: 10px solid #747474;
+    }
+  }
+  
+}
+
+
+

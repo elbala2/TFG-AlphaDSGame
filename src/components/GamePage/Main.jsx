@@ -11,17 +11,20 @@ import { DefaultButton, Modal } from '@fluentui/react';
 
 import styles from './Main.module.scss';
 import SuccessModal from './components/SuccessModal';
+import { NextTurn, StartGame } from '../../utils/ApiConf';
 
 const GamePage = () => {
   const dispatch = useDispatch();
-  const { actualPlayer, players, finished } = useSelector((state) => state);
+  const { actualPlayer, players, finished, id } = useSelector((state) => state);
   const state = useSelector((state) => state);
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
   const [tradeModalOpen, settradeModalOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(start());
-  }, [dispatch]);
+    if (id === 0) {
+      StartGame().then((res) => dispatch(start(res)));
+    }
+  }, [dispatch, id]);
 
   console.log(state)
 
@@ -30,7 +33,7 @@ const GamePage = () => {
       <div className={styles.mainCard} type={actualPlayer}>
         <div className={styles.leftcard}>
           <div className={styles.header}>
-            <p className='h2 my-0 '>{players[actualPlayer].name}</p>
+            <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
             <div className='flex-fill' />
             <DefaultButton
               text='Trade'
@@ -68,7 +71,9 @@ const GamePage = () => {
             className={styles.button}
             style={{fontSize: 'x-large'}}
             onClick={() => {
-              dispatch(nextPlayer());
+              NextTurn(id).then((res) => {
+                dispatch(nextPlayer(res));
+              })
               setnextPlayerModalOpen((prevstate) => !prevstate);
             }}
           />

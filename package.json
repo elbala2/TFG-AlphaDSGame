@@ -23,8 +23,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "Run.bat",
-    "front-start": "react-scripts start",
+    "start": "wt --title Front pwsh -c \"npm run start-front\"; --title Back pwsh -c \"npm run start-api\"",
+    "start-front": "react-scripts start",
+    "start-api": "cd ./api && python -m flask run",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -8,18 +8,18 @@ import conexion_borde from '../../../resources/border-conexion.png';
 import styles from './Styles/Tablero.module.scss';
 
 const Tablero = () => {
-  const {  inicio, actualplayer, pos } = useSelector(state => state)
-  const { tablero, mision, completed } = useSelector(state => state.players[actualplayer])
+  const {  start, actualPlayer, pos } = useSelector(state => state)
+  const { board, completed } = useSelector(state => state.players[actualPlayer])
   const dispatch = useDispatch();
 
   return (
     <div className='d-flex'>
       <div className={`${styles.bordecontainer}`}>
         <div className={`${styles.bordecontainerSpace}`} />
-        {tablero.map((fila, i) => {
+        {board.map((fila, i) => {
           return (
             <div key={`borde${i}`} className={`${styles.bordecontainerZone}`}>
-              {inicio === i && (
+              {start === i && (
                 <img
                   className={styles.conexion}
                   key='cnx1'
@@ -35,12 +35,12 @@ const Tablero = () => {
       <div>
         <img
           draggable='false'
-          src={getMision(mision, completed)}
-          alt={`mision ${mision}`}
+          src={getMision(actualPlayer, completed)}
+          alt={`mision ${actualPlayer}`}
           className={`${styles.misionImg}`}
         />
-        <div className={`${styles.tablero}`}>
-          {tablero.map((fila, i) => {
+        <div className={`${styles.board}`}>
+          {board.map((fila, i) => {
             return fila.map((casilla, j) => {
               return (
                 <div
@@ -65,7 +65,7 @@ const Tablero = () => {
                         src={getSlabImg(casilla)}
                         alt={``}
                         draggable={false}
-                        ishere={`${pos ? i === pos[0] && j === pos[1] && actualplayer === pos[2] : false}`}
+                        ishere={`${pos ? i === pos[0] && j === pos[1] && actualPlayer === pos[2] : false}`}
                       />
                     ) : (
                       <>
@@ -79,7 +79,7 @@ const Tablero = () => {
                           id={`img_${casilla.id}`}
                           src={getSlabImg(casilla)}
                           alt={``}
-                          ishere={`${pos ? i === pos[0] && j === pos[1] && actualplayer === pos[2] : false}`}
+                          ishere={`${pos ? i === pos[0] && j === pos[1] && actualPlayer === pos[2] : false}`}
                           draggable={false}
                         />
                       </>

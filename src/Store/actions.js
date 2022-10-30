@@ -10,10 +10,10 @@ export const DESCARTAR = 'DESCARTAR';
 export const START = 'START';
 export const RESET = 'RESET';
 
-export const mover = (marketId) => {
+export const mover = (callbackRes) => {
   return {
     type: MOVER_ACTION,
-    idOrigen: marketId,
+    ...callbackRes,
   }
 }
 
@@ -39,42 +39,46 @@ export const setCardSelected = (playerId, id) => {
   }
 }
 
-export const nextPlayer = () => {
+export const nextPlayer = (callbackRes) => {
   return {
     type: NEXTPLAYER,
+    newstate: callbackRes,
   }
 }
 
-export const aceptTrade = () => {
+export const aceptTrade = (callbackRes) => {
   return {
     type: ACEPTTRADE,
+    ...callbackRes,
   }
 }
 
-export const fix = (id) => {
+export const fix = (callbackRes) => {
   return {
     type: FIX,
-    riskId: id - 4,
+    ...callbackRes,
   }
 }
 
-export const initialConfig = (config) => {
+export const initialConfig = (callbackRes) => {
+  console.log(callbackRes)
   return {
     type: CONFIG,
-    config,
+    callbackRes,
   }
 }
 
-export const descartar = (id) => {
+export const descartar = (callbackRes) => {
   return {
     type: DESCARTAR,
-    id,
+    ...callbackRes,
   }
 }
 
-export const start = () => {
+export const start = (callbackRes) => {
   return {
     type: START,
+    callbackRes,
   }
 }
 

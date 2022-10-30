@@ -3,6 +3,9 @@ import json
 from slabs import *
 from utils import *
 
+def toJSON(obj):
+  return json.loads(json.dumps(obj, default=lambda o: getattr(o, '__dict__', str(o))))
+
 class Player:
   def __init__(self, id, name, start, cards, type = 0):
     self.id = id
@@ -18,11 +21,11 @@ class Player:
       
   def buy(self, slab, cards):
     costs = slab.costs
-    if(len(filter(lambda f: f.type[0] == 'Domain', cards)) < costs[0]) \
+    if(len(list(filter(lambda f: f.type[0] == 'Domain', cards))) < costs[0]) \
       or  \
-      (len(filter(lambda f: f.type[0] == 'Computer Science', cards)) < costs[1]) \
+      (len(list(filter(lambda f: f.type[0] == 'Computer Science', cards))) < costs[1]) \
       or \
-      (len(filter(lambda f: f.type[0] == 'Mathematics', cards)) < costs[2]):
+      (len(list(filter(lambda f: f.type[0] == 'Mathematics', cards))) < costs[2]):
         raise Exception()
 
     i = len(cards) - 1;
@@ -44,61 +47,64 @@ class Player:
       i -= 1
     return deletedCards
   
-  def whereCanBePlace(slab, origin, here = False):
+  def whereCanBePlace(self, slab, destiny, here = False):
     arriba = 0
     derecha = 1
     abajo = 2
     izquierda = 3
 
     hecho = True;
-    if (origin[0] == 0 and origin[1] == 2):
+    if (destiny[0] == 0 and destiny[1] == 2):
       hecho = slab.ApplyRotation()[arriba] == 1
+
     #comprueba el de arriba del destino
-    if (origin[0] - 1 >= 0) :
-      slabEnTablero = self.board[origin[0] - 1][origin[1]];
+    if (destiny[0] - 1 >= 0):
+      slabEnTablero = self.board[destiny[0] - 1][destiny[1]];
       if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[arriba] and rotaLinks(slabEnTablero)[abajo]) == 1 and hecho):
+        if ((slab.ApplyRotation()[arriba] and slabEnTablero.ApplyRotation()[abajo]) == 1 and hecho):
           return 1
 
     #comprueba el de la derecha del destino
-    if (origin[1] + 1 <= 3) :
-      slabEnTablero = self.board[origin[0]][origin[1] + 1];
+    if (destiny[1] + 1 <= 3):
+      slabEnTablero = self.board[destiny[0]][destiny[1] + 1];
       if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[derecha] and rotaLinks(slabEnTablero)[izquierda]) == 1 and hecho):
+        if ((slab.ApplyRotation()[derecha] and slabEnTablero.ApplyRotation()[izquierda]) == 1 and hecho):
           return 2
 
     #comprueba el de abajo del destino
-    if (origin[0] + 1 <= 3) :
-      slabEnTablero = self.board[origin[0] + 1][origin[1]];
+    if (destiny[0] + 1 <= 3):
+      slabEnTablero = self.board[destiny[0] + 1][destiny[1]];
       if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[abajo] and rotaLinks(slabEnTablero)[arriba]) == 1 and hecho):
+        if ((slab.ApplyRotation()[abajo] and slabEnTablero.ApplyRotation()[arriba]) == 1 and hecho):
           return 3
 
     #comprueba el de la izquierda del destino
-    if (origin[1] - 1 >= 0) :
-      slabEnTablero = self.board[origin[0]][origin[1] - 1];
+    if (destiny[1] - 1 >= 0):
+      slabEnTablero = self.board[destiny[0]][destiny[1] - 1];
       if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[izquierda] and rotaLinks(slabEnTablero)[derecha]) == 1 and hecho):
+        if ((slab.ApplyRotation()[izquierda] and slabEnTablero.ApplyRotation()[derecha]) == 1 and hecho):
           return 4
     return 0;
       
   def putSlab(self, slab, destiny):
-    if (destiny == None or self.board[destiny[0]][destiny[1]]):
+    if (destiny == None or self.board[destiny[0]][destiny[1]] != None):
       raise Exception('')
     
-    if (whereCanBePlace(slab, destiny) == 0):
+    if (self.whereCanBePlace(slab, destiny) == 0):
       raise Exception(
         'Posicion',
         destiny[0],
         destiny[1],
-        'no valida',
-        whereCanBePlace(slab, destiny)
+        'rotación',
+        slab.rotation,
+        self.whereCanBePlace(slab, destiny)
       );
 
     self.board[destiny[0]][destiny[1]] = slab
     if (destiny[0] == 0 and destiny[1] == 2):
       self.points += 10;
     self.points += slab.points;
+    self.hasBougth = True
 
   def toJSON(self):
     return json.loads(json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o))))

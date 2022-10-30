@@ -9,7 +9,7 @@ import HeaderAndFooter from '../Header&Footer';
 
 import styles from './HomePage.module.scss';
 import { Navigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import { StartGame } from '../../utils/ApiConf'
 
@@ -140,13 +140,6 @@ const HomePage = () => {
             />
           )}
         </div>
-        <Button
-          onClick={async () => {
-            console.log( await StartGame())
-          }}
-        >
-          hola
-        </Button>
 
         <div className='d-flex align-items-center'>
           <InputLabel style={{ marginRight: '10px' }}>Iniciar en la fila:</InputLabel>
@@ -162,15 +155,16 @@ const HomePage = () => {
           <div className='flex-fill'/>
           <DefaultButton
             text={'Start'}
-            onClick={() => {
-              dispatch(initialConfig({
+            onClick={async () => {
+              const res = await StartGame({
                 players: [
                 { name: player1Name, type: player1 },
                 { name: player2Name, type: player2 },
                 { name: player3Name, type: player3 },
                 { name: player4Name, type: player4 }],
                 start,
-              }));
+              })
+              dispatch(initialConfig(res));
               setSave(true);
             }}
           />

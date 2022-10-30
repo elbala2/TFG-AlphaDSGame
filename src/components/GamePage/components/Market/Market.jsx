@@ -21,7 +21,7 @@ const Market = () => {
       </div>
       <div className={styles.marketContainer}>
         <div className={`d-flex ${styles.normalMarketContainer}`}>
-          {normalMarket.map((slab, i) => {
+          {normalMarket?.map((slab, i) => {
             return (
               <div key={i}>
                 <MarketContainer disabled={specialMarket.find(f => f.isRisk) !== undefined} index={i} slab={slab}/>

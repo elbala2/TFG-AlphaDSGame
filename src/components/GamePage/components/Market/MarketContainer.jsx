@@ -3,23 +3,24 @@ import { getSlabImg } from "../../../../Store/GetSlabImg";
 
 import styles from './Styles/MarketContainer.module.scss';
 import { mover, rotar } from '../../../../Store/actions';
+import { MoveSlab } from '../../../../utils/ApiConf';
 
-const canbebougth = (cards, costes, type, actualPlayer) => {
-  const canbebougth = cards.filter(f => f.type[0] === 'Domain' ).length >= costes[0]
-      && cards.filter(f => f.type[0] === 'Computer Science' ).length >= costes[1]
-      && cards.filter(f => f.type[0] === 'Mathematics' ).length >= costes[2];
-  
+const canbebougth = (cards, costs, type, actualPlayer) => {
+  const canbebougth = cards.filter(f => f.type[0] === 'Domain' ).length >= costs[0]
+      && cards.filter(f => f.type[0] === 'Computer Science' ).length >= costs[1]
+      && cards.filter(f => f.type[0] === 'Mathematics' ).length >= costs[2];
+      
   switch(type) {
-    case 'red':
+    case 'RED':
       if (actualPlayer !== 0) return false;
       else return canbebougth;
-    case 'green':
+    case 'GREEN':
       if (actualPlayer !== 1) return false;
       else return canbebougth;
-    case 'blue':
+    case 'BLUE':
       if (actualPlayer !== 2) return false;
       else return canbebougth;
-    case 'yellow':
+    case 'YELLOW':
       if (actualPlayer !== 3) return false;
       else return canbebougth;
     default:
@@ -28,12 +29,13 @@ const canbebougth = (cards, costes, type, actualPlayer) => {
 }
 
 const MarketContainer = ({ index, slab, disabled }) => {
-  const { target, actualPlayer, players } = useSelector(state => state);
+  const { target, actualPlayer, players, id } = useSelector(state => state);
   const { cards, hasBougth } = players[actualPlayer];
   const dispatch = useDispatch();
 
-  const { rotation, costes, type } = slab;
-  const canbuy = !hasBougth && canbebougth(cards, costes, type, actualPlayer) && !disabled;
+  const { rotation, costs, type } = slab;
+  console.log(players[actualPlayer]);
+  const canbuy = !hasBougth && canbebougth(cards, costs, type, actualPlayer) && !disabled;
   return (
     <div className={`${styles.marketContainer}`} key={index}>
       <div
@@ -55,12 +57,16 @@ const MarketContainer = ({ index, slab, disabled }) => {
 
           onDragEnd={ (result) => {
             if (target)
-              dispatch(mover(index));
+              MoveSlab(id, index, target, slab.rotation, cards.filter(f => f.selected))
+                .then(res => {
+                  console.log(res);
+                  dispatch(mover(res));
+                })
           }}
         />
       </div>
       <div className={`d-flex ${styles.MarketCostsContainer}`}>
-        {costes.map((coste, type) => {
+        {costs.map((coste, type) => {
           // type 0 => blue, 1 => red, 2 => green 
           return (
             <p

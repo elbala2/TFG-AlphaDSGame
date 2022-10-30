@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './Styles/SpecialContainer.module.scss';
 import { Tooltip } from '@material-ui/core';
+import { MoveSlab } from '../../../../utils/ApiConf';
 
 const canbebougth = (cartas, costes, type, actualplayer) => {
   const canbebougth =
@@ -12,16 +13,16 @@ const canbebougth = (cartas, costes, type, actualplayer) => {
     cartas.filter(f => f.type[0] === 'Mathematics').length >= costes[2];
 
   switch (type) {
-    case 'red':
+    case 'RED':
       if (actualplayer !== 0) return false;
       else return canbebougth;
-    case 'green':
+    case 'GREEN':
       if (actualplayer !== 1) return false;
       else return canbebougth;
-    case 'blue':
+    case 'BLUE':
       if (actualplayer !== 2) return false;
       else return canbebougth;
-    case 'yellow':
+    case 'YELLOW':
       if (actualplayer !== 3) return false;
       else return canbebougth;
     default:
@@ -30,7 +31,7 @@ const canbebougth = (cartas, costes, type, actualplayer) => {
 };
 
 const SpecialContainer = ({ disabled, slab, index }) => {
-  const { target, actualPlayer, players } = useSelector(state => state);
+  const { target, actualPlayer, players, id } = useSelector(state => state);
   const { cards, hasBougth } = players[actualPlayer];
   const dispatch = useDispatch();
 
@@ -54,7 +55,13 @@ const SpecialContainer = ({ disabled, slab, index }) => {
             if (keyEvent.key === 'r' && !disabled) dispatch(rotar(index));
           }}
           onDragEnd={result => {
-            if (target) dispatch(mover(index));
+            if (target) {
+              MoveSlab(id, index, target, slab.rotation, cards.filter(f => f.selected))
+                .then(res => {
+                  console.log(res);
+                  dispatch(mover(res));
+                })
+            }
           }}
         />
       </div>
