@@ -87,6 +87,9 @@ class Game:
     self.pos = [start, 0, 0]
     self.finished = False
     
+  def getActualPlayer(self):
+    return self.players[self.actualPlayer]
+    
   def setConfig(self, players, start):
     self.start = start
     self.pos = [start, 0, 0]
@@ -152,7 +155,7 @@ class Game:
   
     slab = market[realOrigin]
     slab.rotation = rotation
-    player = self.players[self.actualPlayer]
+    player = self.getActualPlayer()
     self.cards.append(player.buy(slab, cards))
     player.putSlab(slab, destiny)
     self.slabs.append(market.pop(realOrigin))
@@ -171,18 +174,26 @@ class Game:
         self.players[player1ID].cards.append(self.players[player2ID].cards.pop(index2))
 
   def fix(self, index, cards):
-    slab = self.specialMarket[index]
+    player = self.getActualPlayer()
     for i in range(len(cards)):
-      index1 = find(self.players[self.actualPlayer].cards, cards[i])
+      index1 = find(player.cards, cards[i])
       if (index1 != -1):
-        self.cards.append(self.players[self.actualPlayer].cards.pop(index1))
+        self.cards.append(player.cards.pop(index1))
     self.specialMarket.pop(index)
-    
-  def discard(self, cardID):
-    index = findById(self.players[self.actualPlayer].cards, cardID)
-    if (index != -1):
-      self.cards.append(self.players[self.actualPlayer].cards.pop(index))
 
+  def discard(self, cardID):
+    index = findById(self.getActualPlayer().cards, cardID)
+    if (index != -1):
+      self.cards.append(self.getActualPlayer().cards.pop(index))
+
+  def resolveRisks_bots(self):
+    bots.resolveRisks()
+
+  def buyPlaceSlab_bots(self):
+    bots.buyPlaceSlab()
+
+  def computeCards_bots(self):
+    pass
 
   def toJSON(self):
     return toJSON(self)

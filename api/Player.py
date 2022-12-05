@@ -21,12 +21,9 @@ class Player:
       
   def buy(self, slab, cards):
     costs = slab.costs
-    if(len(list(filter(lambda f: f.type[0] == 'Domain', cards))) < costs[0]) \
-      or  \
-      (len(list(filter(lambda f: f.type[0] == 'Computer Science', cards))) < costs[1]) \
-      or \
-      (len(list(filter(lambda f: f.type[0] == 'Mathematics', cards))) < costs[2]):
-        raise Exception()
+
+    if not self.canBuySlab(cards, costs):
+      raise Exception('You cant buy this slab')
 
     i = len(cards) - 1;
     deletedCards = []
@@ -89,7 +86,7 @@ class Player:
   def putSlab(self, slab, destiny):
     if (destiny == None or self.board[destiny[0]][destiny[1]] != None):
       raise Exception('')
-    
+
     if (self.whereCanBePlace(slab, destiny) == 0):
       raise Exception(
         'Posicion',
@@ -105,6 +102,18 @@ class Player:
       self.points += 10;
     self.points += slab.points;
     self.hasBougth = True
+    
+  def canBuySlab(self, cards = self.cards, costs):
+    domainList = list(filter(lambda f: f.type[0] == 'Domain', cards))
+    computerScienceList = list(filter(lambda f: f.type[0] == 'Domain', cards))
+    mathematicsList = list(filter(lambda f: f.type[0] == 'Mathematics', cards))
+
+    return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
+
+  def canSolveRisk(self, cards = self.cards, risk): 
+    solveTypeNeeded = getRiskFixCardType(risk.type)
+    requiredCardsNeeded = list(filter(lambda f: f.type[1] == solveTypeNeeded, cards))
+    return len(requiredCardsNeeded) > 0
 
   def toJSON(self):
     return json.loads(json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o))))
