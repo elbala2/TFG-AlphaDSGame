@@ -110,7 +110,7 @@ class Game:
           self.players[self.pos[2]].board[self.pos[0]][self.pos[1]],
           [self.pos[0], self.pos[1]],
           True,
-        )
+        )[0]
         if(mov == 1):
           self.players[self.pos[2]].board[self.pos[0]][self.pos[1]].wasHere = True
           self.pos = [self.pos[0] - 1, self.pos[1], self.pos[2]]

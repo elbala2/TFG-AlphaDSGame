@@ -1,11 +1,11 @@
 
-class Bot: 
-  
+class Bot:
+
   def __init__(self, game):
     self.game = game
     self.brain = None
     self.name_mental_state = None
-    
+
     # TODO
     # self.field_size = self.game.configuration['game_parameters']['field_size']
     # self.max_cards_in_hand = self.game.configuration['game_parameters']['max_num_cards']
@@ -18,61 +18,52 @@ class Bot:
     # self.max_relevance = self.game.configuration['intelligence']['max_relevance']
     # self.min_relevance = self.game.configuration['intelligence']['min_relevance']
     # self.initial_relevance = 1/2 * (self.max_relevance - abs(self.min_relevance))
-    
-  def getRiskToResolve(self, player):
+
+  def getRiskToResolve(self):
+    bot = self.game.getActualPlayer()
     res = []
     for riskIndex in range(game.specialMarket):
-      if game.specialMarket[riskIndex].isRisk:
-        if player.canSolveRisk(game.specialMarket[riskIndex]):
-          res += [riskIndex]
+      if game.specialMarket[riskIndex].isRisk and bot.canSolveRisk(game.specialMarket[riskIndex]):
+        res += [riskIndex]
     return res
-  
-  def solveRisk(self, player, riskId, risk):
-    cardsAux = player.cards.copy()
-    for i in range(risk.costs):
-      for cardId in range(cardsAux):
-        card = player.cards[cardId]
-        if card.type[1] == getRiskFixCardType(risk)
-          cardsAux = cardsAux[:cardId] + cardsAux[cardId + 1:]
-          break
-    player.cards = cardsAux
-    game.specialMarket = game.specialMarket[:riskId] + game.specialMarket[riskId + 1:]
 
   def resolveRisks(self):
-    player = self.game.getActualPlayer()
-    riskToResolve = self.getRiskToResolve(player)
+    riskToResolve = self.getRiskToResolve()
     if len(riskToResolve) == 0:
       return False
     while(len(riskToResolve) != 0):
-      targetRisk = riskToResolve.pop(0)
-      risk = self.game.specialMarket[targetRisk]
-      if player.canSolveRisk(risk):
-        self.solveRisk(player, targetRisk, risk)
-      
+      targetRiskId, cards = riskToResolve.pop(0)
+      if bot.canSolveRisk(risk):
+        self.game.fix(targetRiskId, cards)
+
     return True
-  
-  def getPosibleSlabsToBuy(self, player):
+
+  def findCard(self, bot, type):
+    for i in len(bot.cards):
+      card = bot.cards[i]
+      if type == 1 and card.type[0] == 'Mathematics' \
+        or type == 2 and card.type[0] == 'Computer Science'\
+        or type == 3 and card.type[0] == 'Domain':
+        return { 'card': card, 'cardId': i  }
+    return False
+
+  def getPosibleSlabsToBuy(self):
+    bot = self.game.getActualPlayer()
     res = []
-    #Todo hay que tener en cuenta las posiciones ocupadas del tablero y devolver las slabs en orden de preferencia
+    # !hay que tener en cuenta las posiciones ocupadas del tablero y devolver las slabs en orden de preferencia
     for slabIndex in range(self.game.normalMarket):
-      if player.canBuySlab(self.game.normalMarket[slabIndex].costs):
-        res += [{ 'targetSlabId': slabIndex, mark: 0, pos: [0, 0] }]
+      if bot.canBuySlab(self.game.normalMarket[slabIndex].costs):
+        
+        res += [{'targetSlabId': slabIndex, mark: 0, pos: [0, 0]}]
     return res
 
-  def buySlab(self, player, slabId, slab):
-    pass
-
   def buyPlaceSlab(self):
-    player = self.game.getActualPlayer()
-    slabsToBuy = self.getPosibleSlabsToBuy(player)
+    slabsToBuy = self.getPosibleSlabsToBuy()
     if len(slabsToBuy) == 0:
       return False
-    targetSlabId, mark, pos = slabsToBuy.pop(0)
-    slab = self.game.normalMarket[targetSlab]
-    if player.canBuySlab(slab.costs):
-      self.buySlab(player, targetRisk, risk)
+    targetSlabId, mark, pos, rotation, cards = slabsToBuy.pop(0)
+    self.game.moveSlab(targetSlabId, pos, rotation, cards)
     return True
-  
+
   def computeCards(self):
-    pass
-  
+    bot = self.game.getActualPlayer()

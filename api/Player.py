@@ -15,6 +15,7 @@ class Player:
     self.cards = cards
     self.hasBougth = False
     self.board = [[None for i in range(4) ] for i in range(4)]
+    self.start = start
     self.board[start][0] = Slab([1, 1, 1, 1], 'Start_' + str(id))
     if (id == 0):
       self.board[start][0].isHere = True
@@ -43,6 +44,54 @@ class Player:
         costs[2] -= 1
       i -= 1
     return deletedCards
+  
+  def validPlaces(self):
+    player = self.getActualPlayer()
+    
+    visitedList = []
+    validList = []
+    slabList = [[0, self.start, self.board[0][self.start]]]
+
+    arriba = [0, 1]
+    derecha = [1, 0]
+    abajo = [0, -1]
+    izquierda = [-1, 0]
+    
+    while len(slabList > 0):
+      [x, y, slab] = slabList.pop(0)
+
+    if (x == 2 and y == 0):
+      validList.push([x, y])
+      visitedList.push([x, y])
+      
+    #comprueba el de arriba del destino
+    if (y + 1 >= 0):
+      slabEnTablero = self.board[y+1][x];
+      if (slabEnTablero != None):
+        if ((slab.ApplyRotation()[arriba] and slabEnTablero.ApplyRotation()[abajo]) == 1 and hecho):
+          return 1
+
+    #comprueba el de la derecha del destino
+    if (destiny[1] + 1 <= 3):
+      slabEnTablero = self.board[destiny[0]][destiny[1] + 1];
+      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
+        if ((slab.ApplyRotation()[derecha] and slabEnTablero.ApplyRotation()[izquierda]) == 1 and hecho):
+          return 2
+
+    #comprueba el de abajo del destino
+    if (destiny[0] + 1 <= 3):
+      slabEnTablero = self.board[destiny[0] + 1][destiny[1]];
+      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
+        if ((slab.ApplyRotation()[abajo] and slabEnTablero.ApplyRotation()[arriba]) == 1 and hecho):
+          return 3
+
+    #comprueba el de la izquierda del destino
+    if (destiny[1] - 1 >= 0):
+      slabEnTablero = self.board[destiny[0]][destiny[1] - 1];
+      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
+        if ((slab.ApplyRotation()[izquierda] and slabEnTablero.ApplyRotation()[derecha]) == 1 and hecho):
+          return 4
+    return 0;
   
   def whereCanBePlace(self, slab, destiny, here = False):
     arriba = 0
