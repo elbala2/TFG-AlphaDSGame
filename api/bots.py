@@ -54,7 +54,7 @@ class Bot:
     for slabIndex in range(self.game.normalMarket):
       if bot.canBuySlab(self.game.normalMarket[slabIndex].costs):
         
-        res += [{'targetSlabId': slabIndex, mark: 0, pos: [0, 0]}]
+        res += [{'targetSlabId': slabIndex, mark: 0, pos: [0, 0], rotation: 0, cards: []}]
     return res
 
   def buyPlaceSlab(self):
