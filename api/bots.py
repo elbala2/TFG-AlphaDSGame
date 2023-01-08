@@ -31,7 +31,7 @@ class Bot:
     riskToResolve = self.getRiskToResolve()
     if len(riskToResolve) == 0:
       return False
-    while(len(riskToResolve) != 0):
+    while (len(riskToResolve) != 0):
       targetRiskId, cards = riskToResolve.pop(0)
       if bot.canSolveRisk(risk):
         self.game.fix(targetRiskId, cards)
@@ -42,19 +42,35 @@ class Bot:
     for i in len(bot.cards):
       card = bot.cards[i]
       if type == 1 and card.type[0] == 'Mathematics' \
-        or type == 2 and card.type[0] == 'Computer Science'\
-        or type == 3 and card.type[0] == 'Domain':
-        return { 'card': card, 'cardId': i  }
+              or type == 2 and card.type[0] == 'Computer Science'\
+              or type == 3 and card.type[0] == 'Domain':
+        return {'card': card, 'cardId': i}
     return False
+
+  def getMark(self, slab, place, cards):
+    mark = 0
+    mark += slab.points * 0.6
+    mark -= pow(pow(0 + place.pos[0], 2) +
+                pow(2 + place.pos[1], exp), 1/2) * 0.6
+    mark -= len(cards) * 0.2
+    return mark
 
   def getPosibleSlabsToBuy(self):
     bot = self.game.getActualPlayer()
     res = []
-    # !hay que tener en cuenta las posiciones ocupadas del tablero y devolver las slabs en orden de preferencia
     for slabIndex in range(self.game.normalMarket):
-      if bot.canBuySlab(self.game.normalMarket[slabIndex].costs):
-        
-        res += [{'targetSlabId': slabIndex, mark: 0, pos: [0, 0], rotation: 0, cards: []}]
+      slab = self.game.normalMarket[slabIndex]
+      if bot.canBuySlab(None, slab.costs):
+        cards = bot.getCards(slab)
+        places = bot.getPosiblePlaces(slab)
+        for place in places:
+          res += [{
+              targetSlabId: slabIndex,
+              mark: self.getMark(slab, place, cards),
+              pos: place.pos,
+              rotation: place.rotation,
+              cards: cards,
+          }]
     return res
 
   def buyPlaceSlab(self):
