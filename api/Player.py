@@ -178,7 +178,6 @@ class Player:
     izquierda = [0, -1]
     for y in range(4):
       for x in range(4):
-        # ! Puede salir de la board
         if self.board[y][x] == None:
           for rot in range(4):
             slab.rotation = rot

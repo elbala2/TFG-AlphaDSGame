@@ -68,9 +68,12 @@ class Game:
     self.slabs = genSlabs()
     self.normalMarket = []
     self.specialMarket = []
+    self.hasRisk = 0
     while(len(self.normalMarket) < 4):
       item = self.slabs.pop(0)
       if not item.isSpecial:
+        if item.isRisk:
+          self.hasRisk += 1
         self.normalMarket.append(item)
       elif len(self.specialMarket) == 4:
         self.slabs.append(item)
@@ -193,7 +196,7 @@ class Game:
     bots.buyPlaceSlab()
 
   def computeCards_bots(self):
-    pass
+    bots.computeCards()
 
   def toJSON(self):
     return toJSON(self)

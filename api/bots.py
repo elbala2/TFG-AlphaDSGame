@@ -54,7 +54,7 @@ class Bot:
                 pow(2 + place.pos[1], exp), 1/2) * 0.6
     mark -= len(cards) * 0.2
     return mark
-
+    
   def getPosibleSlabsToBuy(self):
     bot = self.game.getActualPlayer()
     res = []
@@ -62,8 +62,7 @@ class Bot:
       slab = self.game.normalMarket[slabIndex]
       if bot.canBuySlab(None, slab.costs):
         cards = bot.getCards(slab)
-        places = bot.getPosiblePlaces(slab)
-        for place in places:
+        for place in bot.getPosiblePlaces(slab):
           res += [{
               targetSlabId: slabIndex,
               mark: self.getMark(slab, place, cards),
@@ -71,7 +70,7 @@ class Bot:
               rotation: place.rotation,
               cards: cards,
           }]
-    return res
+    return res.sort(key=lambda elem: elem['mark'] , reverse=True)
 
   def buyPlaceSlab(self):
     slabsToBuy = self.getPosibleSlabsToBuy()
@@ -83,3 +82,38 @@ class Bot:
 
   def computeCards(self):
     bot = self.game.getActualPlayer()
+    # ! Tiene que seleccionar las cartas a descartar
+    cardIds = []
+    risks = []
+    if self.game.hasRisk:
+      risks = list(filter(lambda slab: slab.isRisk, self.game.specialMarket))
+    for card in bot.cards:
+      if self.game.hasRisk:
+        needed = False
+        for risk in risks:
+          if card.type[1] == getRiskFixCardType(risk):
+            needed = True
+            break
+        if not needed:
+          cardIds += card.id
+      else:
+        types = []
+        if card.type[0] == 'Domain':
+          if types[0] > 0:
+            cardIds += card.id
+          else:
+            types[0] += 1
+        elif card.type[0] == 'Computer Science':
+          if types[1] > 0:
+            cardIds += card.id
+          else:
+            types[1] += 1
+        else:
+          if types[2] > 0:
+            cardIds += card.id
+          else:
+            types[2] += 1
+    
+    self.game.discard(cardIds)
+    
+    
