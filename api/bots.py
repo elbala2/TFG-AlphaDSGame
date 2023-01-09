@@ -82,7 +82,6 @@ class Bot:
 
   def computeCards(self):
     bot = self.game.getActualPlayer()
-    # ! Tiene que seleccionar las cartas a descartar
     cardIds = []
     risks = []
     if self.game.hasRisk:

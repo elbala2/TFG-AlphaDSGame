@@ -76,3 +76,15 @@ def fix(id):
   game.fix(slabID, [namedtuple('Card', c.keys())(*c.values()) for c in list(filter(lambda f: f['selected'] == True, cards))])
   storeGame(id, game)
   return jsonify(toJSON({ 'players': game.players, 'specialMarket': game.specialMarket }))
+
+@app.route('/bot/resolve', methods=['PUT'])
+def bot_resolve_risks():
+  pass
+
+@app.route('/bot/buy-place', methods=['PUT'])
+def bot_buy_place_risks():
+  pass
+
+@app.route('/bot/computeCards', methods=['PUT'])
+def bot_compute_cards_risks():
+  pass
