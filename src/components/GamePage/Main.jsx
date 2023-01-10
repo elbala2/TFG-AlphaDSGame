@@ -5,13 +5,13 @@ import Tablero from './components/Tablero';
 import TradeModal from './components/tradeModal';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { nextPlayer, start } from '../../Store/actions';
+import { nextPlayer, setState, start } from '../../Store/actions';
 import { useEffect, useState } from 'react';
 import { DefaultButton, Modal } from '@fluentui/react';
 
 import styles from './Main.module.scss';
 import SuccessModal from './components/SuccessModal';
-import { NextTurn, StartGame } from '../../utils/ApiConf';
+import { getBotAction, NextTurn, StartGame } from '../../utils/ApiConf';
 
 const GamePage = () => {
   const dispatch = useDispatch();
@@ -28,6 +28,10 @@ const GamePage = () => {
 
   console.log(state)
 
+  const handleBotNextAction = () => {
+    getBotAction().then(res => setState(res))
+  };
+
   return (
     <HeaderAndFooter>
       <div className={styles.mainCard} type={actualPlayer}>
@@ -35,6 +39,12 @@ const GamePage = () => {
           <div className={styles.header}>
             <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
             <div className='flex-fill' />
+            <DefaultButton
+              text='Bot Next Action'
+              style={{padding: '17px', fontSize: 'large'}}
+              className={styles.button}
+              onClick={handleBotNextAction}
+            />
             <DefaultButton
               text='Trade'
               style={{padding: '17px', fontSize: 'large'}}

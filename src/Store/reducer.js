@@ -10,6 +10,7 @@ import {
   DESCARTAR,
   START,
   RESET,
+  SETSTATE,
 } from './actions';
 import initialState from './InitialState';
 
@@ -28,6 +29,7 @@ const playerReducer = (state = initialState, action) => {
       return initialState;
 
     case START:
+    case SETSTATE:
     case CONFIG:
       return {
         ...state,

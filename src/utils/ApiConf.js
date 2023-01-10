@@ -42,6 +42,10 @@ export function Discard(id, card) {
   return ApiCallBack('GET', `/discard/${id}/${card.id}`);
 }
 
-export function fixRisk(index, slabID, cards) {
-  return ApiCallBack('POST', `/fix/${index}`, { slabID, cards })
+export function fixRisk(id, slabID, cards) {
+  return ApiCallBack('POST', `/fix/${id}`, { slabID, cards })
+}
+
+export function getBotAction(id) {
+  return ApiCallBack('GET', `/bot/${id}`)
 }

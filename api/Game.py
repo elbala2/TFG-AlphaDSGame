@@ -69,6 +69,7 @@ class Game:
     self.normalMarket = []
     self.specialMarket = []
     self.hasRisk = 0
+    self.nextBotAction = 0
     while(len(self.normalMarket) < 4):
       item = self.slabs.pop(0)
       if not item.isSpecial:
@@ -188,15 +189,31 @@ class Game:
     index = findById(self.getActualPlayer().cards, cardID)
     if (index != -1):
       self.cards.append(self.getActualPlayer().cards.pop(index))
-
-  def resolveRisks_bots(self):
-    bots.resolveRisks()
-
-  def buyPlaceSlab_bots(self):
-    bots.buyPlaceSlab()
-
-  def computeCards_bots(self):
-    bots.computeCards()
+      
+  def botAction(self):
+    hecho = False
+    if self.nextBotAction == 0:
+      hecho = bots.resolveRisks()
+      if not hecho:
+        hecho = bots.buyPlaceSlab()
+        if not hecho:
+          hecho = bots.computeCards()
+          self.nextBotAction = 0
+        else:
+          self.nextBotAction = 2
+      else:
+        self.nextBotAction = 1
+    elif self.nextBotAction == 1:
+      hecho = bots.buyPlaceSlab()
+      if not hecho:
+        hecho = bots.computeCards()
+        self.nextBotAction = 0
+      else:
+        self.nextBotAction = 2
+    elif self.nextBotAction == 2:
+      hecho = bots.computeCards()
+      self.nextBotAction = 0
+    return hecho
 
   def toJSON(self):
     return toJSON(self)

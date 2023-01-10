@@ -8,6 +8,7 @@ export const FIX = 'FIX';
 export const CONFIG = 'CONFIG';
 export const DESCARTAR = 'DESCARTAR';
 export const START = 'START';
+export const SETSTATE = 'SETSTATE';
 export const RESET = 'RESET';
 
 export const mover = (callbackRes) => {
@@ -78,6 +79,13 @@ export const descartar = (callbackRes) => {
 export const start = (callbackRes) => {
   return {
     type: START,
+    callbackRes,
+  }
+}
+
+export const setState = (callbackRes) => {
+  return {
+    type: SETSTATE,
     callbackRes,
   }
 }

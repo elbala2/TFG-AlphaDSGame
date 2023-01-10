@@ -77,14 +77,8 @@ def fix(id):
   storeGame(id, game)
   return jsonify(toJSON({ 'players': game.players, 'specialMarket': game.specialMarket }))
 
-@app.route('/bot/resolve', methods=['PUT'])
-def bot_resolve_risks():
-  pass
-
-@app.route('/bot/buy-place', methods=['PUT'])
-def bot_buy_place_risks():
-  pass
-
-@app.route('/bot/computeCards', methods=['PUT'])
-def bot_compute_cards_risks():
-  pass
+@app.route('/bot/<id>', methods=['GET'])
+def bot_moves(id):
+  game = getGame(id)
+  game.botAction()
+  return jsonify(toJSON(game))

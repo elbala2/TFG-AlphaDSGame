@@ -1,9 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { getSlabImg } from "../../../../Store/GetSlabImg";
 
-import styles from './Styles/MarketContainer.module.scss';
 import { mover, rotar } from '../../../../Store/actions';
 import { MoveSlab } from '../../../../utils/ApiConf';
+
+import { Icon } from '@fluentui/react';
+
+
+import styles from './Styles/MarketContainer.module.scss';
 
 const canbebougth = (cards, costs, type, actualPlayer) => {
   const canbebougth = cards.filter(f => f.type[0] === 'Domain' ).length >= costs[0]
@@ -42,6 +46,12 @@ const MarketContainer = ({ index, slab, disabled }) => {
         className={`${styles.slabContainer}`}
         canbebougth={`${canbuy}`}
       >
+        <div className={`${styles.bubble} ${styles.left}`}>
+          <Icon name='ChevronLeft' />
+        </div>
+        <div className={`${styles.bubble} ${styles.right}`}>
+          <Icon name='ChevronRight'  />
+        </div>
         <input
           alt={`img`}
           type='image'
