@@ -91,6 +91,7 @@ const Tablero = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.droppableProps}
+                          className='h-100 w-100'
                         >
                           {provided.placeholder}
                         </div>

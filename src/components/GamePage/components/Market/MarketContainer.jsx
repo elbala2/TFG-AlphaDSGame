@@ -40,6 +40,7 @@ const MarketContainer = ({ index, slab, disabled }) => {
   const dispatch = useDispatch();
 
   const { rotation, costs, type } = slab;
+  console.log('🚀 ~ file: MarketContainer.jsx:43 ~ MarketContainer ~ rotation', rotation);
   const canbuy = !hasBougth && canbebougth(cards, costs, type, actualPlayer) && !disabled;
   return (
     <div className={`${styles.marketContainer}`} key={index}>
@@ -58,7 +59,7 @@ const MarketContainer = ({ index, slab, disabled }) => {
         >
           <Icon iconName='Rotate90Clockwise' className={styles.icon} />
         </button>
-        <Droppable droppableId={`marketDrop_${index}`}>
+        <Droppable droppableId={`marketDrop_${index}`} isDropDisabled>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               <Draggable draggableId={String(index)} index={0}>

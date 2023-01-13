@@ -57,7 +57,7 @@ def genSlabs():
     Risk('Wrong Model', 'Use Right Model to fix the risk', 2)]
   
   random.shuffle(risk)
-  res += risk[:4]
+  # res += risk[:4]
   random.shuffle(res)
   return res
 

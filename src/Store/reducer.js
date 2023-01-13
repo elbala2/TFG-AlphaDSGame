@@ -60,7 +60,7 @@ const playerReducer = (state = initialState, action) => {
       const id = action.id < 4 ? action.id : action.id - 4;
       const slabs = action.id > 3 ? specialMarket : normalMarket;
       slabs[id].rotation = (slabs[id].rotation + action.dir) % 4;
-      console.log('🚀 ~ file: reducer.js:64 ~ playerReducer ~ newRotation', action);
+      console.log('🚀 ~ file: reducer.js:64 ~ playerReducer ~ newRotation', action, slabs[id].rotation);
       return {
         ...state,
       };
