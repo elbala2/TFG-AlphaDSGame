@@ -35,7 +35,7 @@ const canbebougth = (cards, costs, type, actualPlayer) => {
 };
 
 const MarketContainer = ({ index, slab, disabled }) => {
-  const { target, actualPlayer, players, id } = useSelector((state) => state, );
+  const { target, actualPlayer, players, id } = useSelector((state) => state);
   const { cards, hasBougth } = players[actualPlayer];
   const dispatch = useDispatch();
 
@@ -43,7 +43,7 @@ const MarketContainer = ({ index, slab, disabled }) => {
   const canbuy = !hasBougth && canbebougth(cards, costs, type, actualPlayer) && !disabled;
   return (
     <div className={`${styles.marketContainer}`} key={index}>
-      <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`}>
+      <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`} disabled={disabled || !canbuy}>
         <button
           type='button'
           className={`${styles.bubble} ${styles.left}`}
@@ -69,7 +69,7 @@ const MarketContainer = ({ index, slab, disabled }) => {
                     {...provided.dragHandleProps}
                   >
                     <img
-                      alt={`img`}
+                      alt='img'
                       rotation={rotation}
                       className={styles.slab}
                       src={getSlabImg(slab)}
