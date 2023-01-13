@@ -6,6 +6,7 @@ import { Tooltip } from '@material-ui/core';
 import conexion_borde from '../../../resources/border-conexion.png';
 
 import styles from './Styles/Tablero.module.scss';
+import { Droppable } from 'react-beautiful-dnd';
 
 const Tablero = () => {
   const {  start, actualPlayer, pos } = useSelector(state => state)
@@ -55,7 +56,7 @@ const Tablero = () => {
                       dispatch(setTarget([ i, j ]));
                   }}
                 >
-                  {casilla && (
+                  {casilla ? (
                     !casilla.isSpecial ? (
                       <img
                         className={styles.slab}
@@ -84,6 +85,17 @@ const Tablero = () => {
                         />
                       </>
                     )
+                  ) : (
+                    <Droppable droppableId={`boardDrop_${i}, ${j}`}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.droppableProps}
+                        >
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
                   )}
                 </div>
               );

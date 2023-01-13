@@ -18,10 +18,12 @@ export const mover = (callbackRes) => {
   }
 }
 
-export const rotar = (marketId) => {
+export const rotar = (marketId, dir) => {
+  console.log('rotar')
   return {
     type: ROTAR_ACTION,
     id: marketId,
+    dir,
   }
 }
 

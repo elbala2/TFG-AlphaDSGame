@@ -59,12 +59,10 @@ const playerReducer = (state = initialState, action) => {
     case ROTAR_ACTION:
       const id = action.id < 4 ? action.id : action.id - 4;
       const slabs = action.id > 3 ? specialMarket : normalMarket;
-      slabs[id].rotation = (slabs[id].rotation + 1) % 4;
-      console.log(id, slabs, slabs[id], normalMarket, specialMarket)
+      slabs[id].rotation = (slabs[id].rotation + action.dir) % 4;
+      console.log('🚀 ~ file: reducer.js:64 ~ playerReducer ~ newRotation', action);
       return {
         ...state,
-        normalMarket,
-        specialMarket,
       };
 
     case ACEPTTRADE: 
