@@ -44,7 +44,7 @@ const MarketContainer = ({ index, slab, disabled }) => {
   const canbuy = !hasBougth && canbebougth(cards, costs, type, actualPlayer) && !disabled;
   return (
     <div className={`${styles.marketContainer}`} key={index}>
-      <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`} disabled={disabled || !canbuy}>
+      <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`} disabled={!canbuy}>
         <button
           type='button'
           className={`${styles.bubble} ${styles.left}`}
@@ -62,7 +62,7 @@ const MarketContainer = ({ index, slab, disabled }) => {
         <Droppable droppableId={`marketDrop_${index}`} isDropDisabled>
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              <Draggable draggableId={String(index)} index={0}>
+              <Draggable draggableId={String(index)} index={0} isDragDisabled={!canbuy}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -73,6 +73,7 @@ const MarketContainer = ({ index, slab, disabled }) => {
                       alt='img'
                       rotation={rotation}
                       className={styles.slab}
+                      draggable={false}
                       src={getSlabImg(slab)}
                       // draggable={canbuy && !disabled}
                       // onKeyUp={(keyEvent) => {

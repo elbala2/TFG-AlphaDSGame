@@ -16,7 +16,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 const GamePage = () => {
   const dispatch = useDispatch();
-  const { actualPlayer, players, finished, id } = useSelector((state) => state);
+  const { actualPlayer, players, finished, id, normalMarket, specialMarket } = useSelector((state) => state);
   const state = useSelector((state) => state);
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
   const [tradeModalOpen, settradeModalOpen] = useState(false);
@@ -36,18 +36,21 @@ const GamePage = () => {
   return (
     <HeaderAndFooter>
       <DragDropContext
-        onDragEnd={(index, target, rotation, cards) => {
-          if (target)
-            MoveSlab(
-              id,
-              index,
-              target,
-              rotation,
-              cards
-            ).then((res) => {
-              console.log(res);
-              dispatch(mover(res));
-            });
+        onDragEnd={({ draggableId, destination: { droppableId } }) => {
+          const slabIndex = parseInt(draggableId);
+          const target = droppableId.replace('boardDrop_', '').split('-').map(n => parseInt(n));
+
+          const rotation = (slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4]).rotation;
+          const cards = players[actualPlayer].cards.filter(c => c.selected);
+          MoveSlab(
+            id,
+            slabIndex,
+            target,
+            rotation,
+            cards,
+          ).then((res) => {
+            dispatch(mover(res));
+          });
         }}
       >
         <div className={styles.mainCard} type={actualPlayer}>

@@ -86,7 +86,7 @@ const Tablero = () => {
                       </>
                     )
                   ) : (
-                    <Droppable droppableId={`boardDrop_${i}, ${j}`}>
+                    <Droppable droppableId={`boardDrop_${i}-${j}`}>
                       {(provided, snapshot) => (
                         <div
                           ref={provided.innerRef}
