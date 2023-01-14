@@ -1,14 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { getSlabImg } from '../../../../Store/GetSlabImg';
 
-import { mover, rotar } from '../../../../Store/actions';
-import { MoveSlab } from '../../../../utils/ApiConf';
+import { rotar } from '../../../../Store/actions';
 
 import { Icon } from '@fluentui/react';
 
 import styles from './Styles/MarketContainer.module.scss';
-import { Draggable } from 'react-beautiful-dnd';
-import { Droppable } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 const canbebougth = (cards, costs, type, actualPlayer) => {
   const canbebougth =
@@ -35,12 +33,11 @@ const canbebougth = (cards, costs, type, actualPlayer) => {
 };
 
 const MarketContainer = ({ index, slab, disabled }) => {
-  const { target, actualPlayer, players, id } = useSelector((state) => state);
+  const { actualPlayer, players } = useSelector((state) => state);
   const { cards, hasBougth } = players[actualPlayer];
   const dispatch = useDispatch();
 
   const { rotation, costs, type } = slab;
-  console.log('🚀 ~ file: MarketContainer.jsx:43 ~ MarketContainer ~ rotation', rotation);
   const canbuy = !hasBougth && canbebougth(cards, costs, type, actualPlayer) && !disabled;
   return (
     <div className={`${styles.marketContainer}`} key={index}>
@@ -60,10 +57,10 @@ const MarketContainer = ({ index, slab, disabled }) => {
           <Icon iconName='Rotate90Clockwise' className={styles.icon} />
         </button>
         <Droppable droppableId={`marketDrop_${index}`} isDropDisabled>
-          {(provided) => (
+          {provided => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
               <Draggable draggableId={String(index)} index={0} isDragDisabled={!canbuy}>
-                {(provided, snapshot) => (
+                {provided => (
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
@@ -75,23 +72,6 @@ const MarketContainer = ({ index, slab, disabled }) => {
                       className={styles.slab}
                       draggable={false}
                       src={getSlabImg(slab)}
-                      // draggable={canbuy && !disabled}
-                      // onKeyUp={(keyEvent) => {
-                      //   if (keyEvent.key === 'r' && !disabled) dispatch(rotar(index));
-                      // }}
-                      // onDragEnd={(result) => {
-                      //   if (target)
-                      //     MoveSlab(
-                      //       id,
-                      //       index,
-                      //       target,
-                      //       slab.rotation,
-                      //       cards.filter((f) => f.selected),
-                      //     ).then((res) => {
-                      //       console.log(res);
-                      //       dispatch(mover(res));
-                      //     });
-                      // }}
                     />
                   </div>
                 )}
