@@ -84,9 +84,9 @@ const MarketContainer = ({ index, slab, disabled }) => {
         {costs.map((coste, type) => {
           // type 0 => blue, 1 => red, 2 => green
           return (
-            <p key={`c${type}`} type={type} className={styles.MarketCosts}>
+            <span key={`c${type}`} type={type} className={styles.MarketCosts}>
               {coste}
-            </p>
+            </span>
           );
         })}
       </div>

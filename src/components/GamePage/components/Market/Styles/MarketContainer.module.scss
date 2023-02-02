@@ -1,10 +1,16 @@
 .marketContainer {
   width: 7.5rem;
-  height: 11.6rem;
+  // height: 11.6rem;
   margin-left: 1rem;
   margin-right: 1rem;
   margin-bottom: 0.8rem;
   background-color: rgb(1, 106, 37);
+  padding-top: 25px;
+
+  &:hover:not([disabled]) .bubble {
+    display: flex;
+    transition: 0.2s;
+  }
 
   .slabContainer {
     position: relative;
@@ -16,11 +22,6 @@
     box-sizing: content-box;
     border: 2px solid rgb(1, 106, 37);
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
-
-    &:hover:not([disabled]) .bubble {
-      display: flex;
-      transition: 0.2s;
-    }
 
     .bubble {
       position: absolute;
@@ -34,6 +35,7 @@
       justify-content: center;
       border: none;
       padding: 1px;
+      top: -30px;
 
       &.left {
         left: 0px;
@@ -71,8 +73,7 @@
 
   .MarketCostsContainer {
     display: inline;
-    margin-top: 1.5rem;
-    margin-left: 1rem;
+    padding: 1.5rem 1rem;
 
     .MarketCosts {
       width: 1.7rem;
