@@ -58,12 +58,14 @@ const GamePage = () => {
             <div className={styles.header}>
               <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
               <div className='flex-fill' />
-              <DefaultButton
-                text='Bot Next Action'
-                style={{padding: '17px', fontSize: 'large'}}
-                className={styles.button}
-                onClick={handleBotNextAction}
-              />
+              {players[actualPlayer](
+                <DefaultButton
+                  text='Bot Next Action'
+                  style={{padding: '17px', fontSize: 'large'}}
+                  className={styles.button}
+                  onClick={handleBotNextAction}
+                />
+              )}
               <DefaultButton
                 text='Trade'
                 style={{padding: '17px', fontSize: 'large'}}

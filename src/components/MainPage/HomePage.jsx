@@ -1,5 +1,5 @@
 import { Card } from '@material-ui/core';
-import { DefaultButton, TextField } from '@fluentui/react';
+import { DefaultButton, TextField, getEdgeChromiumNoHighContrastAdjustSelector } from '@fluentui/react';
 import { initialConfig } from '../../Store/actions';
 import { Select, MenuItem, InputLabel } from '@material-ui/core/';
 
@@ -14,6 +14,19 @@ import { Button } from 'react-bootstrap';
 import { StartGame } from '../../utils/ApiConf'
 
 const HomePage = () => {
+  const [players, setPlayers] = useState([
+    { name: 'Player 1', type: 0},
+    { name: 'Player 2', type: 0},
+    { name: 'Player 3', type: 0},
+    { name: 'Player 4', type: 0},
+  ]);
+
+  const handleChangePlayer = (player, i) => {
+    setPlayers(p => {
+      p[i] = player;
+      return p;
+    })
+  };
   const [player1, setPlayer1] = useState(0);
   const [player1Name, setPlayer1Name] = useState('Player 1');
   const [player2, setPlayer2] = useState(0);
