@@ -58,7 +58,7 @@ const GamePage = () => {
             <div className={styles.header}>
               <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
               <div className='flex-fill' />
-              {players[actualPlayer](
+              {players[actualPlayer]?.type === 1 && (
                 <DefaultButton
                   text='Bot Next Action'
                   style={{padding: '17px', fontSize: 'large'}}

@@ -1,30 +1,34 @@
-import { Icon } from '@fluentui/react';
+import React from 'react';
+import { Icon, TextField } from '@fluentui/react';
 import { abs } from 'mathjs';
-import React, { useEffect, useState } from 'react'
 import { Button } from 'react-bootstrap';
+import styles from './HomePage.module.scss';
 
-export default function PlayerInput({
-  player,
-  setPlayer,
-  id,
-}) {
-  const [{ name, type }, setChildPlayer] = useState({ name: '', type: 0 });
-  useEffect(() => {
-    setChildPlayer()
-  }, [player]);
-
+export default function PlayerInput({ player, setPlayer, id }) {
   return (
-    <div className=''>
-      <span>
-        { name || '--' }
-      </span>
-      <Button onClick={() => setPlayer({ name, type: (type + 1) % 2 })}>
-        <Icon iconName=''/>
-      </Button>
-      <span>{type === 0 ? 'player' : 'Bot'}</span>
-      <Button onClick={() => setPlayer({ name, type: abs(type - 1) % 2 })}>
-        <Icon iconName=''/>
-      </Button>
+    <div className={styles.playerButton} type={id}>
+      <input
+        type='text'
+        className='bg-transparent text-center'
+        placeholder='Player name'
+        value={player.name}
+        onChange={(e) => setPlayer({ ...player, name: e.target.value })}
+      />
+      <div className={styles.typeButtonContainer}>
+        <Button
+          className={styles.button}
+          onClick={() => setPlayer({ ...player, type: (player.type + 1) % 2 })}
+          >
+          <Icon iconName='ChevronLeft' style={{ margin: '-20px' }} />
+        </Button>
+        <span className='mx-auto'>{player.type === 0 ? 'Player' : 'Bot'}</span>
+        <Button
+          className={styles.button}
+          onClick={() => setPlayer({ ...player, type: abs(player.type - 1) % 2 })}
+        >
+          <Icon iconName='ChevronRight' style={{ margin: '-20px' }}/>
+        </Button>
+      </div>
     </div>
-  )
+  );
 }
