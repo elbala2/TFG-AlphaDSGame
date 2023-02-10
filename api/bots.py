@@ -22,8 +22,8 @@ class Bot:
   def getRiskToResolve(self):
     bot = self.game.getActualPlayer()
     res = []
-    for riskIndex in range(game.specialMarket):
-      if game.specialMarket[riskIndex].isRisk and bot.canSolveRisk(game.specialMarket[riskIndex]):
+    for riskIndex in range(len(self.game.specialMarket)):
+      if self.game.specialMarket[riskIndex].isRisk and bot.canSolveRisk(self.game.specialMarket[riskIndex]):
         res += [riskIndex]
     return res
 
@@ -50,33 +50,34 @@ class Bot:
   def getMark(self, slab, place, cards):
     mark = 0
     mark += slab.points * 0.6
-    mark -= pow(pow(0 + place.pos[0], 2) +
-                pow(2 + place.pos[1], exp), 1/2) * 0.6
+    mark -= pow(pow(0 + place['pos'][0], 2) +
+                pow(2 + place['pos'][1], 2), 1/2) * 0.6
     mark -= len(cards) * 0.2
     return mark
     
   def getPosibleSlabsToBuy(self):
     bot = self.game.getActualPlayer()
     res = []
-    for slabIndex in range(self.game.normalMarket):
+    for slabIndex in range(len(self.game.normalMarket)):
       slab = self.game.normalMarket[slabIndex]
       if bot.canBuySlab(None, slab.costs):
         cards = bot.getCards(slab)
         for place in bot.getPosiblePlaces(slab):
           res += [{
-              targetSlabId: slabIndex,
-              mark: self.getMark(slab, place, cards),
-              pos: place.pos,
-              rotation: place.rotation,
-              cards: cards,
+              'targetSlabId': slabIndex,
+              'mark': self.getMark(slab, place, cards),
+              'pos': place['pos'],
+              'rotation': place['rotation'],
+              'cards': cards,
           }]
-    return res.sort(key=lambda elem: elem['mark'] , reverse=True)
+    res.sort(key=lambda elem: elem['mark'] , reverse=True)
+    return res
 
   def buyPlaceSlab(self):
     slabsToBuy = self.getPosibleSlabsToBuy()
     if len(slabsToBuy) == 0:
       return False
-    targetSlabId, mark, pos, rotation, cards = slabsToBuy.pop(0)
+    targetSlabId, mark, pos, rotation, cards = slabsToBuy.pop(0).values()
     self.game.moveSlab(targetSlabId, pos, rotation, cards)
     return True
 

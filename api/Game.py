@@ -5,9 +5,7 @@ from Cards import *
 from slabs import *
 from Player import *
 from utils import *
-
-def toJSON(obj):
-  return json.loads(json.dumps(obj, default=lambda o: getattr(o, '__dict__', str(o))))
+from bots import *
 
 def genCards():
   res = []
@@ -90,6 +88,7 @@ class Game:
     self.start = start
     self.pos = [start, 0, 0]
     self.finished = False
+    self.bot = None
     
   def getActualPlayer(self):
     return self.players[self.actualPlayer]
@@ -191,30 +190,29 @@ class Game:
       self.cards.append(self.getActualPlayer().cards.pop(index))
       
   def botAction(self):
+    if self.bot == None:
+      self.bot = Bot(self)
     hecho = False
     if self.nextBotAction == 0:
-      hecho = bots.resolveRisks()
+      hecho = self.bot.resolveRisks()
       if not hecho:
-        hecho = bots.buyPlaceSlab()
+        hecho = self.bot.buyPlaceSlab()
         if not hecho:
-          hecho = bots.computeCards()
+          hecho = self.bot.computeCards()
           self.nextBotAction = 0
         else:
           self.nextBotAction = 2
       else:
         self.nextBotAction = 1
     elif self.nextBotAction == 1:
-      hecho = bots.buyPlaceSlab()
+      hecho = self.bot.buyPlaceSlab()
       if not hecho:
-        hecho = bots.computeCards()
+        hecho = self.bot.computeCards()
         self.nextBotAction = 0
       else:
         self.nextBotAction = 2
     elif self.nextBotAction == 2:
-      hecho = bots.computeCards()
+      hecho = self.bot.computeCards()
       self.nextBotAction = 0
     return hecho
-
-  def toJSON(self):
-    return toJSON(self)
   

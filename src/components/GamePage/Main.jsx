@@ -30,7 +30,7 @@ const GamePage = () => {
   // console.log(state)
 
   const handleBotNextAction = () => {
-    getBotAction().then(res => setState(res))
+    getBotAction(id).then(res => setState(res))
   };
 
   return (
@@ -66,18 +66,22 @@ const GamePage = () => {
                   onClick={handleBotNextAction}
                 />
               )}
-              <DefaultButton
-                text='Trade'
-                style={{padding: '17px', fontSize: 'large'}}
-                className={styles.button}
-                onClick={() => settradeModalOpen((prevstate) => !prevstate)}
-              />
-              <DefaultButton
-                text='Terminar Turno'
-                className={styles.closebutton}
-                style={{padding: '17px', fontSize: 'large'}}
-                onClick={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
-              />
+              {players[actualPlayer]?.type === 0 && (
+                <>
+                  <DefaultButton
+                    text='Trade'
+                    style={{padding: '17px', fontSize: 'large'}}
+                    className={styles.button}
+                    onClick={() => settradeModalOpen((prevstate) => !prevstate)}
+                  />
+                  <DefaultButton
+                    text='Terminar Turno'
+                    className={styles.closebutton}
+                    style={{padding: '17px', fontSize: 'large'}}
+                    onClick={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
+                  />
+                </>
+              )}
             </div>
             <hr />
             <Market />

@@ -216,7 +216,7 @@ class Player:
             and (slab_abajo     == None or not slabLinks[2] or (slabLinks[2] and link_abajo[0]    )) \
             and (slab_izquierda == None or not slabLinks[3] or (slabLinks[3] and link_izquierda[1])) \
             or  (slabLinks[0] and x == 2 and y == 0):
-              res += [{ pos: [y, x], rotation: rot }]
+              res += [{ 'pos': [y, x], 'rotation': rot }]
     return res
 
   def getCards(self, slab):
