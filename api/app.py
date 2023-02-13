@@ -81,4 +81,11 @@ def fix(id):
 def bot_moves(id):
   game = getGame(id)
   game.botAction()
-  return jsonify(toJSON(json.loads(json.dumps(game, default=str))))
+  return jsonify(game)
+
+  class ComplexEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Abc) or isinstance(obj, Doc):
+            return obj.toJSON()
+        else:
+            return json.JSONEncoder.default(self, obj)

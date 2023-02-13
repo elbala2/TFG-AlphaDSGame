@@ -26,7 +26,8 @@ class Player:
     costs = slab.costs
 
     if not self.canBuySlab(cards, costs):
-      raise Exception('You can\'t buy this slab')
+      print('You can\'t buy this slab')
+      return []
 
     i = len(cards) - 1
     deletedCards = []
@@ -158,10 +159,13 @@ class Player:
     if cards == None:
       cards = self.cards
     domainList = list(filter(lambda f: f.type[0] == 'Domain', cards))
-    computerScienceList = list(
-        filter(lambda f: f.type[0] == 'Computer Science', cards))
+    computerScienceList = list(filter(lambda f: f.type[0] == 'Computer Science', cards))
     mathematicsList = list(filter(lambda f: f.type[0] == 'Mathematics', cards))
-
+    print('Domain', domainList)
+    print('CSc',computerScienceList)
+    print('mathL', mathematicsList)
+    print('costs', costs)
+    print('res', len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2])
     return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
 
   def canSolveRisk(self, risk):
