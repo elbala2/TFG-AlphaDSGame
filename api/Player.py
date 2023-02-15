@@ -26,7 +26,6 @@ class Player:
     costs = slab.costs
 
     if not self.canBuySlab(cards, costs):
-      print('You can\'t buy this slab')
       return []
 
     i = len(cards) - 1
@@ -137,23 +136,17 @@ class Player:
 
   def putSlab(self, slab, destiny):
     if (destiny == None or self.board[destiny[0]][destiny[1]] != None):
-      raise Exception('')
+      return False
 
     if (self.whereCanBePlace(slab, destiny) == 0):
-      raise Exception(
-          'Posicion',
-          destiny[0],
-          destiny[1],
-          'rotación',
-          slab.rotation,
-          self.whereCanBePlace(slab, destiny)
-      )
+      return False
 
     self.board[destiny[0]][destiny[1]] = slab
     if (destiny[0] == 0 and destiny[1] == 2):
       self.points += 10
     self.points += slab.points
     self.hasBougth = True
+    return True
 
   def canBuySlab(self, cards, costs):
     if cards == None:
@@ -161,11 +154,6 @@ class Player:
     domainList = list(filter(lambda f: f.type[0] == 'Domain', cards))
     computerScienceList = list(filter(lambda f: f.type[0] == 'Computer Science', cards))
     mathematicsList = list(filter(lambda f: f.type[0] == 'Mathematics', cards))
-    print('Domain', domainList)
-    print('CSc',computerScienceList)
-    print('mathL', mathematicsList)
-    print('costs', costs)
-    print('res', len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2])
     return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
 
   def canSolveRisk(self, risk):
@@ -220,7 +208,7 @@ class Player:
             and (slab_abajo     == None or not slabLinks[2] or (slabLinks[2] and link_abajo[0]    )) \
             and (slab_izquierda == None or not slabLinks[3] or (slabLinks[3] and link_izquierda[1])) \
             or  (slabLinks[0] and x == 2 and y == 0):
-              res += [{ 'pos': [y, x], 'rotation': rot }]
+              res += [{ 'pos': [x, y], 'rotation': rot }]
     return res
 
   def getCards(self, slab):

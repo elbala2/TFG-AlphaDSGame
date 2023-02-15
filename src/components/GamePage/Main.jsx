@@ -27,10 +27,10 @@ const GamePage = () => {
     }
   }, [dispatch, id]);
 
-  // console.log(state)
+  console.log(state)
 
   const handleBotNextAction = () => {
-    getBotAction(id).then(res => setState(res))
+    getBotAction(id).then(res => dispatch(setState(res)))
   };
 
   return (

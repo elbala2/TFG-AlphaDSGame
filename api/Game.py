@@ -1,4 +1,3 @@
-import json
 import random
 
 from Cards import *
@@ -59,7 +58,7 @@ def genSlabs():
   random.shuffle(res)
   return res
 
-class Game:
+class Game():
   def __init__(self, id, start = 1):
     self.id = id
     self.cards = genCards()
@@ -88,7 +87,7 @@ class Game:
     self.start = start
     self.pos = [start, 0, 0]
     self.finished = False
-    self.bot = None
+    self.bot = Bot()
     
   def getActualPlayer(self):
     return self.players[self.actualPlayer]
@@ -188,31 +187,31 @@ class Game:
     index = findById(self.getActualPlayer().cards, cardID)
     if (index != -1):
       self.cards.append(self.getActualPlayer().cards.pop(index))
-      
+
   def botAction(self):
-    if self.bot == None:
-      self.bot = Bot(self)
     hecho = False
     if self.nextBotAction == 0:
-      hecho = self.bot.resolveRisks()
+      hecho = self.bot.resolveRisks(self)
       if not hecho:
-        hecho = self.bot.buyPlaceSlab()
+        hecho = self.bot.buyPlaceSlab(self)
         if not hecho:
-          hecho = self.bot.computeCards()
+          hecho = self.bot.computeCards(self)
           self.nextBotAction = 0
         else:
           self.nextBotAction = 2
       else:
         self.nextBotAction = 1
     elif self.nextBotAction == 1:
-      hecho = self.bot.buyPlaceSlab()
+      hecho = self.bot.buyPlaceSlab(self)
       if not hecho:
-        hecho = self.bot.computeCards()
+        hecho = self.bot.computeCards(self)
         self.nextBotAction = 0
       else:
         self.nextBotAction = 2
     elif self.nextBotAction == 2:
-      hecho = self.bot.computeCards()
+      hecho = self.bot.computeCards(self)
       self.nextBotAction = 0
+    if self.nextBotAction == 0:
+      self.nextTurn()
     return hecho
   
