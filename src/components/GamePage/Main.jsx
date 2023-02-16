@@ -1,4 +1,4 @@
-import HeaderAndFooter from '../Header&Footer';
+import HeaderAndFooter from '../UI/Header&Footer';
 import Market from './components/Market/Market';
 import Cartas from './components/Cartas';
 import Tablero from './components/Tablero';

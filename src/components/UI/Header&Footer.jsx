@@ -1,6 +1,6 @@
 import { Navbar, Container } from 'react-bootstrap';
 
-import icon from '../resources/Icon.png';
+import icon from '../../resources/Icon.png';
 
 const HeaderAndFooter = (props) => {
   return (

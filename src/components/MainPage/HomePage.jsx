@@ -1,17 +1,17 @@
 import { Card } from '@material-ui/core';
-import { DefaultButton } from '@fluentui/react';
 import { initialConfig } from '../../Store/actions';
 import { Select, MenuItem, InputLabel } from '@material-ui/core/';
 
 import { useState } from 'react';
 
-import HeaderAndFooter from '../Header&Footer';
+import HeaderAndFooter from '../UI/Header&Footer';
 
 import styles from './HomePage.module.scss';
 import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { StartGame } from '../../utils/ApiConf'
 import PlayerInput from './PlayerInput';
+import Button from '../UI/Button';
 
 const HomePage = () => {
   const [players, setPlayers] = useState([
@@ -59,8 +59,7 @@ const HomePage = () => {
             <MenuItem value={3}>4</MenuItem>
           </Select>
           <div className='flex-fill'/>
-          <DefaultButton
-            text={'Start'}
+          <Button
             onClick={async () => {
               const res = await StartGame({
                 players,
@@ -69,7 +68,9 @@ const HomePage = () => {
               dispatch(initialConfig(res));
               setSave(true);
             }}
-          />
+          >
+            Start
+          </Button>
         </div>
       </Card>
       {save && <Navigate to='/Game' replace/>}
