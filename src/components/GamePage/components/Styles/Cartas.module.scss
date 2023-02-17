@@ -37,22 +37,23 @@
 
     .closebutton {
       display: none;
-      top: 6px;
+      top: 2px;
       right: 2px;
-      width: 24px;
-      height: 24px;
-      user-select: none;
-      font-size: medium;
+      width: 28px;
+      height: 28px;
+      padding: 0px;
       position: absolute;
       text-align: center;
       border-radius: 5px;
-      opacity: 0.3;
-      background-color: transparent;
+      opacity: 0.5;
+      border: none;
+
+      &:not(:hover) {
+        background-color: transparent;
+      }
   
       &:hover {
         opacity: 1;
-        color: white;
-        background-color: rgb(141, 3, 3);
       }
     }
 

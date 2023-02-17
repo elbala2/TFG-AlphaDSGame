@@ -1,8 +1,7 @@
 import React from 'react';
-import { Icon, TextField } from '@fluentui/react';
 import { abs } from 'mathjs';
-import { Button } from 'react-bootstrap';
-import styles from './HomePage.module.scss';
+import Button from '../UI/Button8';
+import styles from './styles/PlayerInput.module.scss';
 
 export default function PlayerInput({ player, setPlayer, id }) {
   return (
@@ -18,15 +17,19 @@ export default function PlayerInput({ player, setPlayer, id }) {
         <Button
           className={styles.button}
           onClick={() => setPlayer({ ...player, type: (player.type + 1) % 2 })}
-          >
-          <Icon iconName='ChevronLeft' style={{ margin: '-20px' }} />
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
         </Button>
         <span className='mx-auto'>{player.type === 0 ? 'Player' : 'Bot'}</span>
         <Button
           className={styles.button}
           onClick={() => setPlayer({ ...player, type: abs(player.type - 1) % 2 })}
         >
-          <Icon iconName='ChevronRight' style={{ margin: '-20px' }}/>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
         </Button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { DefaultButton, Icon, Modal } from '@fluentui/react';
+import { Modal } from '@fluentui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { aceptTrade } from '../../../Store/actions';
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import Cartas from './Cartas';
 
 import styles from './Styles/tradeModal.module.scss';
 import { TradeCards } from '../../../utils/ApiConf';
+import Button from '../../UI/Button';
 
 const TradeModal = (props) => {
   const dispatch = useDispatch();
@@ -52,11 +53,13 @@ const TradeModal = (props) => {
     >
       <div className={styles.header}>
         <h4 className='flex-fill'>
-          Selecciona las cartas que quiere intercambiar
+          Seleccione las cartas que quiere intercambiar
         </h4>
-        <div className={styles.closebutton} onClick={onClose}>
-          <Icon iconName='cancel' style={{ fontSize: 'x-large' }} />
-        </div>
+        <Button variants='secondary' className={styles.closebutton} onClick={onClose}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </Button>
       </div>
       <hr className='my-0' />
       <div className={styles.modalContainer}>
@@ -74,17 +77,18 @@ const TradeModal = (props) => {
           })}
         </div>
         <div className={styles.modalbuttoncontainer}>
-          <DefaultButton
-            text={acept1 ? 'Cancelar' : 'Aceptar'}
-            className={acept1 ? styles.closebutton : styles.button}
+          <Button
+            variants={acept1 ? 'outlined secondary' : 'primary'}
             onClick={() => aceptHandler(1)}
-          />
-          <DefaultButton
-            text={acept2 ? 'Cancelar' : 'Aceptar'}
-            className={acept2 ? styles.closebutton : styles.button}
-            select={acept2}
+          >
+            {acept1 ? 'Cancelar' : 'Aceptar'}
+          </Button>
+          <Button
+            variants={acept2 ? 'outlined secondary' : 'primary'}
             onClick={() => aceptHandler(2)}
-          />
+          >
+            {acept2 ? 'Cancelar' : 'Aceptar'}
+          </Button>
         </div>
       </div>
     </Modal>

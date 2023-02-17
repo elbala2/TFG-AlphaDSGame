@@ -1,6 +1,8 @@
-import { DefaultButton, Modal } from '@fluentui/react';
+import { Modal } from '@fluentui/react';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+
+import Button from '../../UI/Button'
 
 import styles from './Styles/FailModal.module.scss'
 
@@ -14,11 +16,12 @@ const FailModal = () => {
       <div className={styles.modal}>
         <h1 className={styles.title}>Game Over</h1>
         <p className={styles.errorMSG}>El sistema se vio comprometido</p>
-        <DefaultButton
-          text='Volver a la pantalla de inicio'
+        <Button
+          variants=''
           onClick={() => setCloseModal(true)}
-          className={styles.button}
-        />
+        >
+          Volver a la pantalla de inicio
+        </Button>
       </div>
       {closeModal && <Navigate to='/' />}
     </Modal>

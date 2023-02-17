@@ -1,12 +1,10 @@
 import { Card } from '@material-ui/core';
 import { initialConfig } from '../../Store/actions';
-import { Select, MenuItem, InputLabel } from '@material-ui/core/';
-
 import { useState } from 'react';
 
 import HeaderAndFooter from '../UI/Header&Footer';
 
-import styles from './HomePage.module.scss';
+import styles from './styles/HomePage.module.scss';
 import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { StartGame } from '../../utils/ApiConf'
@@ -48,16 +46,16 @@ const HomePage = () => {
         </div>
 
         <div className='d-flex align-items-center'>
-          <InputLabel style={{ marginRight: '10px' }}>Iniciar en la fila:</InputLabel>
-          <Select
+          <label style={{ marginRight: '10px' }}>Iniciar en la fila:</label>
+          <select
             value={start}
             onChange={(e) => setstart(e.target.value)}
           >
-            <MenuItem value={0}>1</MenuItem>
-            <MenuItem value={1}>2</MenuItem>
-            <MenuItem value={2}>3</MenuItem>
-            <MenuItem value={3}>4</MenuItem>
-          </Select>
+            <option value={0}>1</option>
+            <option value={1}>2</option>
+            <option value={2}>3</option>
+            <option value={3}>4</option>
+          </select>
           <div className='flex-fill'/>
           <Button
             onClick={async () => {

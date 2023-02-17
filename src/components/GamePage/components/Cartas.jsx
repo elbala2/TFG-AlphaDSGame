@@ -2,8 +2,8 @@ import styles from './Styles/Cartas.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCardIMG } from '../../../Store/GetSlabImg';
 import { descartar, setCardSelected } from '../../../Store/actions';
-import { Icon } from '@fluentui/react';
 import { Discard } from '../../../utils/ApiConf';
+import Button from '../../UI/Button';
 
 const Cartas = ({actualPlayer = 0, titleStyles, descartable = false}) => {
   const cards = useSelector((state) => state.players[actualPlayer].cards);
@@ -21,7 +21,8 @@ const Cartas = ({actualPlayer = 0, titleStyles, descartable = false}) => {
             onClick={() => dispatch(setCardSelected(actualPlayer, index))}
           >
             {descartable && (
-              <div
+              <Button
+                variants='outlined secondary'
                 className={styles.closebutton}
                 onClick={() => {
                   Discard(id, card).then((res) => {
@@ -29,8 +30,10 @@ const Cartas = ({actualPlayer = 0, titleStyles, descartable = false}) => {
                   })
                 }}
               >
-                <Icon iconName='cancel' style={{ fontSize: 'medium' }} />
-              </div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </Button>
             )}
             <p className={styles.title} style={titleStyles}>{card.type[0]}</p>
             <img

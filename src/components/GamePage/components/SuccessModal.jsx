@@ -1,9 +1,10 @@
-import { DefaultButton, Modal } from '@fluentui/react';
+import { Modal } from '@fluentui/react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 import styles from './Styles/SuccessModal.module.scss'
+import Button from '../../UI/Button';
 
 const SuccessModal = () => {
   const players = useSelector(state => state.players)
@@ -24,11 +25,11 @@ const SuccessModal = () => {
             : <p className={styles.loserMSG}>{index + 1}: {player.name} ({player.points} puntos)</p>
           ))
         }
-        <DefaultButton
-          text='Volver a la pantalla de inicio'
+        <Button
           onClick={() => setCloseModal(true)}
-          className={styles.button}
-        />
+        >
+          Volver a la pantalla de inicio
+        </Button>
       </div>
       {closeModal && <Navigate to='/' />}
     </Modal>

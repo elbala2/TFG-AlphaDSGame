@@ -16,24 +16,16 @@
   display: flex;
   align-items: center;
   margin: 0px;
+  margin-left: 25px;
 
   .closebutton {
     width: 40px;
     height: 40px;
     margin: 10px;
     display: flex;
-    color: white;
-    cursor: pointer;
-    border-radius: 6px;
+    padding: 0px;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgb(141, 3, 3);
-    background-color: rgb(141, 3, 3);
-
-    &:hover {
-      color:black;
-      background-color: rgb(255, 255, 255);
-    }
   }
 }
 
@@ -84,39 +76,5 @@
   .modalbuttoncontainer {
     justify-content: space-evenly;
     display: flex;
-    
-    .closebutton {
-      font-size: large;
-      border-color: rgb(141, 3, 3);
-      padding: 20px;
-      margin: 10px;
-      border-radius: 5px;
-      background-color: rgb(141, 3, 3);
-      color: white;
-  
-      &:hover {
-        color: black;
-        background-color: white;
-      }
-    }
-
-    .button {
-      font-size: large;
-      padding: 20px;
-      margin: 10px;
-      border-radius: 5px;
-      color: white;
-      border-color: #016a25;
-      background-color: #016a25;
-
-      &:hover {
-        color:black;
-        background-color: rgb(255, 255, 255);
-      }
-      
-      &[select='true'] {
-        background-color: rgb(141, 3, 3);
-      }
-    }
   }
 }

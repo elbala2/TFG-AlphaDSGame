@@ -18,10 +18,16 @@
   --accent: var(--dangerAccentColor);
 }
 
+.btn-normal {
+  padding: .25rem 1rem;
+}
+
 .btn-normal:not(.btn-outlined) {
   background-color: var(--color);
   border: 2px var(--color) solid;
   color: var(--accent);
+  font-weight: 600;
+  font-size: 16px;
 
   &:hover {
     background-color: var(--accent);
@@ -33,6 +39,8 @@
   background-color: var(--accent);
   border: 2px var(--color) solid;
   color: var(--color);
+  font-weight: 600;
+  font-size: 16px;
 
   &:hover {
     background-color: var(--color);

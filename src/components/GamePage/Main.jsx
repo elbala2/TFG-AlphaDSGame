@@ -7,7 +7,9 @@ import TradeModal from './components/tradeModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { mover, nextPlayer, setState, start } from '../../Store/actions';
 import { useEffect, useState } from 'react';
-import { DefaultButton, Modal } from '@fluentui/react';
+import { Modal } from '@fluentui/react';
+
+import Button from '../UI/Button';
 
 import styles from './Main.module.scss';
 import SuccessModal from './components/SuccessModal';
@@ -19,7 +21,7 @@ const GamePage = () => {
   const { actualPlayer, players, finished, id, normalMarket, specialMarket } = useSelector((state) => state);
   const state = useSelector((state) => state);
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
-  const [tradeModalOpen, settradeModalOpen] = useState(false);
+  const [tradeModalOpen, setTradeModalOpen] = useState(false);
 
   useEffect(() => {
     if (id === 0) {
@@ -29,9 +31,14 @@ const GamePage = () => {
 
   console.log(state)
 
-  const handleBotNextAction = () => {
+  function handleBotNextAction() {
     getBotAction(id).then(res => dispatch(setState(res)))
   };
+
+  function handlerNextTurnAction() {
+    NextTurn(id).then(res => dispatch(nextPlayer(res)))
+    setnextPlayerModalOpen((prevstate) => !prevstate);
+  }
 
   return (
     <HeaderAndFooter>
@@ -39,7 +46,6 @@ const GamePage = () => {
         onDragEnd={({ draggableId, destination: { droppableId } }) => {
           const slabIndex = parseInt(draggableId);
           const target = droppableId.replace('boardDrop_', '').split('-').map(n => parseInt(n));
-
           const rotation = (slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4]).rotation;
           const cards = players[actualPlayer].cards.filter(c => c.selected);
           MoveSlab(
@@ -59,27 +65,26 @@ const GamePage = () => {
               <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
               <div className='flex-fill' />
               {players[actualPlayer]?.type === 1 && (
-                <DefaultButton
-                  text='Bot Next Action'
-                  style={{padding: '17px', fontSize: 'large'}}
-                  className={styles.button}
+                <Button
                   onClick={handleBotNextAction}
-                />
+                >
+                  Bot Next Action
+                </Button>
               )}
               {players[actualPlayer]?.type === 0 && (
                 <>
-                  <DefaultButton
-                    text='Trade'
-                    style={{padding: '17px', fontSize: 'large'}}
-                    className={styles.button}
-                    onClick={() => settradeModalOpen((prevstate) => !prevstate)}
-                  />
-                  <DefaultButton
-                    text='Terminar Turno'
-                    className={styles.closebutton}
-                    style={{padding: '17px', fontSize: 'large'}}
+                  <Button
+                    className='mx-2'
+                    onClick={() => setTradeModalOpen((prevstate) => !prevstate)}
+                  >
+                    Trade
+                  </Button>
+                  <Button
+                    variants='secondary'
                     onClick={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
-                  />
+                  >
+                    Terminar Turno
+                  </Button>
                 </>
               )}
             </div>
@@ -91,7 +96,7 @@ const GamePage = () => {
           </div>
           <Tablero />
         </div>
-        {tradeModalOpen && <TradeModal isOpen={tradeModalOpen} onClose={() => settradeModalOpen(prevstate => !prevstate)}/>}
+        {tradeModalOpen && <TradeModal isOpen={tradeModalOpen} onClose={() => setTradeModalOpen(prevstate => !prevstate)}/>}
         {finished === true && <SuccessModal />}
         <Modal
           isOpen={nextPlayerModalOpen}
@@ -101,23 +106,19 @@ const GamePage = () => {
           <h4>¿Esta seguro de terminar el turno?</h4>
           <hr/>
           <div className={styles.modalContainer}>
-            <DefaultButton
-              text='Terminar el turno'
-              className={styles.button}
-              style={{fontSize: 'x-large'}}
-              onClick={() => {
-                NextTurn(id).then((res) => {
-                  dispatch(nextPlayer(res));
-                })
-                setnextPlayerModalOpen((prevstate) => !prevstate);
-              }}
-            />
-            <DefaultButton
-              text='Cerrar'
-              className={styles.closebutton}
-              style={{fontSize: 'x-large'}}
+            <Button
+              className='mx-2'
+              variants='secondary outlined'
               onClick={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
-            />
+            >
+              Cerrar
+            </Button>
+            <Button
+              variants='secondary'
+              onClick={handlerNextTurnAction}
+            >
+              Terminar el turno
+            </Button>
           </div>
         </Modal>
       </DragDropContext>

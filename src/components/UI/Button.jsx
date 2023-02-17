@@ -4,14 +4,14 @@ import { CircularProgress } from '@material-ui/core'
 
 import './Styles/Button.scss'
 
-const commonClasses = 'px-3 py-1 rounded-1 btn-normal'
+const commonClasses = 'rounded-1 btn-normal'
 
 const classes = {
   primary: 'primary',
   secondary: 'secondary',
   danger: 'danger',
   error: 'danger',
-  outLined: 'btn-outlined',
+  outlined: 'btn-outlined',
 }
 
 function Button({
@@ -25,7 +25,7 @@ function Button({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
 
-  async function clickHandler() {
+  async function clickHandler(event) {
     setLoading(true)
     try {
       await onClick()
@@ -38,7 +38,7 @@ function Button({
   }
 
   function getClassName() {
-    const res = variants?.trim().split(/ |\,/).map((variant) => classes[variant] || '') || [classes.primary]
+    const res = variants?.trim().split(/ |\,/).map((variant) => classes[variant.toLowerCase()] || '') || [classes.primary]
     res.push(commonClasses, className)
     if (error) res.push(classes.error)
     return res.join(' ')

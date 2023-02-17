@@ -1,0 +1,44 @@
+.playerButton {
+  height: 7.5rem;
+  width: 7.5rem;
+  border-radius: 10px;
+  
+  &[type='0'] {
+    background-color: rgba(255, 153, 153, 0.7);
+  }
+  &[type='1']  {
+    background-color: rgba(153, 255, 153, 0.7);
+  }
+  &[type='2'] {
+    background-color: rgba(153, 153, 255, 0.7);
+  }
+  &[type='3']  {
+    background-color: rgba(255, 240, 153, 0.7);
+  }
+
+  input {
+    margin: 10%;
+    width: 80%;
+    border-radius: 4px;
+    border: solid gray 1px;
+    padding: 5px;
+  }
+
+  &:hover .typeButtonContainer .button{
+    display: flex;
+  }
+  
+  .typeButtonContainer {
+    height: 50px;
+    padding: 0px 5px;
+    display: flex;
+    align-items: center;
+
+    .button {
+      display: none;
+      padding: 0px;
+      width: 20px;
+      height: 25px;
+    }
+  }
+}

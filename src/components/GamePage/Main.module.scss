@@ -36,35 +36,6 @@
       margin: 5px 5px 15px;
     }
 
-    .button {
-      padding: 25px;
-      margin: 10px;
-      border-radius: 5px;
-      color: white;
-      border-color: #016a25;
-      background-color: #016a25;
-
-      &:hover {
-        color: black;
-        background-color: white;
-      }
-
-    }
-    
-    .closebutton {
-      padding: 25px;
-      margin: 10px;
-      border-radius: 5px;
-      color: white;
-      border-color: rgb(141, 3, 3);
-      background-color: rgb(141, 3, 3);
-
-      &:hover {
-        color: black;
-        background-color: white;
-      }
-    }
-
     .cartsContainer {
       height: 310px;
     }
