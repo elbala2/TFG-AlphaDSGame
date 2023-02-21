@@ -1,4 +1,3 @@
-import { Modal } from '@fluentui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { aceptTrade } from '../../../Store/actions';
 import { useState } from 'react';
@@ -8,6 +7,7 @@ import Cartas from './Cartas';
 import styles from './Styles/tradeModal.module.scss';
 import { TradeCards } from '../../../utils/ApiConf';
 import Button from '../../UI/Button';
+import Modal from '../../UI/Modal';
 
 const TradeModal = (props) => {
   const dispatch = useDispatch();
@@ -47,21 +47,9 @@ const TradeModal = (props) => {
   return (
     <Modal
       isOpen={isOpen}
-      onDismiss={onClose}
-      containerClassName={styles.modal}
-      className={{ className: styles.backdrop }}
+      onClose={onClose}
+      title='Seleccione las cartas que quiere intercambiar'
     >
-      <div className={styles.header}>
-        <h4 className='flex-fill'>
-          Seleccione las cartas que quiere intercambiar
-        </h4>
-        <Button variants='secondary' className={styles.closebutton} onClick={onClose}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </Button>
-      </div>
-      <hr className='my-0' />
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
           {players.map((player, index) => {

@@ -3,10 +3,9 @@ import { getSlabImg } from '../../../../Store/GetSlabImg';
 
 import { rotar } from '../../../../Store/actions';
 
-import { Icon } from '@fluentui/react';
-
 import styles from './Styles/MarketContainer.module.scss';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import Button from '../../../UI/Button';
 
 const canbebougth = (cards, costs, type, actualPlayer) => {
   const canbebougth =
@@ -42,20 +41,22 @@ const MarketContainer = ({ index, slab, disabled }) => {
   return (
     <div className={`${styles.marketContainer}`} key={index}>
       <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`} disabled={!canbuy}>
-        <button
-          type='button'
+        <Button
           className={`${styles.bubble} ${styles.left}`}
           onClick={() => dispatch(rotar(index, 3))}
         >
-          <Icon iconName='Rotate90CounterClockwise' className={styles.icon} />
-        </button>
-        <button
-          type='button'
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 15l-6 6m0 0l-6-6m6 6V9a6 6 0 0112 0v3" />
+          </svg>
+        </Button>
+        <Button
           className={`${styles.bubble} ${styles.right}`}
           onClick={() => dispatch(rotar(index, 1))}
         >
-          <Icon iconName='Rotate90Clockwise' className={styles.icon} />
-        </button>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" />
+          </svg>
+        </Button>
         <Droppable droppableId={`marketDrop_${index}`} isDropDisabled>
           {provided => (
             <div ref={provided.innerRef} {...provided.droppableProps}>

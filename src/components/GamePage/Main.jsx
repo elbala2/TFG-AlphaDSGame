@@ -7,9 +7,8 @@ import TradeModal from './components/tradeModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { mover, nextPlayer, setState, start } from '../../Store/actions';
 import { useEffect, useState } from 'react';
-import { Modal } from '@fluentui/react';
-
 import Button from '../UI/Button';
+import Modal from '../UI/Modal';
 
 import styles from './Main.module.scss';
 import SuccessModal from './components/SuccessModal';
@@ -100,11 +99,9 @@ const GamePage = () => {
         {finished === true && <SuccessModal />}
         <Modal
           isOpen={nextPlayerModalOpen}
-          className={{ className: styles.backdrop }}
-          containerClassName={styles.modal}
+          title='¿Esta seguro de terminar el turno?'
+          onClose={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
         >
-          <h4>¿Esta seguro de terminar el turno?</h4>
-          <hr/>
           <div className={styles.modalContainer}>
             <Button
               className='mx-2'

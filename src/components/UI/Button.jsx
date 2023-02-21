@@ -21,6 +21,7 @@ function Button({
   loading: forcedLoading,
   disabled: forcedDisabled,
   onClick,
+  style,
 }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -51,6 +52,7 @@ function Button({
         className={getClassName()}
         disabled={forcedDisabled || forcedLoading  || loading}
         onClick={clickHandler}
+        style={style}
       >
         {error  ? (
           <>
@@ -77,6 +79,7 @@ Button.propTypes = {
   loading: PropTypes.bool,
   disabled: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
+  style: PropTypes.object,
 }
 
 export default Button

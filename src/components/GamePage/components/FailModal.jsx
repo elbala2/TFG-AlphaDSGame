@@ -1,8 +1,8 @@
-import { Modal } from '@fluentui/react';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import Button from '../../UI/Button'
+import Modal from '../../UI/Modal';
 
 import styles from './Styles/FailModal.module.scss'
 
@@ -11,10 +11,10 @@ const FailModal = () => {
   return (
     <Modal
       isOpen
-      onDismiss={() => setCloseModal(true)}
+      onClose={() => setCloseModal(true)}
+      title='Game Over'
     >
-      <div className={styles.modal}>
-        <h1 className={styles.title}>Game Over</h1>
+      <div>
         <p className={styles.errorMSG}>El sistema se vio comprometido</p>
         <Button
           variants=''

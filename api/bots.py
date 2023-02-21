@@ -29,12 +29,14 @@ class Bot:
     riskToResolve = self.getRiskToResolve(game)
     if len(riskToResolve) == 0:
       return False
+    hecho = False
     while (len(riskToResolve) != 0):
       targetRiskId, cards = riskToResolve.pop(0)
       if bot.canSolveRisk(risk):
+        hecho = True
         game.fix(targetRiskId, cards)
 
-    return True
+    return hecho
 
   def getDistance(self, x, y):
     return pow(pow(2 - x, 2) + pow(0 - y, 2), 1/2)
@@ -126,3 +128,4 @@ class Bot:
             types[2] += 1
     
     game.discard(cardIds)
+    return True

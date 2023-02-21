@@ -1,11 +1,11 @@
 import { getSlabImg } from '../../../../Store/GetSlabImg';
 import { fix } from '../../../../Store/actions';
-import { DefaultButton } from '@fluentui/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './Styles/RiskContainer.module.scss';
 import { Tooltip } from '@material-ui/core';
 import { fixRisk } from '../../../../utils/ApiConf';
+import Button from '../../../UI/Button';
 
 const canbebougth = (cartas, costes, type) => {
   switch (type) {
@@ -54,12 +54,13 @@ const RiskContainer = ({ slab, index }) => {
           draggable={false}
         />
       </div>
-      <DefaultButton
+      <Button
         disabled={!canbuy}
-        text='Fix'
         className={styles.button}
         onClick={() => fixRisk(id, index - 4, cards.filter(f => f.selected)).then((calbackRes) => dispatch(fix(calbackRes)))}
-      />
+      >
+        Fix
+      </Button>
     </div>
   );
 }

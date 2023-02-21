@@ -7,10 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
 import GamePage from './components/GamePage/Main';
 import HomePage from './components/MainPage/HomePage';
-import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-initializeIcons()
 
 ReactDOM.render(
   <React.StrictMode>

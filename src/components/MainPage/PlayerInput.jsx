@@ -1,6 +1,6 @@
 import React from 'react';
 import { abs } from 'mathjs';
-import Button from '../UI/Button8';
+import Button from '../UI/Button';
 import styles from './styles/PlayerInput.module.scss';
 
 export default function PlayerInput({ player, setPlayer, id }) {

@@ -1,10 +1,10 @@
-import { Modal } from '@fluentui/react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 import styles from './Styles/SuccessModal.module.scss'
 import Button from '../../UI/Button';
+import Modal from '../../UI/Modal';
 
 const SuccessModal = () => {
   const players = useSelector(state => state.players)
@@ -13,10 +13,10 @@ const SuccessModal = () => {
   return (
     <Modal
       isOpen
-      onDismiss={() => setCloseModal(true)}
+      onClose={() => setCloseModal(true)}
+      title='Game Over'
     >
-      <div className={styles.modal}>
-        <h1 className={styles.title}>Game Over</h1>
+      <div>
         {players
           .sort((a, b) => b.puntos - a.puntos)
           .map((player, index) => (
