@@ -39,12 +39,12 @@ class Bot:
     return hecho
 
   def getDistance(self, x, y):
-    return pow(pow(2 - x, 2) + pow(0 - y, 2), 1/2)
+    return abs(2 - x) + y
 
   def getMark(self, slab, place, cards):
     mark = 0
     mark += slab.points * 10
-    mark -= self.getDistance(place['pos'][0], place['pos'][1])
+    mark -= self.getDistance(place['pos'][0], place['pos'][1]) * 3
     links = slab.ApplyRotation()
     if place['pos'][0] == 2 and place['pos'][1] == 0:
       mark += 40
