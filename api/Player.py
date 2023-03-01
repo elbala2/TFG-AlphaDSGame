@@ -162,6 +162,17 @@ class Player:
         filter(lambda f: f.type[1] == solveTypeNeeded, self.cards,))
     return len(requiredCardsNeeded) > 0
 
+  def getCloseLinks(self, coords, movement):
+    link = None
+    x = coords[1] + movement[1]
+    y = coords[0] + movement[0]
+    if 0 <= x < 4 and 0 <= y < 4:
+      slab = self.board[y][x]
+      # print(x, y, slab)
+      if slab != None:
+        link = slab.ApplyRotation()
+    return link
+
   def getPosiblePlaces(self, slab):
     res = []
     arriba = [-1, 0]
@@ -171,44 +182,21 @@ class Player:
     for y in range(4):
       for x in range(4):
         if self.board[y][x] == None:
+          link_arriba    = self.getCloseLinks([y, x], arriba)
+          link_derecha   = self.getCloseLinks([y, x], derecha)
+          link_abajo     = self.getCloseLinks([y, x], abajo)
+          link_izquierda = self.getCloseLinks([y, x], izquierda)
           for rot in range(4):
             slab.rotation = rot
             slabLinks = slab.ApplyRotation()
-
-            slab_arriba = None
-            link_arriba = [0, 0, 0, 0]
-            if 0 < y + arriba[0] < 4 and 0 < x + arriba[1] < 4:
-              slab_arriba = self.board[y + arriba[0]][x + arriba[1]]
-              if slab_arriba != None:
-                link_arriba = slab_arriba.ApplyRotation()
-                
-            slab_derecha = None
-            link_derecha = [0, 0, 0, 0]
-            if 0 < y + derecha[0] < 4 and 0 < x + derecha[1] < 4:
-              slab_derecha = self.board[y + derecha[0]][x + derecha[1]]
-              if slab_derecha != None:
-                link_derecha = slab_derecha.ApplyRotation()
             
-            slab_abajo = None
-            link_abajo = [0, 0, 0, 0]
-            if 0 < y + abajo[0] < 4 and 0 < x + abajo[1] < 4:
-              slab_abajo = self.board[y + abajo[0]][x + abajo[1]]
-              if slab_abajo != None:
-                link_abajo = slab_abajo.ApplyRotation()
-                
-            slab_izquierda = None
-            link_izquierda = [0, 0, 0, 0]
-            if 0 < y + izquierda[0] < 4 and 0 < x + izquierda[1] < 4:
-              slab_izquierda = self.board[y + izquierda[0]][x + izquierda[1]]
-              if slab_izquierda != None:
-                link_izquierda = slab_izquierda.ApplyRotation()
-            
-            if  (slab_arriba    == None or not slabLinks[0] or (slabLinks[0] and link_arriba[2]   )) \
-            and (slab_derecha   == None or not slabLinks[1] or (slabLinks[1] and link_derecha[3]  )) \
-            and (slab_abajo     == None or not slabLinks[2] or (slabLinks[2] and link_abajo[0]    )) \
-            and (slab_izquierda == None or not slabLinks[3] or (slabLinks[3] and link_izquierda[1])) \
-            or  (slabLinks[0] and x == 2 and y == 0):
+            if ((link_arriba   != None and slabLinks[0]  and link_arriba[2]   ) \
+            or (link_derecha   != None and slabLinks[1]  and link_derecha[3]  ) \
+            or (link_abajo     != None and slabLinks[2]  and link_abajo[0]    ) \
+            or (link_izquierda != None and slabLinks[3]  and link_izquierda[1]))\
+            and (x != 2 or y != 0 or (slabLinks[0] and x == 2 and y == 0)):
               res += [{ 'pos': [x, y], 'rotation': rot }]
+
     return res
 
   def getCards(self, slab):

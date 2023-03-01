@@ -44,27 +44,27 @@ class Bot:
   def getMark(self, slab, place, cards):
     mark = 0
     mark += slab.points * 10
-    mark -= self.getDistance(place['pos'][0], place['pos'][1]) * 3
+    mark += self.getDistance(place['pos'][0], place['pos'][1])
     links = slab.ApplyRotation()
     if place['pos'][0] == 2 and place['pos'][1] == 0:
       mark += 40
     if links[0] == 1 and 0 <= place['pos'][1]-1 <= 3:
-      mark -= self.getDistance(place['pos'][0], place['pos'][1]-1)
+      mark += self.getDistance(place['pos'][0], place['pos'][1]-1) + 1
     else:
-      mark -= 4
+      mark += 8
     if links[1] == 1 and 0 <= place['pos'][0]+1 <= 3:
-      mark -= self.getDistance(place['pos'][0]+1, place['pos'][1])
+      mark += self.getDistance(place['pos'][0]+1, place['pos'][1]) + 1
     else:
-      mark -= 4
+      mark += 8
     if links[2] == 1 and 0 <= place['pos'][1]+1 <= 3:
-      mark -= self.getDistance(place['pos'][0], place['pos'][1]+1)
+      mark += self.getDistance(place['pos'][0], place['pos'][1]+1)
     else:
-      mark -= 4
+      mark += 8
     if links[3] == 1 and 0 <= place['pos'][0]-1 <= 3:
-      mark -= self.getDistance(place['pos'][0]-1, place['pos'][1])
+      mark += self.getDistance(place['pos'][0]-1, place['pos'][1])
     else:
-      mark -= 4
-    mark -= len(cards)
+      mark += 8
+    mark += len(cards)
     return mark
     
   def getPosibleSlabsToBuy(self, game):
@@ -83,6 +83,7 @@ class Bot:
               'cards': cards,
           }]
     res.sort(key=lambda elem: elem['mark'] , reverse=True)
+    print(res)
     return res
 
   def buyPlaceSlab(self, game):
@@ -90,7 +91,6 @@ class Bot:
     if len(slabsToBuy) == 0:
       return False
     targetSlabId, mark, pos, rotation, cards = slabsToBuy.pop(0).values()
-    print(pos, rotation)
     game.moveSlab(targetSlabId, [pos[0], pos[1]], rotation, cards)
     return True
 
