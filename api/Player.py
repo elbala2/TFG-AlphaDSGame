@@ -139,6 +139,7 @@ class Player:
       return False
 
     if (self.whereCanBePlace(slab, destiny) == 0):
+      print('Not posible<')
       return False
 
     self.board[destiny[0]][destiny[1]] = slab

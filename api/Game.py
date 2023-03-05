@@ -148,6 +148,7 @@ class Game():
     self.actualPlayer = (self.actualPlayer + 1) % 4
     
   def moveSlab(self, origin, destiny, rotation, cards):
+    print(origin, destiny, rotation)
     if (origin < 4):
       market = self.normalMarket
       realOrigin = origin

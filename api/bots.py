@@ -83,7 +83,6 @@ class Bot:
               'cards': cards,
           }]
     res.sort(key=lambda elem: elem['mark'] , reverse=True)
-    print(res)
     return res
 
   def buyPlaceSlab(self, game):
@@ -110,7 +109,7 @@ class Bot:
         if not needed:
           cardIds += card.id
       else:
-        types = []
+        types = [0,0,0]
         if card.type[0] == 'Domain':
           if types[0] > 0:
             cardIds += card.id

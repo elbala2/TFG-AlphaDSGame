@@ -81,5 +81,6 @@ def fix(id):
 def bot_moves(id):
   game = getGame(id)
   game.botAction()
+  storeGame(id, game)
   return jsonify(toJSON(game))
 
