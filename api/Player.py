@@ -204,13 +204,13 @@ class Player:
     res = []
     costs = slab.costs
     for card in self.cards:
-      if costs[0] > 1 and card.type[0] == 'Domain':
+      if costs[0] >= 1 and card.type[0] == 'Domain':
         res += [card]
         costs[0] -= 1
-      if costs[1] > 1 and card.type[0] == 'Computer Science':
+      if costs[1] >= 1 and card.type[0] == 'Computer Science':
         res += [card]
         costs[1] -= 1
-      if costs[2] > 1 and card.type[0] == 'Mathematics':
+      if costs[2] >= 1 and card.type[0] == 'Mathematics':
         res += [card]
         costs[2] -= 1
     return res

@@ -39,31 +39,37 @@ class Bot:
     return hecho
 
   def getDistance(self, x, y):
-    return abs(2 - x) + y
+    return abs(2 - x) + abs(-1 - y)
 
-  def getMark(self, slab, place, cards):
+  def getMark(self, slab, place, cards, board):
     mark = 0
-    mark += slab.points * 10
-    mark += self.getDistance(place['pos'][0], place['pos'][1])
+    x = place['pos'][0]
+    y = place['pos'][1]
+    mark -= slab.points * 4
     links = slab.ApplyRotation()
-    if place['pos'][0] == 2 and place['pos'][1] == 0:
-      mark += 40
-    if links[0] == 1 and 0 <= place['pos'][1]-1 <= 3:
-      mark += self.getDistance(place['pos'][0], place['pos'][1]-1) + 1
+    mark -= self.getDistance(x, y)
+    if x == 2 and y == 0:
+      mark -= 40
+    if links[0] == 1 and 0 <= y - 1 <= 3:
+      if board[x][y - 1] == None or not board[x][y - 1].ApplyRotation()[2]:
+        mark += self.getDistance(x, y - 1)
     else:
-      mark += 8
-    if links[1] == 1 and 0 <= place['pos'][0]+1 <= 3:
-      mark += self.getDistance(place['pos'][0]+1, place['pos'][1]) + 1
+      mark += 10
+    if links[1] == 1 and 0 <= x + 1 <= 3:
+      if board[x + 1][y] == None or not board[x+1][y].ApplyRotation()[3]:
+        mark += self.getDistance(x + 1, y)
     else:
-      mark += 8
-    if links[2] == 1 and 0 <= place['pos'][1]+1 <= 3:
-      mark += self.getDistance(place['pos'][0], place['pos'][1]+1)
+      mark += 10
+    if links[2] == 1 and 0 <= y + 1 <= 3:
+      if board[x][y + 1] == None or not board[x][y + 1].ApplyRotation()[0]:
+        mark += self.getDistance(x, y + 1)
     else:
-      mark += 8
-    if links[3] == 1 and 0 <= place['pos'][0]-1 <= 3:
-      mark += self.getDistance(place['pos'][0]-1, place['pos'][1])
+      mark += 10
+    if links[3] == 1 and 0 <= x - 1 <= 3:
+      if board[x - 1][y] == None or not board[x - 1][y].ApplyRotation()[1]:
+        mark += self.getDistance(x - 1, y)
     else:
-      mark += 8
+      mark += 10
     mark += len(cards)
     return mark
     
@@ -75,14 +81,17 @@ class Bot:
       if bot.canBuySlab(None, slab.costs):
         cards = bot.getCards(slab)
         for place in bot.getPosiblePlaces(slab):
+          slab.rotation = place['rotation']
           res += [{
               'targetSlabId': slabIndex,
-              'mark': self.getMark(slab, place, cards),
+              'mark': self.getMark(slab, place, cards, bot.board),
               'pos': place['pos'],
               'rotation': place['rotation'],
               'cards': cards,
           }]
-    res.sort(key=lambda elem: elem['mark'] , reverse=True)
+    res.sort(key=lambda elem: elem['mark'])
+    for x in res:
+      print(x)
     return res
 
   def buyPlaceSlab(self, game):
