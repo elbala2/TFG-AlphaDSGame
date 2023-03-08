@@ -26,22 +26,25 @@ class Player:
     costs = slab.costs
 
     if not self.canBuySlab(cards, costs):
+      print('Nop')
       return []
 
     i = len(cards) - 1
+    print(i, costs)
     deletedCards = []
     while (i >= 0 and costs[0] + costs[1] + costs[2] > 0):
       index = indexOf(self.cards, cards[i])
       if index == -1:
         raise Exception('Card not found')
-      type = cards[i].type
-      if (costs[0] > 0 and type[0] == 'Domain'):
+      cardType = self.cards[index].type
+      print(index, self.cards[index], cardType)
+      if (costs[0] > 0 and cardType[0] == 'Domain'):
         deletedCards += [self.cards.pop(index)]
         costs[0] -= 1
-      if (costs[1] > 0 and type[0] == 'Computer Science'):
+      if (costs[1] > 0 and cardType[0] == 'Computer Science'):
         deletedCards += [self.cards.pop(index)]
         costs[1] -= 1
-      if (costs[2] > 0 and type[0] == 'Mathematics'):
+      if (costs[2] > 0 and cardType[0] == 'Mathematics'):
         deletedCards += [self.cards.pop(index)]
         costs[2] -= 1
       i -= 1

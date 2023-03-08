@@ -19,7 +19,7 @@ def getCosts():
   total = random.randint(1, 4)
   blue = random.randint(0, total)
   red = random.randint(0, total - blue)
-  green = random.randint(0, total - blue - red)
+  green = total - blue - red
   return [blue, red, green]
 
 def getRiskFixCardType(type):

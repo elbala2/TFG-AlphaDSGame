@@ -78,6 +78,7 @@ class Bot:
     res = []
     for slabIndex in range(len(game.normalMarket)):
       slab = game.normalMarket[slabIndex]
+      print('root', slab.__dict__)
       if bot.canBuySlab(None, slab.costs):
         cards = bot.getCards(slab)
         for place in bot.getPosiblePlaces(slab):
@@ -90,8 +91,6 @@ class Bot:
               'cards': cards,
           }]
     res.sort(key=lambda elem: elem['mark'])
-    for x in res:
-      print(x)
     return res
 
   def buyPlaceSlab(self, game):
