@@ -54,7 +54,7 @@ def genSlabs():
     Risk('Wrong Model', 'Use Right Model to fix the risk', 2)]
   
   random.shuffle(risk)
-  # res += risk[:4]
+  res += risk[:4]
   random.shuffle(res)
   return res
 
@@ -103,36 +103,37 @@ class Game():
     
   def nextTurn(self):
     if (self.actualPlayer == 3):
+      player = self.players[self.pos[2]]
       if (self.pos[0] == 0 and self.pos[1] == 2):
-        self.players[self.pos[2]].board[self.start][0].isHere = True
+        player.board[self.start][0].isHere = True
         self.finished = self.pos[2] == 4
         self.pos = [self.start, 0, self.pos[2] + 1]
       else:
-        mov = self.players[self.pos[2]].whereCanBePlace(
-          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]],
+        print(self.pos)
+        print(self.players[self.pos[2]])
+        mov = player.whereCanBePlace(
+          player.board[self.pos[0]][self.pos[1]],
           [self.pos[0], self.pos[1]],
           True,
-        )[0]
-        if(mov == 1):
-          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]].wasHere = True
-          self.pos = [self.pos[0] - 1, self.pos[1], self.pos[2]]
-        elif(mov == 2):
-          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]].wasHere = True
-          self.pos = [self.pos[0], self.pos[1] + 1, self.pos[2]]
-        elif(mov == 3):
-          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]].wasHere = True
-          self.pos = [self.pos[0] + 1, self.pos[1], self.pos[2]]
-        elif(mov == 4):
-          self.players[self.pos[2]].board[self.pos[0]][self.pos[1]].wasHere = True
-          self.pos = [self.pos[0], self.pos[1] - 1, self.pos[2]]
+        )
+        if mov != 0:
+          player.board[self.pos[0]][self.pos[1]].wasHere = True
+          if(mov == 1):
+            self.pos = [self.pos[0] - 1, self.pos[1], self.pos[2]]
+          elif(mov == 2):
+            self.pos = [self.pos[0], self.pos[1] + 1, self.pos[2]]
+          elif(mov == 3):
+            self.pos = [self.pos[0] + 1, self.pos[1], self.pos[2]]
+          elif(mov == 4):
+            self.pos = [self.pos[0], self.pos[1] - 1, self.pos[2]]
 
-      for i in range(len(self.players)):
-        self.cards += self.players[i].cards
-        self.players[i].cards = []
-        self.players[i].hasBougth = False
-        x = 4 - len(self.players.cards)
+      for playerAux in self.players:
+        self.cards += playerAux.cards
+        playerAux.cards = []
+        playerAux.hasBougth = False
+        x = 4 - len(playerAux.cards)
         self.cards = self.cards[x:]
-        self.players[i].cards += self.cards[:x]
+        playerAux.cards.append(self.cards[:x])
 
       self.slabs += self.normalMarket
       self.normalMarket = []
@@ -146,6 +147,7 @@ class Game():
         else:
           self.slabs.append(slab)
     self.actualPlayer = (self.actualPlayer + 1) % 4
+    self.nextBotAction = 0
     
   def moveSlab(self, origin, destiny, rotation, cards):
     if (origin < 4):
@@ -156,7 +158,6 @@ class Game():
       realOrigin = origin - 4
   
     slab = market[realOrigin]
-    print(slab.__dict__)
     slab.rotation = rotation
     player = self.getActualPlayer()
     self.cards.append(player.buy(slab, cards))
@@ -191,28 +192,17 @@ class Game():
 
   def botAction(self):
     hecho = False
-    if self.nextBotAction == 0:
-      hecho = self.bot.resolveRisks(self)
-      if not hecho:
-        hecho = self.bot.buyPlaceSlab(self)
-        if not hecho:
-          hecho = self.bot.computeCards(self)
-          self.nextBotAction = 0
-        else:
-          self.nextBotAction = 2
-      else:
-        self.nextBotAction = 1
-    elif self.nextBotAction == 1:
-      hecho = self.bot.buyPlaceSlab(self)
-      if not hecho:
-        hecho = self.bot.computeCards(self)
-        self.nextBotAction = 0
-      else:
-        self.nextBotAction = 2
-    elif self.nextBotAction == 2:
-      hecho = self.bot.computeCards(self)
-      self.nextBotAction = 0
-    if self.nextBotAction == 0:
-      self.nextTurn()
+    actions = [
+      # ! TODO tradear cartas
+      self.bot.resolveRisks, # Funciona
+      self.bot.buyPlaceSlab, # Funciona
+      self.bot.computeCards,
+      Game.nextTurn,
+    ]
+    for botActionIndex in range(self.nextBotAction, len(actions)):
+      hecho = actions[botActionIndex](self)
+      if hecho:
+        self.nextBotAction = (botActionIndex + 1) % 4
+        break
     return hecho
   

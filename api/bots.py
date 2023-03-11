@@ -22,17 +22,21 @@ class Bot:
     res = []
     for riskIndex in range(len(game.specialMarket)):
       if game.specialMarket[riskIndex].isRisk and bot.canSolveRisk(game.specialMarket[riskIndex]):
-        res += [riskIndex]
+        res += [{
+          'targetRiskId': riskIndex,
+          'cards': bot.getRiskCards(game.specialMarket[riskIndex]),
+        }]
     return res
 
   def resolveRisks(self, game):
+    bot = game.getActualPlayer()
     riskToResolve = self.getRiskToResolve(game)
     if len(riskToResolve) == 0:
       return False
     hecho = False
     while (len(riskToResolve) != 0):
-      targetRiskId, cards = riskToResolve.pop(0)
-      if bot.canSolveRisk(risk):
+      targetRiskId, cards = riskToResolve.pop(0).values()
+      if bot.canSolveRisk(game.specialMarket[targetRiskId]):
         hecho = True
         game.fix(targetRiskId, cards)
 
@@ -78,7 +82,6 @@ class Bot:
     res = []
     for slabIndex in range(len(game.normalMarket)):
       slab = game.normalMarket[slabIndex]
-      print('root', slab.__dict__)
       if bot.canBuySlab(None, slab.costs):
         cards = bot.getCards(slab)
         for place in bot.getPosiblePlaces(slab):
@@ -133,6 +136,6 @@ class Bot:
             cardIds += card.id
           else:
             types[2] += 1
-    
-    game.discard(cardIds)
-    return True
+    for cardId in cardIds:
+      game.discard(cardId)
+    return len(cardIds) != 0

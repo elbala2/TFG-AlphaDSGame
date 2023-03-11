@@ -26,18 +26,15 @@ class Player:
     costs = slab.costs
 
     if not self.canBuySlab(cards, costs):
-      print('Nop')
       return []
 
     i = len(cards) - 1
-    print(i, costs)
     deletedCards = []
     while (i >= 0 and costs[0] + costs[1] + costs[2] > 0):
       index = indexOf(self.cards, cards[i])
       if index == -1:
         raise Exception('Card not found')
       cardType = self.cards[index].type
-      print(index, self.cards[index], cardType)
       if (costs[0] > 0 and cardType[0] == 'Domain'):
         deletedCards += [self.cards.pop(index)]
         costs[0] -= 1
@@ -172,7 +169,6 @@ class Player:
     y = coords[0] + movement[0]
     if 0 <= x < 4 and 0 <= y < 4:
       slab = self.board[y][x]
-      # print(x, y, slab)
       if slab != None:
         link = slab.ApplyRotation()
     return link
@@ -205,7 +201,7 @@ class Player:
 
   def getCards(self, slab):
     res = []
-    costs = slab.costs
+    costs = slab.costs.copy()
     for card in self.cards:
       if costs[0] >= 1 and card.type[0] == 'Domain':
         res += [card]
@@ -216,6 +212,15 @@ class Player:
       if costs[2] >= 1 and card.type[0] == 'Mathematics':
         res += [card]
         costs[2] -= 1
+    return res
+
+  def getRiskCards(self, risk):
+    res = []
+    costs = risk.costs
+    for card in self.cards:
+      if costs >= 1 and card.type[1] == risk.needed:
+        res += [card]
+        costs -= 1
     return res
 
   def toJSON(self):
