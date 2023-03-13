@@ -70,7 +70,7 @@ const GamePage = () => {
                   Bot Next Action
                 </Button>
               )}
-              {players[actualPlayer]?.type === 0 && (
+              {/* {players[actualPlayer]?.type === 0 && ( */}
                 <>
                   <Button
                     className='mx-2'
@@ -85,7 +85,7 @@ const GamePage = () => {
                     Terminar Turno
                   </Button>
                 </>
-              )}
+              {/* )} */}
             </div>
             <hr />
             <Market />

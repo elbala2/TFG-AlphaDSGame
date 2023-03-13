@@ -76,27 +76,41 @@ class Bot:
       mark += 10
     mark += len(cards)
     return mark
+
+  def computeSlab(self, game, slabIndex, slab):
+    bot = game.getActualPlayer()
+    res = []
+    if bot.canBuySlab(None, slab.costs):
+      cards = bot.getCards(slab)
+      for place in bot.getPosiblePlaces(slab):
+        slab.rotation = place['rotation']
+        res += [{
+          'targetSlabId': slabIndex,
+          'mark': self.getMark(slab, place, cards, bot.board),
+          'pos': place['pos'],
+          'rotation': place['rotation'],
+          'cards': cards,
+        }]
+    return res
     
   def getPosibleSlabsToBuy(self, game):
-    bot = game.getActualPlayer()
+    typeOptions = ['RED', 'GREEN', 'BLUE', 'YELLOW']
     res = []
     for slabIndex in range(len(game.normalMarket)):
       slab = game.normalMarket[slabIndex]
-      if bot.canBuySlab(None, slab.costs):
-        cards = bot.getCards(slab)
-        for place in bot.getPosiblePlaces(slab):
-          slab.rotation = place['rotation']
-          res += [{
-              'targetSlabId': slabIndex,
-              'mark': self.getMark(slab, place, cards, bot.board),
-              'pos': place['pos'],
-              'rotation': place['rotation'],
-              'cards': cards,
-          }]
+      res += self.computeSlab(game, slabIndex,  slab)
+
+    for slabIndex in range(4, len(game.specialMarket) + 4):
+      slab = game.specialMarket[slabIndex - 4]
+      if not slab.isRisk and slab.type == typeOptions[game.actualPlayer]:
+        res += self.computeSlab(game, slabIndex, slab)
+      
     res.sort(key=lambda elem: elem['mark'])
     return res
 
   def buyPlaceSlab(self, game):
+    if len(list(filter(lambda slab: slab.isRisk, game.specialMarket))) != 0:
+      return False
     slabsToBuy = self.getPosibleSlabsToBuy(game)
     if len(slabsToBuy) == 0:
       return False

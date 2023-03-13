@@ -133,7 +133,7 @@ class Game():
         playerAux.hasBougth = False
         x = 4 - len(playerAux.cards)
         self.cards = self.cards[x:]
-        playerAux.cards.append(self.cards[:x])
+        playerAux.cards += self.cards[:x]
 
       self.slabs += self.normalMarket
       self.normalMarket = []
