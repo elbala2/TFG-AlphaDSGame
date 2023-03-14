@@ -58,6 +58,8 @@ def genSlabs():
   random.shuffle(res)
   return res
 
+colors = ['RED', 'GREEN', 'BLUE', 'YELLOW']
+
 class Game():
   def __init__(self, id, start = 1):
     self.id = id
@@ -82,7 +84,7 @@ class Game():
       cards = []
       for j in range(4):
         cards.append(self.cards.pop(0))
-      self.players.append(Player(i, 'Player '+ str(i + 1), start, cards))
+      self.players.append(Player(i, 'Player '+ str(i + 1), start, cards, colors[i]))
     self.actualPlayer = 0
     self.start = start
     self.pos = [start, 0, 0]
@@ -99,7 +101,7 @@ class Game():
       name, type = players[i].values()
       cards = self.cards[:4]
       self.cards = self.cards[4:]
-      self.players[i] = Player(i, name, start, cards, type)
+      self.players[i] = Player(i, name, start, cards, colors[i], type)
     
   def nextTurn(self):
     if (self.actualPlayer == 3):
@@ -160,7 +162,7 @@ class Game():
     slab = market[realOrigin]
     slab.rotation = rotation
     player = self.getActualPlayer()
-    self.cards.append(player.buy(slab, cards))
+    self.cards += player.buy(slab, cards)
     player.putSlab(slab, destiny)
     self.slabs.append(market.pop(realOrigin))
     

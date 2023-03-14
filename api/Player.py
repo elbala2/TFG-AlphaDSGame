@@ -9,10 +9,11 @@ def toJSON(obj):
 
 
 class Player:
-  def __init__(self, id, name, start, cards, type=0):
+  def __init__(self, id, name, start, cards, color, type=0):
     self.id = id
     self.name = name
     self.type = type
+    self.color = color
     self.points = 0
     self.cards = cards
     self.hasBougth = False

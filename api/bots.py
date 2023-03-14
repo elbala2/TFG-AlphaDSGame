@@ -115,7 +115,7 @@ class Bot:
     if len(slabsToBuy) == 0:
       return False
     targetSlabId, mark, pos, rotation, cards = slabsToBuy.pop(0).values()
-    game.moveSlab(targetSlabId, [pos[0], pos[1]], rotation, cards)
+    game.moveSlab(targetSlabId, [pos[1], pos[0]], rotation, cards)
     return True
 
   def computeCards(self, game):

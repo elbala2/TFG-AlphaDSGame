@@ -7,37 +7,21 @@ import styles from './Styles/MarketContainer.module.scss';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Button from '../../../UI/Button';
 
-const canbebougth = (cards, costs, type, actualPlayer) => {
+const canbebougth = (cards, costs) => {
   const canbebougth =
     cards.filter((f) => f.type[0] === 'Domain').length >= costs[0] &&
     cards.filter((f) => f.type[0] === 'Computer Science').length >= costs[1] &&
     cards.filter((f) => f.type[0] === 'Mathematics').length >= costs[2];
-
-  switch (type) {
-    case 'RED':
-      if (actualPlayer !== 0) return false;
-      else return canbebougth;
-    case 'GREEN':
-      if (actualPlayer !== 1) return false;
-      else return canbebougth;
-    case 'BLUE':
-      if (actualPlayer !== 2) return false;
-      else return canbebougth;
-    case 'YELLOW':
-      if (actualPlayer !== 3) return false;
-      else return canbebougth;
-    default:
-      return canbebougth;
-  }
+  return canbebougth; 
 };
 
 const MarketContainer = ({ index, slab, disabled }) => {
-  const { actualPlayer, players } = useSelector((state) => state);
-  const { cards, hasBougth } = players[actualPlayer];
+  const { cards, hasBougth } = useSelector((state) => state.players[state.actualPlayer]);
   const dispatch = useDispatch();
 
-  const { rotation, costs, type } = slab;
-  const canbuy = !hasBougth && canbebougth(cards, costs, type, actualPlayer) && !disabled;
+  const { rotation, costs } = slab;
+  const canbuy = !hasBougth && canbebougth(cards, costs) && !disabled;
+  const canbuyWithSelected = !hasBougth && canbebougth(cards.filter(c => c.selected), costs) && !disabled;
   return (
     <div className={`${styles.marketContainer}`} key={index}>
       <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`} disabled={!canbuy}>
@@ -60,7 +44,7 @@ const MarketContainer = ({ index, slab, disabled }) => {
         <Droppable droppableId={`marketDrop_${index}`} isDropDisabled>
           {provided => (
             <div ref={provided.innerRef} {...provided.droppableProps}>
-              <Draggable draggableId={String(index)} index={0} isDragDisabled={!canbuy}>
+              <Draggable draggableId={String(index)} index={0} isDragDisabled={!canbuyWithSelected}>
                 {provided => (
                   <div
                     ref={provided.innerRef}

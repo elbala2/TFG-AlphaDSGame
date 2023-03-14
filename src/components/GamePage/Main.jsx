@@ -28,10 +28,13 @@ const GamePage = () => {
     }
   }, [dispatch, id]);
 
-  console.log(state)
 
   function handleBotNextAction() {
-    getBotAction(id).then(res => dispatch(setState(res)))
+    getBotAction(id).then(res => {
+      console.log('prev', JSON.parse(JSON.stringify(state)))
+      console.log('new', res)
+      dispatch(setState(res));
+    })
   };
 
   function handlerNextTurnAction() {

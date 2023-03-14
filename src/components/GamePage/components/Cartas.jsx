@@ -6,8 +6,7 @@ import { Discard } from '../../../utils/ApiConf';
 import Button from '../../UI/Button';
 
 const Cartas = ({actualPlayer = 0, titleStyles, descartable = false}) => {
-  const cards = useSelector((state) => state.players[actualPlayer].cards);
-  const id = useSelector((state) => state.id);
+  const { id, cards } = useSelector((state) => ({ id: state.id, cards: state.players[actualPlayer].cards }));
   const dispatch = useDispatch();
   return (
     <div className={styles.cardscontainer}>

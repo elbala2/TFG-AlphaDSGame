@@ -43,7 +43,6 @@ export const setCardSelected = (playerId, id) => {
 }
 
 export const nextPlayer = (callbackRes) => {
-  console.log(callbackRes)
   return {
     type: NEXTPLAYER,
     newstate: callbackRes,
