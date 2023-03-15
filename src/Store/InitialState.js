@@ -9,9 +9,14 @@ const initialState = {
   target: null,
   finished: false,
   actualPlayer: 0,
-  pos: null,
+  pos: [1, 0, 0],
   players: [
-    { name: 'Player 1', cards: [], board: [] }
+    { name: 'Player 1', cards: [], board: [
+      [null, null, null, null],
+      [{}, null, null, null],
+      [null, null, null, null],
+      [null, null, null, null],
+    ] }
   ],
 }
 

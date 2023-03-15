@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
 import styles from './Styles/Modal.module.scss'
@@ -11,9 +12,9 @@ function Modal({
   title,
 }) {
   if (!isOpen) return '';
-  return (
-    <div className={styles.back}>
-      <div className={styles.content}>
+  return ReactDOM.createPortal(
+    <div className={styles.back} onClick={onClose}>
+      <div className={styles.content} onClick={(e) => e.stopPropagation()}>
         <div className='d-flex py-2'>
           <h4 className='flex-fill'>{title}</h4>
           <Button variants='secondary' className='p-0' onClick={onClose}>
@@ -27,7 +28,8 @@ function Modal({
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal'),
   )
 }
 

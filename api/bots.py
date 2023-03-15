@@ -45,6 +45,20 @@ class Bot:
   def getDistance(self, x, y):
     return abs(2 - x) + abs(-1 - y)
 
+  def dirMark(self, link, x, y, direction, board):
+    distance = self.getDistance(x, y)
+    pointingInside = (0 <= x <= 3 and 0 <= y <= 3)
+    if link:
+      if not pointingInside:
+        return distance * 2
+      if board[x][y] == None:
+        return distance
+      if board[x][y].ApplyRotation()[direction]:
+        return -distance
+    if pointingInside and board[x][y] != None and board[x][y].ApplyRotation()[direction]:
+      return distance * 2
+    return 0
+
   def getMark(self, slab, place, cards, board):
     mark = 0
     x = place['pos'][0]
@@ -54,26 +68,10 @@ class Bot:
     mark -= self.getDistance(x, y)
     if x == 2 and y == 0:
       mark -= 40
-    if links[0] == 1 and 0 <= y - 1 <= 3:
-      if board[x][y - 1] == None or not board[x][y - 1].ApplyRotation()[2]:
-        mark += self.getDistance(x, y - 1)
-    else:
-      mark += 10
-    if links[1] == 1 and 0 <= x + 1 <= 3:
-      if board[x + 1][y] == None or not board[x+1][y].ApplyRotation()[3]:
-        mark += self.getDistance(x + 1, y)
-    else:
-      mark += 10
-    if links[2] == 1 and 0 <= y + 1 <= 3:
-      if board[x][y + 1] == None or not board[x][y + 1].ApplyRotation()[0]:
-        mark += self.getDistance(x, y + 1)
-    else:
-      mark += 10
-    if links[3] == 1 and 0 <= x - 1 <= 3:
-      if board[x - 1][y] == None or not board[x - 1][y].ApplyRotation()[1]:
-        mark += self.getDistance(x - 1, y)
-    else:
-      mark += 10
+    mark += self.dirMark(links[0] == 1, x, y - 1, 2, board)
+    mark += self.dirMark(links[1] == 1, x + 1, y, 3, board)
+    mark += self.dirMark(links[2] == 1, x, y + 1, 0, board)
+    mark += self.dirMark(links[3] == 1, x - 1, y, 1, board)
     mark += len(cards)
     return mark
 
@@ -91,8 +89,9 @@ class Bot:
           'rotation': place['rotation'],
           'cards': cards,
         }]
+        
     return res
-    
+
   def getPosibleSlabsToBuy(self, game):
     typeOptions = ['RED', 'GREEN', 'BLUE', 'YELLOW']
     res = []
@@ -106,6 +105,8 @@ class Bot:
         res += self.computeSlab(game, slabIndex, slab)
       
     res.sort(key=lambda elem: elem['mark'])
+    for x in res:
+      print(x)
     return res
 
   def buyPlaceSlab(self, game):

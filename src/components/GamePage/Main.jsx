@@ -17,22 +17,23 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 const GamePage = () => {
   const dispatch = useDispatch();
-  const { actualPlayer, players, finished, id, normalMarket, specialMarket } = useSelector((state) => state);
+  const { actualPlayer, players, finished, id, normalMarket, specialMarket, pos: { 2: specialPlayer } } = useSelector((state) => state);
   const state = useSelector((state) => state);
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
 
   useEffect(() => {
     if (id === 0) {
-      StartGame().then((res) => dispatch(start(res)));
+      StartGame().then((res) => {
+        console.log('new', res)
+        dispatch(start(res))
+      });
     }
   }, [dispatch, id]);
 
 
   function handleBotNextAction() {
     getBotAction(id).then(res => {
-      console.log('prev', JSON.parse(JSON.stringify(state)))
-      console.log('new', res)
       dispatch(setState(res));
     })
   };
@@ -66,14 +67,13 @@ const GamePage = () => {
             <div className={styles.header}>
               <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
               <div className='flex-fill' />
-              {players[actualPlayer]?.type === 1 && (
+              {(players[actualPlayer]?.type === 1 || specialPlayer === actualPlayer) ? (
                 <Button
                   onClick={handleBotNextAction}
                 >
                   Bot Next Action
                 </Button>
-              )}
-              {/* {players[actualPlayer]?.type === 0 && ( */}
+              ) : (
                 <>
                   <Button
                     className='mx-2'
@@ -88,7 +88,7 @@ const GamePage = () => {
                     Terminar Turno
                   </Button>
                 </>
-              {/* )} */}
+              )}
             </div>
             <hr />
             <Market />

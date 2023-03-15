@@ -83,7 +83,6 @@ const playerReducer = (state = initialState, action) => {
       };
 
     case FIX:
-      console.log(action)
       return {
         ...state,
         players: action.players,

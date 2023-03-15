@@ -2,15 +2,19 @@ import { setTarget } from '../../../Store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMision, getSlabImg } from "../../../Store/GetSlabImg";
 import { Tooltip } from '@material-ui/core';
+import { Droppable } from 'react-beautiful-dnd';
 
 import conexion_borde from '../../../resources/border-conexion.png';
 
 import styles from './Styles/Tablero.module.scss';
-import { Droppable } from 'react-beautiful-dnd';
 
 const Tablero = () => {
-  const {  start, actualPlayer, pos } = useSelector(state => state)
-  const { board, completed } = useSelector(state => state.players[actualPlayer])
+  const {  start, actualPlayer, pos, board } = useSelector(state => ({
+    start: state.start,
+    actualPlayer: state.actualPlayer,
+    pos: state.pos,
+    board: state.players[state.actualPlayer].board,
+  }))
   const dispatch = useDispatch();
 
   return (
@@ -36,7 +40,7 @@ const Tablero = () => {
       <div>
         <img
           draggable='false'
-          src={getMision(actualPlayer, completed)}
+          src={getMision(actualPlayer, board[0][2] !== null)}
           alt={`mision ${actualPlayer}`}
           className={`${styles.misionImg}`}
         />
@@ -66,7 +70,7 @@ const Tablero = () => {
                         src={getSlabImg(casilla)}
                         alt={``}
                         draggable={false}
-                        ishere={`${pos ? i === pos[0] && j === pos[1] && actualPlayer === pos[2] : false}`}
+                        ishere={`${i === pos[0] && j === pos[1] && actualPlayer === pos[2]}`}
                       />
                     ) : (
                       <>
@@ -80,7 +84,7 @@ const Tablero = () => {
                           id={`img_${casilla.id}`}
                           src={getSlabImg(casilla)}
                           alt={``}
-                          ishere={`${pos ? i === pos[0] && j === pos[1] && actualPlayer === pos[2] : false}`}
+                          ishere={`${i === pos[0] && j === pos[1] && actualPlayer === pos[2]}`}
                           draggable={false}
                         />
                       </>
