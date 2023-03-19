@@ -1,19 +1,21 @@
-import HeaderAndFooter from '../UI/Header&Footer';
-import Market from './components/Market/Market';
-import Cartas from './components/Cartas';
-import Tablero from './components/Tablero';
-import TradeModal from './components/tradeModal';
+import { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { DragDropContext } from 'react-beautiful-dnd';
+
 import { mover, nextPlayer, setState, start } from '../../Store/actions';
-import { useEffect, useState } from 'react';
+import { getBotAction, MoveSlab, NextTurn, StartGame } from '../../utils/ApiConf';
+
+import SuccessModal from './components/SuccessModal';
+import HeaderAndFooter from '../UI/Header&Footer';
+import TradeModal from './components/tradeModal';
+import Market from './components/Market/Market';
+import Tablero from './components/Tablero';
+import Cartas from './components/Cartas';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 
 import styles from './Main.module.scss';
-import SuccessModal from './components/SuccessModal';
-import { getBotAction, MoveSlab, NextTurn, StartGame } from '../../utils/ApiConf';
-import { DragDropContext } from 'react-beautiful-dnd';
 
 const GamePage = () => {
   const dispatch = useDispatch();

@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-import styles from './Styles/SuccessModal.module.scss'
-import Button from '../../UI/Button';
 import Modal from '../../UI/Modal';
+import Button from '../../UI/Button';
+
+import styles from './Styles/SuccessModal.module.scss'
 
 const SuccessModal = () => {
   const players = useSelector(state => state.players)

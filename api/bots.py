@@ -1,3 +1,8 @@
+cardTypes = [
+  'Domain',
+  'Computer Science',
+  'Mathematics',
+]
 
 class Bot:
   def __init__(self):
@@ -133,24 +138,14 @@ class Bot:
             needed = True
             break
         if not needed:
-          cardIds += card.id
+          cardIds += [card.id]
       else:
         types = [0,0,0]
-        if card.type[0] == 'Domain':
-          if types[0] > 0:
-            cardIds += card.id
-          else:
-            types[0] += 1
-        elif card.type[0] == 'Computer Science':
-          if types[1] > 0:
-            cardIds += card.id
-          else:
-            types[1] += 1
-        else:
-          if types[2] > 0:
-            cardIds += card.id
-          else:
-            types[2] += 1
+        for i in range(len(cardTypes)):
+          if card.type[0] == cardTypes[i]:
+            types[i] += 1
+            if types[i] > 0:
+              cardIds += [card.id]
     for cardId in cardIds:
       game.discard(cardId)
     return len(cardIds) != 0
