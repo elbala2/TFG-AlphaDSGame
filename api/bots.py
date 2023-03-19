@@ -50,13 +50,13 @@ class Bot:
     pointingInside = (0 <= x <= 3 and 0 <= y <= 3)
     if link:
       if not pointingInside:
-        return distance * 2
+        return 20
       if board[x][y] == None:
         return distance
       if board[x][y].ApplyRotation()[direction]:
         return -distance
     if pointingInside and board[x][y] != None and board[x][y].ApplyRotation()[direction]:
-      return distance * 2
+      return 20
     return 0
 
   def getMark(self, slab, place, cards, board):

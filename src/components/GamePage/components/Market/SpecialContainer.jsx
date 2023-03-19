@@ -2,9 +2,11 @@ import { getSlabImg } from '../../../../Store/GetSlabImg';
 import { mover, rotar } from '../../../../Store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
-import styles from './Styles/SpecialContainer.module.scss';
-import { Tooltip } from '@material-ui/core';
 import { MoveSlab } from '../../../../utils/ApiConf';
+
+import Tooltip from '../../../UI/Tooltip';
+
+import styles from './Styles/SpecialContainer.module.scss';
 
 const canbebougth = (cartas, costes, type, actualplayer) => {
   const canbebougth =

@@ -3,9 +3,9 @@ import { fix } from '../../../../Store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './Styles/RiskContainer.module.scss';
-import { Tooltip } from '@material-ui/core';
 import { fixRisk } from '../../../../utils/ApiConf';
 import Button from '../../../UI/Button';
+import Tooltip from '../../../UI/Tooltip';
 
 const canbebougth = (cartas, costes, type) => {
   switch (type) {

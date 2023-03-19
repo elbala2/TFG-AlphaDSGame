@@ -1,4 +1,3 @@
-import { Card } from '@material-ui/core';
 import { initialConfig } from '../../Store/actions';
 import { useState } from 'react';
 
@@ -32,7 +31,7 @@ const HomePage = () => {
 
   return (
     <HeaderAndFooter>
-      <Card className={styles.mainCard}>
+      <div className={styles.mainCard}>
         <h1>Bienvenido a AlphaDSGame</h1>
         <div className={styles.playerButtonsContainer}>
           {players.map((player, index) => (
@@ -70,7 +69,7 @@ const HomePage = () => {
             Start
           </Button>
         </div>
-      </Card>
+      </div>
       {save && <Navigate to='/Game' replace/>}
     </HeaderAndFooter>
   );

@@ -29,7 +29,11 @@
   font-weight: 600;
   font-size: 16px;
 
-  &:hover {
+  &:disabled {
+    opacity: 0.6;
+  }
+
+  &:not(:disabled):hover {
     background-color: var(--accent);
     color: var(--color);
   }
@@ -42,7 +46,11 @@
   font-weight: 600;
   font-size: 16px;
 
-  &:hover {
+  &:disabled {
+    opacity: 0.6;
+  }
+
+  &:not(:disabled):hover {
     background-color: var(--color);
     color: var(--accent);
   }

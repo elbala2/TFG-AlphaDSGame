@@ -1,12 +1,12 @@
 import { setTarget } from '../../../Store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMision, getSlabImg } from "../../../Store/GetSlabImg";
-import { Tooltip } from '@material-ui/core';
 import { Droppable } from 'react-beautiful-dnd';
 
 import conexion_borde from '../../../resources/border-conexion.png';
 
 import styles from './Styles/Tablero.module.scss';
+import Tooltip from '../../UI/Tooltip';
 
 const Tablero = () => {
   const {  start, actualPlayer, pos, board } = useSelector(state => ({

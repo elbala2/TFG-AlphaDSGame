@@ -1,0 +1,17 @@
+.container {
+  position: relative;
+
+  &:hover .hidden {
+    display: block;
+  }
+
+  .hidden {
+    display: none;
+    position: absolute;
+    top: 0px;
+    border-radius: 10px;
+    background-color: gray;
+    color: white;
+    z-index: 50;
+  }
+}

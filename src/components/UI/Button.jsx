@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { CircularProgress } from '@material-ui/core'
 
 import './Styles/Button.scss'
+import Loader from './Loader'
 
 const commonClasses = 'rounded-1 btn-normal'
 
@@ -63,7 +63,7 @@ function Button({
           </>
         ) : (
           <>
-            {(forcedLoading || loading) && <CircularProgress size={12} className='me-2' color='none'/>}
+            {(forcedLoading || loading) && <Loader />}
             {children}
           </>
         )}
