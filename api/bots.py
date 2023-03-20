@@ -25,6 +25,8 @@ class Bot:
   def getRiskToResolve(self, game):
     bot = game.getActualPlayer()
     res = []
+    if not game.hasRisk:
+      return []
     for riskIndex in range(len(game.specialMarket)):
       if game.specialMarket[riskIndex].isRisk and bot.canSolveRisk(game.specialMarket[riskIndex]):
         res += [{
@@ -115,7 +117,7 @@ class Bot:
     return res
 
   def buyPlaceSlab(self, game):
-    if len(list(filter(lambda slab: slab.isRisk, game.specialMarket))) != 0:
+    if game.hasRisk:
       return False
     slabsToBuy = self.getPosibleSlabsToBuy(game)
     if len(slabsToBuy) == 0:
@@ -149,3 +151,54 @@ class Bot:
     for cardId in cardIds:
       game.discard(cardId)
     return len(cardIds) != 0
+
+  def getCardsConfig(self, game, slab):
+    bot = game.getActualPlayer()
+    blocked = []
+    if slab.isRisk:
+      cost = risk.cost
+      for cardIndex in range(len(bot.cards)):
+        card = bot.cards[cardIndex]
+        if getRiskFixCardType(risk.type) == card.type[1]:
+          blocked += [cardIndex]
+      if len(blocked) == cost:
+        return {
+          'needed': [],
+          'blocked': blocked,
+          'player': game.actualPlayer,
+        }
+      else:
+        res = []
+        for playerIndex in range(len(game.players)):
+          needed = []
+          if playerIndex != game.actualPlayer:
+            for cardIndex in range(len(game.players[playerIndex].cards)):
+              if getRiskFixCardType(risk.type) == card.type[1] and len(blocked) + len(needed) == cost:
+                needed += [cardIndex]
+            if len(blocked) + len(needed) == cost:
+              res += {
+                'needed': needed,
+                'blocked': blocked,
+                'player': game.actualPlayer,
+              }
+        return res        
+
+    else:
+      pass
+
+  def getPreferedRiskCards(self, game):
+    re = []
+    for index in range(len(game.specialMarket)):
+      if game.specialMarket[index].isRisk and game.canRiskBeSolved(index):
+        res += self.getCardsConfig(game, game.specialMarket[index])
+
+  def getPreferedCards(self, game):
+    res = []
+
+    if game.hasRisk:
+      res += self.getPreferedRiskCards(game)
+    else:
+      pass
+
+  def trade(self, game):
+    preferedCards, blockedCards = self.getPreferedCards(game)

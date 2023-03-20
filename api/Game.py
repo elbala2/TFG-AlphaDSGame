@@ -195,7 +195,7 @@ class Game():
   def botAction(self):
     hecho = False
     actions = [
-      # ! TODO tradear cartas
+      self.bot.trade,
       self.bot.resolveRisks, # Funciona
       self.bot.buyPlaceSlab, # Funciona
       self.bot.computeCards,
@@ -207,4 +207,31 @@ class Game():
         self.nextBotAction = (botActionIndex + 1) % 4
         break
     return hecho
-  
+
+  def canRiskBeSolved(self, index):
+    risk = self.specialMarket[index]
+
+    cost = risk.costs
+    for player in self.players:
+      for card in player.cards:
+        if card.type[1] == getRiskFixCardType(risk.type):
+          cost -= 1
+          if cost == 0:
+            return True
+    return False
+
+  def canSlabBeBougth(self, index):
+    slab = self.normalMarket[index]
+
+    costs = slab.costs.copy()
+    for player in self.players:
+      for card in player.cards:
+        if card.type[0] == 'Domain':
+          costs[0] -= 1
+        elif card.type[0] == 'Computer Science':
+          costs[1] -= 1
+        elif card.type[0] == 'Mathematics':
+          costs[2] -= 1
+        if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
+          return True
+    return False
