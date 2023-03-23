@@ -156,7 +156,7 @@ class Bot:
     bot = game.getActualPlayer()
     blocked = []
     if slab.isRisk:
-      cost = risk.cost
+      cost = slab.cost
       for cardIndex in range(len(bot.cards)):
         card = bot.cards[cardIndex]
         if getRiskFixCardType(risk.type) == card.type[1]:
@@ -173,24 +173,81 @@ class Bot:
           needed = []
           if playerIndex != game.actualPlayer:
             for cardIndex in range(len(game.players[playerIndex].cards)):
+              card = game.players[playerIndex].cards[cardIndex]
               if getRiskFixCardType(risk.type) == card.type[1] and len(blocked) + len(needed) == cost:
                 needed += [cardIndex]
             if len(blocked) + len(needed) == cost:
               res += {
                 'needed': needed,
                 'blocked': blocked,
-                'player': game.actualPlayer,
+                'player': playerIndex,
               }
-        return res        
+        return res
 
     else:
-      pass
+      costs = slab.costs.copy()
+      for cardIndex in range(len(bot.cards)):
+        card = bot.cards[cardIndex]
+        if costs[0] != 0 and card.type[0] == 'Domain':
+          costs[0] -= 1
+          blocked += [cardIndex]
+        if costs[1] != 0 and card.type[0] == 'Computer Science':
+          costs[1] -= 1
+          blocked += [cardIndex]
+        if costs[2] != 0 and card.type[0] == 'Mathematics':
+          costs[2] -= 1
+          blocked += [cardIndex]
+        if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
+          break
+      if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
+        return {
+          'needed': [],
+          'blocked': blocked,
+          'player': game.actualPlayer,
+        }
+      else:
+        res = []
+        for playerIndex in range(len(game.players)):
+          needed = []
+          if playerIndex != game.actualPlayer:
+            for cardIndex in range(len(game.players[playerIndex].cards)):
+              card = game.players[playerIndex].cards[cardIndex]
+              if len(blocked) + len(needed) == len(costs[0]) + len(costs[1] + len(costs[2])):
+                if costs[0] != 0 and card.type[0] == 'Domain':
+                  costs[0] -= 1
+                  needed += [cardIndex]
+                if costs[1] != 0 and card.type[0] == 'Computer Science':
+                  costs[1] -= 1
+                  needed += [cardIndex]
+                if costs[2] != 0 and card.type[0] == 'Mathematics':
+                  costs[2] -= 1
+                  needed += [cardIndex]
+              if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
+                res += {
+                  'needed': needed,
+                  'blocked': blocked,
+                  'player': playerIndex,
+                }
+                break
+        return res      
 
   def getPreferedRiskCards(self, game):
-    re = []
+    res = []
     for index in range(len(game.specialMarket)):
       if game.specialMarket[index].isRisk and game.canRiskBeSolved(index):
         res += self.getCardsConfig(game, game.specialMarket[index])
+    return res
+
+  def getPreferedSlabCards(self, game):
+    res = []
+    for index in range(len(game.normalMarket)):
+      if game.canSlabBeBought(index):
+        res += self.getCardsConfig(game, game.normalMarket[index])
+    for index in range(len(game.specialMarket)):
+      if not game.specialMarket[index].isRisk and game.canSlabBeBought(index):
+        res += self.getCardsConfig(game, game.specialMarket[index])
+    return res
+
 
   def getPreferedCards(self, game):
     res = []
@@ -198,7 +255,7 @@ class Bot:
     if game.hasRisk:
       res += self.getPreferedRiskCards(game)
     else:
-      pass
+      res += self.getPreferedSlabCards(game)
 
   def trade(self, game):
     preferedCards, blockedCards = self.getPreferedCards(game)
