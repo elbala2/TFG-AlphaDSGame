@@ -80,7 +80,9 @@ def fix(id):
 @app.route('/bot/<id>', methods=['GET'])
 def bot_moves(id):
   game = getGame(id)
-  game.botAction()
+  hecho = game.botAction()
+  if hecho != True:
+    return jsonify(toJSON(hecho))
   storeGame(id, game)
   return jsonify(toJSON(game))
 

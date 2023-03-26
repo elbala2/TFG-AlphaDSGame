@@ -236,7 +236,7 @@ class Bot:
     for index in range(len(game.specialMarket)):
       if game.specialMarket[index].isRisk and game.canRiskBeSolved(index):
         res += self.getCardsConfig(game, game.specialMarket[index])
-    return res
+    return res[:3]
 
   def getPreferedSlabCards(self, game):
     res = []
@@ -246,7 +246,7 @@ class Bot:
     for index in range(len(game.specialMarket)):
       if not game.specialMarket[index].isRisk and game.canSlabBeBought(index):
         res += self.getCardsConfig(game, game.specialMarket[index])
-    return res
+    return res[:3]
 
 
   def getPreferedCards(self, game):
@@ -258,4 +258,10 @@ class Bot:
       res += self.getPreferedSlabCards(game)
 
   def trade(self, game):
-    preferedCards, blockedCards = self.getPreferedCards(game)
+    cardConfigurations = self.getPreferedCards(game)
+    if len(cardConfigurations) == 0:
+      return False
+    return {
+      'action': 'trade',
+      'cardConfig': cardConfigurations,
+    }

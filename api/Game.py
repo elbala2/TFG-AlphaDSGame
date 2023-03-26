@@ -203,7 +203,7 @@ class Game():
     ]
     for botActionIndex in range(self.nextBotAction, len(actions)):
       hecho = actions[botActionIndex](self)
-      if hecho:
+      if hecho != False:
         self.nextBotAction = (botActionIndex + 1) % 4
         break
     return hecho
