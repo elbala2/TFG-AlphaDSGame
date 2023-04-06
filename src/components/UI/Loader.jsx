@@ -8,7 +8,7 @@ function Loader({
 }) {
   return (
     <div className={className}>
-      <span class={Styles.loader} />
+      <span className={Styles.loader} />
     </div>
   )
 }

@@ -72,13 +72,13 @@ class Game():
     while(len(self.normalMarket) < 4):
       item = self.slabs.pop(0)
       if not item.isSpecial:
+        self.normalMarket.append(item)
+      elif len(self.specialMarket) < 4:
         if item.isRisk:
           self.hasRisk += 1
-        self.normalMarket.append(item)
-      elif len(self.specialMarket) == 4:
-        self.slabs.append(item)
-      else:
         self.specialMarket.append(item)
+      else:
+        self.slabs.append(item)
     self.players = []
     for i in range(4):
       cards = []
@@ -111,8 +111,6 @@ class Game():
         self.finished = self.pos[2] == 4
         self.pos = [self.start, 0, self.pos[2] + 1]
       else:
-        print(self.pos)
-        print(self.players[self.pos[2]])
         mov = player.whereCanBePlace(
           player.board[self.pos[0]][self.pos[1]],
           [self.pos[0], self.pos[1]],
@@ -145,6 +143,8 @@ class Game():
         if (not slab.isSpecial):
           self.normalMarket.append(slab)
         elif (len(self.specialMarket) < 4):
+          if slab.isRisk:
+            self.hasRisk += 1
           self.specialMarket.append(slab)
         else:
           self.slabs.append(slab)
@@ -201,8 +201,17 @@ class Game():
       self.bot.computeCards,
       Game.nextTurn,
     ]
+    actionLiterals = [
+      'Trade',
+      'Risk Resolve',
+      'Move Slab',
+      'Discard Cards',
+      'Next Turn',
+    ]
     for botActionIndex in range(self.nextBotAction, len(actions)):
       hecho = actions[botActionIndex](self)
+      if hecho:
+        print(actionLiterals[botActionIndex])
       if hecho != False:
         self.nextBotAction = (botActionIndex + 1) % 4
         break
