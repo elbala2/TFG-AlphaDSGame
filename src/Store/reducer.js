@@ -11,6 +11,7 @@ import {
   START,
   RESET,
   SETSTATE,
+  SETTRADE,
 } from './actions';
 import initialState from './InitialState';
 
@@ -88,6 +89,21 @@ const playerReducer = (state = initialState, action) => {
         players: action.players,
         specialMarket: action.specialMarket,
       };
+
+    case SETTRADE:
+      action.callbackRes.forEach(x => {
+        x.config.forEach(config => {
+          if (config.needed.length) {
+            
+          }
+        })
+      })
+      console.log('🚀 ~ file: reducer.js:95 ~ playerReducer ~ cardConfigAux:', action.callbackRes);
+      const newCardConfig = []
+      return {
+        ...state,
+        cardConfig: newCardConfig,
+      }
 
     default:
       break;

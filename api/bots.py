@@ -164,11 +164,7 @@ class Bot:
         if getRiskFixCardType(slab.type) == card.type[1]:
           blocked += [cardIndex]
       if len(blocked) == cost:
-        return [{
-          'needed': [],
-          'blocked': blocked,
-          'player': game.actualPlayer,
-        }]
+        return []
       else:
         res = []
         for playerIndex in range(len(game.players)):
@@ -176,14 +172,17 @@ class Bot:
           if playerIndex != game.actualPlayer:
             for cardIndex in range(len(game.players[playerIndex].cards)):
               card = game.players[playerIndex].cards[cardIndex]
-              if getRiskFixCardType(risk.type) == card.type[1] and len(blocked) + len(needed) == cost:
+              if getRiskFixCardType(slab.type) == card.type[1] and len(blocked) + len(needed) == cost:
                 needed += [cardIndex]
-            if len(blocked) + len(needed) == cost:
+            if len(blocked) + len(needed) == cost and len(needed) > 0:
               res += [{
                 'needed': needed,
                 'blocked': blocked,
                 'player': playerIndex,
               }]
+        res.sort(key=lambda x: len(needed))
+        if len(res) > 3:
+          return res[:3]
         return res
 
     else:
@@ -202,11 +201,7 @@ class Bot:
         if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
           break
       if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
-        return [{
-          'needed': [],
-          'blocked': blocked,
-          'player': game.actualPlayer,
-        }]
+        return []
       else:
         res = []
         for playerIndex in range(len(game.players)):
@@ -214,7 +209,7 @@ class Bot:
           if playerIndex != game.actualPlayer:
             for cardIndex in range(len(game.players[playerIndex].cards)):
               card = game.players[playerIndex].cards[cardIndex]
-              if len(blocked) + len(needed) == len(costs[0]) + len(costs[1] + len(costs[2])):
+              if len(blocked) + len(needed) == costs[0] + costs[1] + costs[2]:
                 if costs[0] != 0 and card.type[0] == 'Domain':
                   costs[0] -= 1
                   needed += [cardIndex]
@@ -224,41 +219,36 @@ class Bot:
                 if costs[2] != 0 and card.type[0] == 'Mathematics':
                   costs[2] -= 1
                   needed += [cardIndex]
-              if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
+              if costs[0] == 0 and costs[1] == 0 and costs[2] == 0 and len(needed) > 0:
                 res += [{
                   'needed': needed,
                   'blocked': blocked,
                   'player': playerIndex,
                 }]
                 break
-        return res      
+        res.sort(key=lambda x: len(needed))
+        if len(res) > 3:
+          return res[:3]
+        return res 
 
   def getPreferedRiskCards(self, game):
     res = []
     for index in range(len(game.specialMarket)):
       if game.specialMarket[index].isRisk and game.canRiskBeSolved(index):
-        res += [{
-          'cardIndex': index,
-          'config': self.getCardsConfig(game, game.specialMarket[index]),
-        }]
-    print(res)
-    return res[:3]
+        res += self.getCardsConfig(game, game.specialMarket[index])
+    res.sort(key=lambda x: len(needed))
+    return res
 
   def getPreferedSlabCards(self, game):
     res = []
     for index in range(len(game.normalMarket)):
       if game.canSlabBeBougth(index):
-        res += [{
-          'cardIndex': index,
-          'config': self.getCardsConfig(game, game.normalMarket[index]),
-        }]
+        res += self.getCardsConfig(game, game.normalMarket[index])
     for index in range(len(game.specialMarket)):
       if not game.specialMarket[index].isRisk and game.canSlabBeBougth(index):
-        res += [{
-          'cardIndex': index + 4,
-          'config': self.getCardsConfig(game, game.specialMarket[index]),
-        }]
-    return res[:3]
+        res += self.getCardsConfig(game, game.specialMarket[index])
+    res.sort(key=lambda x: len(needed))
+    return res
 
 
   def getPreferedCards(self, game):

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { mover, nextPlayer, setState, start } from '../../Store/actions';
+import { mover, nextPlayer, setState, setTrade, start } from '../../Store/actions';
 import { getBotAction, MoveSlab, NextTurn, StartGame } from '../../utils/ApiConf';
 
 import SuccessModal from './components/SuccessModal';
@@ -20,7 +20,6 @@ import styles from './Main.module.scss';
 const GamePage = () => {
   const dispatch = useDispatch();
   const { actualPlayer, players, finished, id, normalMarket, specialMarket, pos: { 2: specialPlayer } } = useSelector((state) => state);
-  const state = useSelector((state) => state);
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
 
@@ -36,7 +35,11 @@ const GamePage = () => {
 
   function handleBotNextAction() {
     getBotAction(id).then(res => {
-      dispatch(setState(res));
+      if (res.action === 'trade') {
+        dispatch(setTrade(res.cardConfig))
+      } else {
+        dispatch(setState(res));
+      }
     })
   };
 
@@ -91,6 +94,20 @@ const GamePage = () => {
                   </Button>
                 </>
               )}
+              <>
+                  <Button
+                    className='mx-2'
+                    onClick={() => setTradeModalOpen((prevstate) => !prevstate)}
+                  >
+                    Trade
+                  </Button>
+                  <Button
+                    variants='secondary'
+                    onClick={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
+                  >
+                    Terminar Turno
+                  </Button>
+                </>
             </div>
             <hr />
             <Market />

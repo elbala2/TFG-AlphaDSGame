@@ -9,6 +9,7 @@ export const CONFIG = 'CONFIG';
 export const DESCARTAR = 'DESCARTAR';
 export const START = 'START';
 export const SETSTATE = 'SETSTATE';
+export const SETTRADE = 'SETTRADE';
 export const RESET = 'RESET';
 
 export const mover = (callbackRes) => {
@@ -88,6 +89,13 @@ export const start = (callbackRes) => {
 export const setState = (callbackRes) => {
   return {
     type: SETSTATE,
+    callbackRes,
+  }
+}
+
+export const setTrade = (callbackRes) => {
+  return {
+    type: SETTRADE,
     callbackRes,
   }
 }

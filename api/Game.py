@@ -150,6 +150,7 @@ class Game():
           self.slabs.append(slab)
     self.actualPlayer = (self.actualPlayer + 1) % 4
     self.nextBotAction = 0
+    return True
     
   def moveSlab(self, origin, destiny, rotation, cards):
     if (origin < 4):
@@ -186,6 +187,7 @@ class Game():
       if (index1 != -1):
         self.cards.append(player.cards.pop(index1))
     self.specialMarket.pop(index)
+    self.hasRisk -= 1
 
   def discard(self, cardID):
     index = findById(self.getActualPlayer().cards, cardID)
@@ -210,10 +212,10 @@ class Game():
     ]
     for botActionIndex in range(self.nextBotAction, len(actions)):
       hecho = actions[botActionIndex](self)
-      if hecho:
+      if hecho != False:
         print(actionLiterals[botActionIndex])
       if hecho != False:
-        self.nextBotAction = (botActionIndex + 1) % 4
+        self.nextBotAction = (botActionIndex + 1) % 5
         break
     return hecho
 

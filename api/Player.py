@@ -160,9 +160,8 @@ class Player:
 
   def canSolveRisk(self, risk):
     solveTypeNeeded = getRiskFixCardType(risk.type)
-    requiredCardsNeeded = list(
-        filter(lambda f: f.type[1] == solveTypeNeeded, self.cards,))
-    return len(requiredCardsNeeded) > 0
+    requiredCardsNeeded = list(filter(lambda f: f.type[1] == solveTypeNeeded, self.cards))
+    return len(requiredCardsNeeded) >= risk.costs
 
   def getCloseLinks(self, coords, movement):
     link = None
@@ -219,7 +218,7 @@ class Player:
     res = []
     costs = risk.costs
     for card in self.cards:
-      if costs >= 1 and card.type[1] == risk.needed:
+      if costs >= 1 and len(res) < risk.costs and card.type[1] == risk.needed:
         res += [card]
         costs -= 1
     return res
