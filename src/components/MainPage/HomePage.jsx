@@ -12,10 +12,10 @@ import Button from '../UI/Button';
 
 const HomePage = () => {
   const [players, setPlayers] = useState([
-    { name: 'Player 1', type: 1},
-    { name: 'Player 2', type: 1},
-    { name: 'Player 3', type: 1},
-    { name: 'Player 4', type: 1},
+    { name: 'Player 1', type: 0},
+    { name: 'Player 2', type: 0},
+    { name: 'Player 3', type: 0},
+    { name: 'Player 4', type: 0},
   ]);
 
   const handleChangePlayer = (player, i) => {

@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { mover, nextPlayer, setState, setTrade, start } from '../../Store/actions';
-import { getBotAction, MoveSlab, NextTurn, StartGame } from '../../utils/ApiConf';
+import { mover, setState, setTrade, start } from '../../Store/actions';
+import { getBotAction, MoveSlab, StartGame } from '../../utils/ApiConf';
 
 import SuccessModal from './components/SuccessModal';
 import HeaderAndFooter from '../UI/Header&Footer';
@@ -13,13 +13,22 @@ import Market from './components/Market/Market';
 import Tablero from './components/Tablero';
 import Cartas from './components/Cartas';
 import Button from '../UI/Button';
-import Modal from '../UI/Modal';
 
 import styles from './Main.module.scss';
+import NexPlayerModal from './components/NexPlayerModal';
 
 const GamePage = () => {
   const dispatch = useDispatch();
-  const { actualPlayer, players, finished, id, normalMarket, specialMarket, pos: { 2: specialPlayer } } = useSelector((state) => state);
+  const {
+    actualPlayer,
+    players,
+    finished,
+    id,
+    normalMarket,
+    specialMarket,
+    pos: { 2: specialPlayer },
+  } = useSelector((state) => state);
+
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
 
@@ -42,11 +51,6 @@ const GamePage = () => {
       }
     })
   };
-
-  function handlerNextTurnAction() {
-    NextTurn(id).then(res => dispatch(nextPlayer(res)))
-    setnextPlayerModalOpen((prevstate) => !prevstate);
-  }
 
   return (
     <HeaderAndFooter>
@@ -94,20 +98,6 @@ const GamePage = () => {
                   </Button>
                 </>
               )}
-              <>
-                  <Button
-                    className='mx-2'
-                    onClick={() => setTradeModalOpen((prevstate) => !prevstate)}
-                  >
-                    Trade
-                  </Button>
-                  <Button
-                    variants='secondary'
-                    onClick={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
-                  >
-                    Terminar Turno
-                  </Button>
-                </>
             </div>
             <hr />
             <Market />
@@ -117,29 +107,15 @@ const GamePage = () => {
           </div>
           <Tablero />
         </div>
-        {tradeModalOpen && <TradeModal isOpen={tradeModalOpen} onClose={() => setTradeModalOpen(prevstate => !prevstate)}/>}
-        {finished === true && <SuccessModal />}
-        <Modal
+        <TradeModal
+          isOpen={tradeModalOpen}
+          onClose={() => setTradeModalOpen(prevstate => !prevstate)}
+        />
+        <NexPlayerModal
           isOpen={nextPlayerModalOpen}
-          title='¿Esta seguro de terminar el turno?'
-          onClose={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
-        >
-          <div className={styles.modalContainer}>
-            <Button
-              className='mx-2'
-              variants='secondary outlined'
-              onClick={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
-            >
-              Cerrar
-            </Button>
-            <Button
-              variants='secondary'
-              onClick={handlerNextTurnAction}
-            >
-              Terminar el turno
-            </Button>
-          </div>
-        </Modal>
+          onClose={() => setnextPlayerModalOpen(prevstate => !prevstate)}
+        />
+        {finished === true && <SuccessModal />}
       </DragDropContext>
     </HeaderAndFooter>
   );

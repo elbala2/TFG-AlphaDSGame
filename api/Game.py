@@ -84,7 +84,7 @@ class Game():
       cards = []
       for j in range(4):
         cards.append(self.cards.pop(0))
-      self.players.append(Player(i, 'Player '+ str(i + 1), start, cards, colors[i]))
+      self.players.append(Player(i, 'Player '+ str(i + 1), start, cards, colors[i], 1))
     self.actualPlayer = 0
     self.start = start
     self.pos = [start, 0, 0]
@@ -214,7 +214,7 @@ class Game():
       hecho = actions[botActionIndex](self)
       if hecho != False:
         print(actionLiterals[botActionIndex])
-      if hecho != False:
+        print(hecho)
         self.nextBotAction = (botActionIndex + 1) % 5
         break
     return hecho
@@ -232,7 +232,10 @@ class Game():
     return False
 
   def canSlabBeBougth(self, index):
-    slab = self.normalMarket[index]
+    if index > 3:
+      slab = self.specialMarket[index - 4]
+    else:
+      slab = self.normalMarket[index]
 
     costs = slab.costs.copy()
     for player in self.players:
