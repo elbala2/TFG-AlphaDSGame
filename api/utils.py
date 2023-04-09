@@ -16,3 +16,9 @@ def findById(array, id):
     if (array[i].id == int(id)):
       return i
   return -1
+
+def apply(listA, function, default):
+  defaultAux = default
+  for x in listA:
+    defaultAux = function(defaultAux, x)
+  return defaultAux

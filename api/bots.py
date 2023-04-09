@@ -1,4 +1,5 @@
 from slabs import *
+from utils import *
 
 cardTypes = [
   'Domain',
@@ -64,8 +65,8 @@ class Bot:
         return distance
       if board[x][y].ApplyRotation()[direction]:
         return -distance
-    if pointingInside and board[x][y] != None and board[x][y].ApplyRotation()[direction]:
-      return 20
+    if pointingInside and board[x][y] != None and board[x][y].ApplyRotation()[direction] == 1:
+      return 30
     return 0
 
   def getMark(self, slab, place, cards, board):
@@ -131,7 +132,8 @@ class Bot:
   def computeCards(self, game):
     bot = game.getActualPlayer()
     cardIds = []
-    risks = []
+    types = [0,0,0]
+
     if game.hasRisk:
       risks = list(filter(lambda slab: slab.isRisk, game.specialMarket))
     for card in bot.cards:
@@ -144,12 +146,13 @@ class Bot:
         if not needed:
           cardIds += [card.id]
       else:
-        types = [0,0,0]
         for i in range(len(cardTypes)):
           if card.type[0] == cardTypes[i]:
-            types[i] += 1
             if types[i] > 0:
               cardIds += [card.id]
+            else:
+              types[i] += 1
+
     for cardId in cardIds:
       game.discard(cardId)
     return len(cardIds) != 0
@@ -193,27 +196,19 @@ class Bot:
       costs = slab.costs.copy()
       for cardIndex in range(len(bot.cards)):
         card = bot.cards[cardIndex]
-        if costs[0] != 0 and card.type[0] == 'Domain':
-          costs[0] -= 1
-          blocked += [cardIndex]
-        if costs[1] != 0 and card.type[0] == 'Computer Science':
-          costs[1] -= 1
-          blocked += [cardIndex]
-        if costs[2] != 0 and card.type[0] == 'Mathematics':
-          costs[2] -= 1
-          blocked += [cardIndex]
-        if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
-          break
-      if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
-        return []
-      else:
+        for i in range(len(cardTypes)):
+          if costs[i] != 0 and card.type[0] == cardTypes[i]:
+            costs[i] -= 1
+            blocked += [cardIndex]
+        if apply(costs, (lambda res, x: res + x), 0):
+          return []
         needed = []
         for playerIndex in range(len(game.players)):
           if playerIndex != game.actualPlayer:
             cards = []
             for cardIndex in range(len(game.players[playerIndex].cards)):
               card = game.players[playerIndex].cards[cardIndex]
-              if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
+              if apply(costs, (lambda res, x: res + x), 0):
                 if len(cards) > 0:
                   needed += [{
                     'cards': cards,
@@ -221,15 +216,10 @@ class Bot:
                   }]
                 break
               else:
-                if costs[0] != 0 and card.type[0] == 'Domain':
-                  costs[0] -= 1
-                  cards += [cardIndex]
-                if costs[1] != 0 and card.type[0] == 'Computer Science':
-                  costs[1] -= 1
-                  cards += [cardIndex]
-                if costs[2] != 0 and card.type[0] == 'Mathematics':
-                  costs[2] -= 1
-                  cards += [cardIndex]
+                for i in range(len(cardTypes)):
+                  if costs[i] != 0 and card.type[0] == cardTypes[i]:
+                    costs[i] -= 1
+                    blocked += [cardIndex]
         if len(needed) == 0:
           return []
         return [{
