@@ -1,23 +1,37 @@
-import styles from './Styles/Cartas.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { getCardIMG } from '../../../Store/GetSlabImg';
 import { descartar, setCardSelected } from '../../../Store/actions';
+
 import { Discard } from '../../../utils/ApiConf';
+
 import Button from '../../UI/Button';
 
-const Cartas = ({actualPlayer = 0, titleStyles, descartable = false}) => {
-  const { id, cards } = useSelector((state) => ({ id: state.id, cards: state.players[actualPlayer].cards }));
+import styles from './Styles/Cartas.module.scss';
+
+const Cartas = ({
+  actualPlayer = 0,
+  titleStyles,
+  descartable = false,
+  blocked = [],
+  selected = [],
+}) => {
   const dispatch = useDispatch();
+  const { id, cards } = useSelector((state) => ({ id: state.id, cards: state.players[actualPlayer].cards }));
   return (
     <div className={styles.cardscontainer}>
       {cards.map((card, index) => {
+        if (selected.includes(card.id) && !card.selected) dispatch(setCardSelected(actualPlayer, index));
+        console.log('🚀 ~ file: Cartas.jsx:19 ~ {cards.map ~ selected.includes(card.id) && !card.selected:', selected.includes(card.id) && !card.selected);
         return (
           <div
             key={index}
             type={card.type[0]}
             className={styles.card}
             select={`${card.selected}`}
-            onClick={() => dispatch(setCardSelected(actualPlayer, index))}
+            onClick={() => {
+              if (!blocked.includes(card.id) && !selected.includes(card.id)) dispatch(setCardSelected(actualPlayer, index));
+            }}
           >
             {descartable && (
               <Button

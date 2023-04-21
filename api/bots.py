@@ -165,7 +165,7 @@ class Bot:
       for cardIndex in range(len(bot.cards)):
         card = bot.cards[cardIndex]
         if getRiskFixCardType(slab.type) == card.type[1]:
-          blocked += [cardIndex]
+          blocked += [card.id]
       if len(blocked) == cost:
         return []
       else:
@@ -177,7 +177,7 @@ class Bot:
               card = game.players[playerIndex].cards[cardIndex]
               if len(blocked) + len(cards) < cost:
                 if getRiskFixCardType(slab.type) == card.type[1]:
-                  cards += [cardIndex]
+                  cards += [card.id]
               else:
                 if len(cards) > 0:
                   needed += [{
@@ -199,7 +199,7 @@ class Bot:
         for i in range(len(cardTypes)):
           if costs[i] != 0 and card.type[0] == cardTypes[i]:
             costs[i] -= 1
-            blocked += [cardIndex]
+            blocked += [card.id]
         if apply(costs, (lambda res, x: res + x), 0) == 0:
           return []
         needed = []
@@ -219,7 +219,7 @@ class Bot:
                 for i in range(len(cardTypes)):
                   if costs[i] != 0 and card.type[0] == cardTypes[i]:
                     costs[i] -= 1
-                    blocked += [cardIndex]
+                    blocked += [card.id]
         if len(needed) == 0 or len(blocked) == 0:
           return []
         return [{

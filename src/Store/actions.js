@@ -10,7 +10,6 @@ export const DESCARTAR = 'DESCARTAR';
 export const START = 'START';
 export const SETSTATE = 'SETSTATE';
 export const SET_CARD_CONFIG = 'SET_CARD_CONFIG';
-export const DISCARD_CARD_CONFIG = 'DISCARD_CARD_CONFIG';
 export const CLEAR_CARD_CONFIG = 'CLEAR_CARD_CONFIG';
 export const RESET = 'RESET';
 
@@ -98,13 +97,6 @@ export const setState = (callbackRes) => {
 export const setCardConfig = (cardConfig) => {
   return {
     type: SET_CARD_CONFIG,
-    cardConfig,
-  }
-}
-
-export const discardCardConfig = (cardConfig) => {
-  return {
-    type: DISCARD_CARD_CONFIG,
     cardConfig,
   }
 }

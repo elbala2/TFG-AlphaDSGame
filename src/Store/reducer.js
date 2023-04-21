@@ -12,7 +12,6 @@ import {
   RESET,
   SETSTATE,
   SET_CARD_CONFIG,
-  DISCARD_CARD_CONFIG,
   CLEAR_CARD_CONFIG,
 } from './actions';
 import initialState from './InitialState';
@@ -93,12 +92,6 @@ const playerReducer = (state = initialState, action) => {
       };
 
     case SET_CARD_CONFIG:
-      return {
-        ...state,
-        cardConfig: action.cardConfig,
-      }
-
-    case DISCARD_CARD_CONFIG:
       return {
         ...state,
         cardConfig: action.cardConfig,

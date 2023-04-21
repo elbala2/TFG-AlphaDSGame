@@ -8,12 +8,12 @@ import Button from '../../UI/Button';
 import styles from './Styles/SuccessModal.module.scss'
 
 const SuccessModal = () => {
-  const players = useSelector(state => state.players)
+  const { players, finished } = useSelector(state => ({ players: state.players, finished: state.finished }))
   const [closeModal, setCloseModal] = useState(false);
 
   return (
     <Modal
-      isOpen
+      isOpen={finished}
       onClose={() => setCloseModal(true)}
       title='Game Over'
     >

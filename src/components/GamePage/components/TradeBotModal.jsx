@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { aceptTrade, discardCardConfig } from '../../../Store/actions';
-import { useEffect, useState } from 'react';
+import { aceptTrade, clearCardConfig, setCardConfig } from '../../../Store/actions';
 
 import Cartas from './Cartas';
 
@@ -9,31 +8,26 @@ import { TradeCards } from '../../../utils/ApiConf';
 import Button from '../../UI/Button';
 import Modal from '../../UI/Modal';
 
-const TradeBotModal = ({
-  isOpen,
-  onClose,
-}) => {
+const TradeBotModal = () => {
   const dispatch = useDispatch();
-  const { players, id, cardConfig } = useSelector((state) => ({ players: state.players, id: state.id, cardConfig: state.cardConfig }));
+  const { players, id, cardConfig, actualPlayer } = useSelector((state) => ({ players: state.players, id: state.id, actualPlayer: state.actualPlayer, cardConfig: state.cardConfig }));
 
-  const [acept1, setacept1] = useState(false);
-  const [acept2, setacept2] = useState(false);
-
-  useEffect(() => {
+  async function handleTrade() {
     const tradePlayers = players.filter(f => f.cards.find(f => f.selected) !== undefined);
-    if (acept1 && acept2 && tradePlayers.length === 2) {
-      TradeCards(id, tradePlayers[0], tradePlayers[1])
-        .then((res) => dispatch(aceptTrade(res)))
-      setacept1(false);
-      setacept2(false);
-      onClose();
+    if (tradePlayers.length === 2) {
+      await TradeCards(id, tradePlayers[0], tradePlayers[1])
+        .then((res) => {
+          dispatch(aceptTrade(res));
+          dispatch(clearCardConfig());
+        })
     }
-  }, [acept1, acept2, dispatch, id, onClose, players])
+  }
 
+  console.log('🚀 ~ file: TradeBotModal.jsx:26 ~ TradeBotModal ~ cardConfig:', cardConfig);
   return (
     <Modal
       isOpen={cardConfig.length}
-      onClose={() => dispatch(discardCardConfig(cardConfig.slice(1, cardConfig.length)))}
+      onClose={() => dispatch(setCardConfig(cardConfig.slice(1, cardConfig.length)))}
       title='Seleccione las cartas que quiere intercambiar'
     >
       <div className={styles.modalContainer}>
@@ -43,7 +37,12 @@ const TradeBotModal = ({
               <div className={styles.playerContainer} id={index} key={player.id} type={index}>
                 <h3 className={styles.title}>{player.name}</h3>
                 <div className={styles.playerCardsContainer}>
-                  <Cartas actualPlayer={index} titleStyles={{ fontSize: 'smaller' }}/>
+                  <Cartas
+                    actualPlayer={index}
+                    titleStyles={{ fontSize: 'smaller' }}
+                    blocked={actualPlayer === index ? cardConfig[0]?.blocked : []}
+                    selected={cardConfig[0]?.needed.find(x => x.player === player.id)?.cards ?? []}
+                  />
                 </div>
               </div>
             );
@@ -51,16 +50,16 @@ const TradeBotModal = ({
         </div>
         <div className={styles.modalbuttoncontainer}>
           <Button
-            variants={acept1 ? 'outlined secondary' : 'primary'}
-            onClick={() => setacept1(x => !x)}
+            variants='outlined secondary'
+            onClick={() => dispatch(setCardConfig(cardConfig.slice(1, cardConfig.length)))}
           >
-            {acept1 ? 'Cancelar' : 'Aceptar'}
+            Cancelar
           </Button>
           <Button
-            variants={acept2 ? 'outlined secondary' : 'primary'}
-            onClick={() => setacept2(x => !x)}
+            variants='primary'
+            onClick={handleTrade}
           >
-            {acept2 ? 'Cancelar' : 'Aceptar'}
+            Aceptar
           </Button>
         </div>
       </div>

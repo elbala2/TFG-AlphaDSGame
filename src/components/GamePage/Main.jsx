@@ -16,13 +16,13 @@ import Button from '../UI/Button';
 
 import styles from './Main.module.scss';
 import NexPlayerModal from './components/NexPlayerModal';
+import TradeBotModal from './components/TradeBotModal';
 
 const GamePage = () => {
   const dispatch = useDispatch();
   const {
     actualPlayer,
     players,
-    finished,
     id,
     normalMarket,
     specialMarket,
@@ -115,7 +115,8 @@ const GamePage = () => {
           isOpen={nextPlayerModalOpen}
           onClose={() => setnextPlayerModalOpen(prevstate => !prevstate)}
         />
-        {finished === true && <SuccessModal />}
+        <TradeBotModal />
+        <SuccessModal />
       </DragDropContext>
     </HeaderAndFooter>
   );
