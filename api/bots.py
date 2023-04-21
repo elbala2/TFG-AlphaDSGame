@@ -185,7 +185,7 @@ class Bot:
                     'player': playerIndex,
                   }]
                 break
-        if len(needed) == 0:
+        if len(needed) == 0 or len(blocked) == 0:
           return []
         return [{
           'blocked': blocked,
@@ -200,7 +200,7 @@ class Bot:
           if costs[i] != 0 and card.type[0] == cardTypes[i]:
             costs[i] -= 1
             blocked += [cardIndex]
-        if apply(costs, (lambda res, x: res + x), 0):
+        if apply(costs, (lambda res, x: res + x), 0) == 0:
           return []
         needed = []
         for playerIndex in range(len(game.players)):
@@ -208,7 +208,7 @@ class Bot:
             cards = []
             for cardIndex in range(len(game.players[playerIndex].cards)):
               card = game.players[playerIndex].cards[cardIndex]
-              if apply(costs, (lambda res, x: res + x), 0):
+              if apply(costs, (lambda res, x: res + x), 0) == 0:
                 if len(cards) > 0:
                   needed += [{
                     'cards': cards,
@@ -220,7 +220,7 @@ class Bot:
                   if costs[i] != 0 and card.type[0] == cardTypes[i]:
                     costs[i] -= 1
                     blocked += [cardIndex]
-        if len(needed) == 0:
+        if len(needed) == 0 or len(blocked) == 0:
           return []
         return [{
           'blocked': blocked,

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { aceptTrade } from '../../../Store/actions';
+import { aceptTrade, discardCardConfig } from '../../../Store/actions';
 import { useEffect, useState } from 'react';
 
 import Cartas from './Cartas';
@@ -9,12 +9,12 @@ import { TradeCards } from '../../../utils/ApiConf';
 import Button from '../../UI/Button';
 import Modal from '../../UI/Modal';
 
-const TradeModal = ({
+const TradeBotModal = ({
   isOpen,
   onClose,
 }) => {
   const dispatch = useDispatch();
-  const { players, id } = useSelector((state) => ({ players: state.players, id: state.id }));
+  const { players, id, cardConfig } = useSelector((state) => ({ players: state.players, id: state.id, cardConfig: state.cardConfig }));
 
   const [acept1, setacept1] = useState(false);
   const [acept2, setacept2] = useState(false);
@@ -32,8 +32,8 @@ const TradeModal = ({
 
   return (
     <Modal
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={cardConfig.length}
+      onClose={() => dispatch(discardCardConfig(cardConfig.slice(1, cardConfig.length)))}
       title='Seleccione las cartas que quiere intercambiar'
     >
       <div className={styles.modalContainer}>
@@ -68,4 +68,4 @@ const TradeModal = ({
   );
 };
 
-export default TradeModal;
+export default TradeBotModal;

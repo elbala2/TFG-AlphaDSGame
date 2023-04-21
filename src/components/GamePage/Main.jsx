@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { mover, setState, setTrade, start } from '../../Store/actions';
+import { mover, setState, setCardConfig, start } from '../../Store/actions';
 import { getBotAction, MoveSlab, StartGame } from '../../utils/ApiConf';
 
 import SuccessModal from './components/SuccessModal';
 import HeaderAndFooter from '../UI/Header&Footer';
-import TradeModal from './components/tradeModal';
+import TradeModal from './components/TradeModal';
 import Market from './components/Market/Market';
 import Tablero from './components/Tablero';
 import Cartas from './components/Cartas';
@@ -45,7 +45,7 @@ const GamePage = () => {
   function handleBotNextAction() {
     getBotAction(id).then(res => {
       if (res.action === 'trade') {
-        dispatch(setTrade(res.cardConfig))
+        dispatch(setCardConfig(res.cardConfig))
       } else {
         dispatch(setState(res));
       }
