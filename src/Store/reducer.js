@@ -13,6 +13,7 @@ import {
   SETSTATE,
   SET_CARD_CONFIG,
   CLEAR_CARD_CONFIG,
+  CLEAR_CARDS_ACTION,
 } from './actions';
 import initialState from './InitialState';
 
@@ -44,10 +45,13 @@ const playerReducer = (state = initialState, action) => {
         target: action.target,
       };
 
+    case CLEAR_CARDS_ACTION:
+      players.forEach(player => player.cards.forEach(card => card.selected = !card.selected))
+      break;
+
     case CARDSELECTED_ACTION:
       const playerid = typeof action.playerId !== 'undefined' ? action.playerId : actualPlayer;
-      players[playerid].cards[action.cardId].selected =
-        !players[playerid].cards[action.cardId].selected;
+      players[playerid].cards[action.cardId].selected = !players[playerid].cards[action.cardId].selected;
       break;
 
     case MOVER_ACTION:

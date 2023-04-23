@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { aceptTrade, clearCardConfig, setCardConfig } from '../../../Store/actions';
+import { aceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../../Store/actions';
 
 import Cartas from './Cartas';
 
@@ -7,10 +7,12 @@ import styles from './Styles/tradeModal.module.scss';
 import { TradeCards } from '../../../utils/ApiConf';
 import Button from '../../UI/Button';
 import Modal from '../../UI/Modal';
+import { useState } from 'react';
 
 const TradeBotModal = () => {
   const dispatch = useDispatch();
   const { players, id, cardConfig, actualPlayer } = useSelector((state) => ({ players: state.players, id: state.id, actualPlayer: state.actualPlayer, cardConfig: state.cardConfig }));
+  const [step, setStep] = useState(0);
 
   async function handleTrade() {
     const tradePlayers = players.filter(f => f.cards.find(f => f.selected) !== undefined);
@@ -23,7 +25,8 @@ const TradeBotModal = () => {
     }
   }
 
-  console.log('🚀 ~ file: TradeBotModal.jsx:26 ~ TradeBotModal ~ cardConfig:', cardConfig);
+  const cardConfigTrade = cardConfig[0]?.needed.pop(step)
+  console.log(cardConfigTrade)
   return (
     <Modal
       isOpen={cardConfig.length}
@@ -33,6 +36,7 @@ const TradeBotModal = () => {
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
           {players.map((player, index) => {
+            const selected = cardConfigTrade?.player === player.id ? cardConfigTrade.cards : [];
             return (
               <div className={styles.playerContainer} id={index} key={player.id} type={index}>
                 <h3 className={styles.title}>{player.name}</h3>
@@ -41,7 +45,7 @@ const TradeBotModal = () => {
                     actualPlayer={index}
                     titleStyles={{ fontSize: 'smaller' }}
                     blocked={actualPlayer === index ? cardConfig[0]?.blocked : []}
-                    selected={cardConfig[0]?.needed.find(x => x.player === player.id)?.cards ?? []}
+                    selected={selected}
                   />
                 </div>
               </div>
@@ -51,7 +55,11 @@ const TradeBotModal = () => {
         <div className={styles.modalbuttoncontainer}>
           <Button
             variants='outlined secondary'
-            onClick={() => dispatch(setCardConfig(cardConfig.slice(1, cardConfig.length)))}
+            onClick={() => {
+              if (step + 1 < cardConfig.length) setStep(s => s + 1)
+              else dispatch(setCardConfig(cardConfig.slice(1, cardConfig.length)))
+              dispatch(clearSelected())
+            }}
           >
             Cancelar
           </Button>

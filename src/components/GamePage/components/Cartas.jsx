@@ -8,6 +8,7 @@ import { Discard } from '../../../utils/ApiConf';
 import Button from '../../UI/Button';
 
 import styles from './Styles/Cartas.module.scss';
+import { useEffect } from 'react';
 
 const Cartas = ({
   actualPlayer = 0,
@@ -18,10 +19,16 @@ const Cartas = ({
 }) => {
   const dispatch = useDispatch();
   const { id, cards } = useSelector((state) => ({ id: state.id, cards: state.players[actualPlayer].cards }));
+
+  useEffect(() => {
+    cards.forEach((card, index) => {
+      if (selected.includes(card.id) && !card.selected) dispatch(setCardSelected(actualPlayer, index));
+    })
+  }, [actualPlayer, cards, dispatch, selected])
+
   return (
     <div className={styles.cardscontainer}>
       {cards.map((card, index) => {
-        if (selected.includes(card.id) && !card.selected) dispatch(setCardSelected(actualPlayer, index));
         console.log('🚀 ~ file: Cartas.jsx:19 ~ {cards.map ~ selected.includes(card.id) && !card.selected:', selected.includes(card.id) && !card.selected);
         return (
           <div

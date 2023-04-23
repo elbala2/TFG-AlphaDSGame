@@ -2,6 +2,7 @@ export const MOVER_ACTION = 'MOVER';
 export const ROTAR_ACTION = 'ROTAR';
 export const SETTARGET_ACTION = 'SETTARGET';
 export const CARDSELECTED_ACTION = 'CARDSELECTED';
+export const CLEAR_CARDS_ACTION = 'CLEAR_CARDS_ACTION';
 export const NEXTPLAYER = 'NEXTPLAYER';
 export const ACEPTTRADE = 'ACEPTTRADE';
 export const FIX = 'FIX';
@@ -44,6 +45,12 @@ export const setCardSelected = (playerId, id) => {
   }
 }
 
+export const clearSelected = () => {
+  return {
+    type: CLEAR_CARDS_ACTION,
+  }
+}
+
 export const nextPlayer = (callbackRes) => {
   return {
     type: NEXTPLAYER,
@@ -66,7 +73,6 @@ export const fix = (callbackRes) => {
 }
 
 export const initialConfig = (callbackRes) => {
-  console.log(callbackRes)
   return {
     type: CONFIG,
     callbackRes,
