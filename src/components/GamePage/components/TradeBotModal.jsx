@@ -36,7 +36,7 @@ const TradeBotModal = () => {
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
           {players.map((player, index) => {
-            const selected = cardConfigTrade?.player === player.id ? cardConfigTrade.cards : [];
+            const selected = cardConfigTrade?.player === player.id ? cardConfigTrade?.cards ?? [] : [];
             return (
               <div className={styles.playerContainer} id={index} key={player.id} type={index}>
                 <h3 className={styles.title}>{player.name}</h3>

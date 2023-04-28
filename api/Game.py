@@ -23,35 +23,35 @@ def genCards():
 
 def genSlabs():
   res = [] \
-  + [NormalSlab([0, 1, 0, 1]) for i in range(6)] \
-  + [NormalSlab([1, 1, 1, 1]) for i in range(6)] \
-  + [NormalSlab([0, 1, 1, 0]) for i in range(12)] \
-  + [NormalSlab([1, 0, 1, 1]) for i in range(14)] \
+  + [NormalSlab('n-' + str(i), [0, 1, 0, 1]) for i in range(6)] \
+  + [NormalSlab('nx' + str(i), [1, 1, 1, 1]) for i in range(6)] \
+  + [NormalSlab('nl' + str(i), [0, 1, 1, 0]) for i in range(12)] \
+  + [NormalSlab('nt' + str(i), [1, 0, 1, 1]) for i in range(14)] \
     \
-  + [GoldSlab([0, 1, 0, 1]),
-  GoldSlab([1, 1, 1, 1]),
-  GoldSlab([0, 1, 1, 0]),
-  GoldSlab([1, 0, 1, 1])] \
+  + [GoldSlab('g-' + str(0), [0, 1, 0, 1]),
+  GoldSlab('gx' + str(1), [1, 1, 1, 1]),
+  GoldSlab('gl' + str(2), [0, 1, 1, 0]),
+  GoldSlab('gt' + str(3), [1, 0, 1, 1])] \
     \
-  + [SilverSlab([0, 1, 0, 1]),
-  SilverSlab([1, 1, 1, 1]),
-  SilverSlab([0, 1, 1, 0]),
-  SilverSlab([1, 0, 1, 1])] \
+  + [SilverSlab('s-' + str(0), [0, 1, 0, 1]),
+  SilverSlab('sx' + str(1), [1, 1, 1, 1]),
+  SilverSlab('sl' + str(2), [0, 1, 1, 0]),
+  SilverSlab('st' + str(3), [1, 0, 1, 1])] \
     \
-  + [SpecialRed(i) for i in range(3)] \
-  + [SpecialBlue(i) for i in range(3)] \
-  + [SpecialGreen(i) for i in range(3)] \
-  + [SpecialYellow(i) for i in range(3)]
+  + [SpecialRed('sr' + str(i), i) for i in range(3)] \
+  + [SpecialBlue('sb' + str(i), i) for i in range(3)] \
+  + [SpecialGreen('sg', i) for i in range(3)] \
+  + [SpecialYellow('sy', i) for i in range(3)]
     
-  risk = [Risk('Complex Model', 'Use Simple Model to fix the risk', 2),
-    Risk('Danger Data', 'Use Protected Data to fix the risk', 1),
-    Risk('No Data', 'Use Data Base to fix the risk', 2),
-    Risk('Old Software', 'Use Open Source to fix the risk', 1),
-    Risk('Old Technology', 'Use New Technology to fix the risk', 2),
-    Risk('Slow Model', 'Use Fast Model to fix the risk', 1),
-    Risk('Virus', 'Use Antivirus to fix the risk', 2),
-    Risk('Working Alone', 'Use Team Spirit to fix the risk', 1),
-    Risk('Wrong Model', 'Use Right Model to fix the risk', 2)]
+  risk = [Risk(0, 'Complex Model', 'Use Simple Model to fix the risk', 2),
+    Risk(1, 'Danger Data', 'Use Protected Data to fix the risk', 1),
+    Risk(2, 'No Data', 'Use Data Base to fix the risk', 2),
+    Risk(3, 'Old Software', 'Use Open Source to fix the risk', 1),
+    Risk(4, 'Old Technology', 'Use New Technology to fix the risk', 2),
+    Risk(5, 'Slow Model', 'Use Fast Model to fix the risk', 1),
+    Risk(6, 'Virus', 'Use Antivirus to fix the risk', 2),
+    Risk(7, 'Working Alone', 'Use Team Spirit to fix the risk', 1),
+    Risk(8, 'Wrong Model', 'Use Right Model to fix the risk', 2)]
   
   random.shuffle(risk)
   res += risk[:4]
