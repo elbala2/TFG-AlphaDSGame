@@ -46,7 +46,7 @@ const playerReducer = (state = initialState, action) => {
       };
 
     case CLEAR_CARDS_ACTION:
-      players.forEach(player => player.cards.forEach(card => card.selected = !card.selected))
+      players.forEach(player => player.cards.forEach(card => card.selected = false))
       break;
 
     case CARDSELECTED_ACTION:

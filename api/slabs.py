@@ -136,4 +136,4 @@ greenCosts = [[1, 2, 0], [2, 1, 1], [0, 1, 1]]
 class SpecialGreen(SpecialSlab):
   def __init__(self, id, type):
     super().__init__(id, greenTitle[type], greenDescription[type], greenCosts[type])
-    self.tyimg_undefinedpe = 'GREEN'
+    self.type = 'GREEN'

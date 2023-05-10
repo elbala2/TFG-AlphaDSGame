@@ -29,7 +29,7 @@ const Cartas = ({
   return (
     <div className={styles.cardscontainer}>
       {cards.map((card, index) => {
-        console.log('🚀 ~ file: Cartas.jsx:19 ~ {cards.map ~ selected.includes(card.id) && !card.selected:', selected.includes(card.id) && !card.selected);
+        console.log('🚀 ~ file: Cartas.jsx:19 ~ {cards.map ~ selected.includes(card.id) && !card.selected:', selected, card.id, selected.includes(card.id) && !card.selected);
         return (
           <div
             key={index}

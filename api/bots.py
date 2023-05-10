@@ -99,7 +99,7 @@ class Bot:
           'rotation': place['rotation'],
           'cards': cards,
         }]
-        
+
     return res
 
   def getPosibleSlabsToBuy(self, game):

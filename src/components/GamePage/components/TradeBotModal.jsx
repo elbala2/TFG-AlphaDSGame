@@ -25,8 +25,7 @@ const TradeBotModal = () => {
     }
   }
 
-  const cardConfigTrade = cardConfig[0]?.needed.pop(step)
-  console.log(cardConfigTrade)
+  const cardConfigTrade = cardConfig[0]?.needed[step];
   return (
     <Modal
       isOpen={cardConfig.length}
@@ -35,21 +34,22 @@ const TradeBotModal = () => {
     >
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
-          {players.map((player, index) => {
-            const selected = cardConfigTrade?.player === player.id ? cardConfigTrade?.cards ?? [] : [];
-            return (
-              <div className={styles.playerContainer} id={index} key={player.id} type={index}>
-                <h3 className={styles.title}>{player.name}</h3>
-                <div className={styles.playerCardsContainer}>
-                  <Cartas
-                    actualPlayer={index}
-                    titleStyles={{ fontSize: 'smaller' }}
-                    blocked={actualPlayer === index ? cardConfig[0]?.blocked : []}
-                    selected={selected}
-                  />
+          {players.filter(player => player.id === cardConfigTrade?.player || player.id === actualPlayer)
+            .map((player, index) => {
+              const selected = cardConfigTrade?.player === player.id ? cardConfigTrade?.cards ?? [] : [];
+              return (
+                <div className={styles.playerContainer} id={index} key={player.id} type={index}>
+                  <h3 className={styles.title}>{player.name}</h3>
+                  <div className={styles.playerCardsContainer}>
+                    <Cartas
+                      actualPlayer={index}
+                      titleStyles={{ fontSize: 'smaller' }}
+                      blocked={actualPlayer === index ? cardConfig[0]?.blocked : []}
+                      selected={selected}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
+              );
           })}
         </div>
         <div className={styles.modalbuttoncontainer}>

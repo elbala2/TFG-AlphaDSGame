@@ -19,7 +19,7 @@ class Player:
     self.hasBougth = False
     self.board = [[None for i in range(4)] for i in range(4)]
     self.start = start
-    self.board[start][0] = Slab([1, 1, 1, 1], 'Start_' + str(id))
+    self.board[start][0] = Slab('Start_' + str(id), [1, 1, 1, 1], 'Start_' + str(id))
     if (id == 0):
       self.board[start][0].isHere = True
 
