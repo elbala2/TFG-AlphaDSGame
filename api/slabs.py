@@ -1,6 +1,12 @@
 import random
 import json
 
+cardTypes = [
+  'Domain',
+  'Computer Science',
+  'Mathematics',
+]
+
 def getPointsValue(slab):
   if isinstance(slab, NormalSlab):
     return random.randint(0, 1)
@@ -54,6 +60,9 @@ class Risk:
     self.isRisk = True
     self.isSpecial = True
 
+  def isCardNeeded(self, card):
+    return card.type[1] == self.needed
+
 class Slab:
   def __init__(self, id, links, type = ''):
     self.id = id
@@ -73,6 +82,12 @@ class Slab:
     for i in range(self.rotation):
       result.insert(0, result.pop(-1))
     return result
+
+  def isCardNeeded(self, card):
+    for c in range(len(self.costs)):
+      if card.type[0] == cardTypes[c] and self.costs[c]:
+        return True
+    return False
 
   def toJSON(self):
     return json.loads(json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o))))

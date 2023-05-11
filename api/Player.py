@@ -159,8 +159,7 @@ class Player:
     return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
 
   def canSolveRisk(self, risk):
-    solveTypeNeeded = getRiskFixCardType(risk.type)
-    requiredCardsNeeded = list(filter(lambda f: f.type[1] == solveTypeNeeded, self.cards))
+    requiredCardsNeeded = list(filter(lambda f: risk.isCardNeeded(f), self.cards))
     return len(requiredCardsNeeded) >= risk.costs
 
   def getCloseLinks(self, coords, movement):

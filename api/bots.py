@@ -140,7 +140,7 @@ class Bot:
       if game.hasRisk:
         needed = False
         for risk in risks:
-          if card.type[1] == getRiskFixCardType(risk):
+          if risk.isCardNeeded(risk):
             needed = True
             break
         if not needed:
@@ -161,71 +161,39 @@ class Bot:
     bot = game.getActualPlayer()
     blocked = []
     if slab.isRisk:
-      cost = slab.costs
-      for cardIndex in range(len(bot.cards)):
-        card = bot.cards[cardIndex]
-        if getRiskFixCardType(slab.type) == card.type[1]:
-          blocked += [card.id]
-      if len(blocked) == cost:
-        return []
-      else:
-        needed = []
-        for playerIndex in range(len(game.players)):
-          if playerIndex != game.actualPlayer:
-            cards = []
-            for cardIndex in range(len(game.players[playerIndex].cards)):
-              card = game.players[playerIndex].cards[cardIndex]
-              if len(blocked) + len(cards) < cost:
-                if getRiskFixCardType(slab.type) == card.type[1]:
-                  cards += [card.id]
-              else:
-                if len(cards) > 0:
-                  needed += [{
-                    'cards': cards,
-                    'player': playerIndex,
-                  }]
-                break
-        if len(needed) == 0 or len(blocked) == 0:
-          return []
-        return [{
-          'blocked': blocked,
-          'needed': needed,
-        }]
-
+      costs = [slab.costs]
     else:
       costs = slab.costs.copy()
-      for cardIndex in range(len(bot.cards)):
-        card = bot.cards[cardIndex]
-        for i in range(len(cardTypes)):
-          if costs[i] != 0 and card.type[0] == cardTypes[i]:
-            costs[i] -= 1
-            blocked += [card.id]
-        if apply(costs, (lambda res, x: res + x), 0) == 0:
-          return []
-        needed = []
-        for playerIndex in range(len(game.players)):
-          if playerIndex != game.actualPlayer:
-            cards = []
-            for cardIndex in range(len(game.players[playerIndex].cards)):
-              card = game.players[playerIndex].cards[cardIndex]
-              if apply(costs, (lambda res, x: res + x), 0) == 0:
-                if len(cards) > 0:
-                  needed += [{
-                    'cards': cards,
-                    'player': playerIndex,
-                  }]
-                break
-              else:
-                for i in range(len(cardTypes)):
-                  if costs[i] != 0 and card.type[0] == cardTypes[i]:
-                    costs[i] -= 1
-                    blocked += [card.id]
-        if len(needed) == 0 or len(blocked) == 0:
-          return []
-        return [{
-          'blocked': blocked,
-          'needed': needed,
-        } ]
+
+    for cardIndex in range(len(bot.cards)):
+      card = bot.cards[cardIndex]
+      if slab.isCardNeeded(card):
+        blocked += [card.id]
+    if len(blocked) == sum(costs):
+      return []
+    else:
+      needed = []
+      for playerIndex in range(len(game.players)):
+        if playerIndex != game.actualPlayer:
+          cards = []
+          for cardIndex in range(len(game.players[playerIndex].cards)):
+            card = game.players[playerIndex].cards[cardIndex]
+            if len(blocked) + len(cards) < sum(costs):
+              if slab.isCardNeeded(card):
+                cards += [card.id]
+            else:
+              if len(cards) > 0:
+                needed += [{
+                  'cards': cards,
+                  'player': playerIndex,
+                }]
+              break
+      if len(needed) == 0 or len(blocked) == 0:
+        return []
+      return [{
+        'blocked': blocked,
+        'needed': needed,
+      }]
 
   def getPreferedRiskCards(self, game):
     res = []

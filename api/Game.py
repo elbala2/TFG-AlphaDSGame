@@ -225,7 +225,7 @@ class Game():
     cost = risk.costs
     for player in self.players:
       for card in player.cards:
-        if card.type[1] == getRiskFixCardType(risk.type):
+        if risk.isCardNeeded(card):
           cost -= 1
           if cost == 0:
             return True
