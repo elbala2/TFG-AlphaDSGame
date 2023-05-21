@@ -225,7 +225,7 @@ class Game():
     cost = risk.costs
     for player in self.players:
       for card in player.cards:
-        if risk.isCardNeeded(card):
+        if cost != 0 and risk.isCardNeeded(card):
           cost -= 1
           if cost == 0:
             return True
@@ -240,11 +240,11 @@ class Game():
     costs = slab.costs.copy()
     for player in self.players:
       for card in player.cards:
-        if card.type[0] == 'Domain':
+        if costs[0] != 0 and card.type[0] == 'Domain':
           costs[0] -= 1
-        elif card.type[0] == 'Computer Science':
+        elif costs[1] != 0 and  card.type[0] == 'Computer Science':
           costs[1] -= 1
-        elif card.type[0] == 'Mathematics':
+        elif costs[2] != 0 and  card.type[0] == 'Mathematics':
           costs[2] -= 1
         if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
           return True

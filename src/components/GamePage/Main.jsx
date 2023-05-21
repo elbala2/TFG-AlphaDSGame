@@ -76,7 +76,7 @@ const GamePage = () => {
             <div className={styles.header}>
               <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
               <div className='flex-fill' />
-              {(players[actualPlayer]?.type === 1 || specialPlayer === actualPlayer) ? (
+              {(players[actualPlayer]?.type === 1 || specialPlayer === actualPlayer) && false ? (
                 <Button
                   onClick={handleBotNextAction}
                 >
@@ -84,6 +84,11 @@ const GamePage = () => {
                 </Button>
               ) : (
                 <>
+                  <Button
+                    onClick={handleBotNextAction}
+                  >
+                    Bot Next Action
+                  </Button>
                   <Button
                     className='mx-2'
                     onClick={() => setTradeModalOpen((prevstate) => !prevstate)}

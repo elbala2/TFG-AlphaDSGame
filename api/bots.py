@@ -160,6 +160,7 @@ class Bot:
   def getCardsConfig(self, game, slab):
     bot = game.getActualPlayer()
     blocked = []
+    print(slab.__dict__)
     if slab.isRisk:
       costs = [slab.costs]
     else:
