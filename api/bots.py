@@ -8,23 +8,6 @@ cardTypes = [
 ]
 
 class Bot:
-  def __init__(self):
-    self.brain = None
-    self.name_mental_state = None
-
-    # TODO
-    # self.field_size = game.configuration['game_parameters']['field_size']
-    # self.max_cards_in_hand = game.configuration['game_parameters']['max_num_cards']
-    # self.max_num_tiles = game.configuration['intelligence']['max_num_tiles']
-    # self.max_possible_path = game.configuration['intelligence']['max_possible_path']
-    # self.alpha_board = game.configuration['intelligence']['alpha_board']
-    # self.alpha_hand = game.configuration['intelligence']['alpha_hand']
-    # self.learning_rate = game.configuration['intelligence']['learning_rate']
-    # self.reward = game.configuration['intelligence']['reward']
-    # self.max_relevance = game.configuration['intelligence']['max_relevance']
-    # self.min_relevance = game.configuration['intelligence']['min_relevance']
-    # self.initial_relevance = 1/2 * (self.max_relevance - abs(self.min_relevance))
-
   def getRiskToResolve(self, game):
     bot = game.getActualPlayer()
     res = []

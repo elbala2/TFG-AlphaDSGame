@@ -81,8 +81,8 @@ def fix(id):
 def bot_moves(id):
   game = getGame(id)
   hecho = game.botAction()
+  storeGame(id, game)
   if hecho != True:
     return jsonify(toJSON(hecho))
-  storeGame(id, game)
   return jsonify(toJSON(game))
 

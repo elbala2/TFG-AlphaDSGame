@@ -24,6 +24,8 @@ const TradeBotModal = () => {
         })
     }
   }
+  console.log(cardConfig)
+  if (!cardConfig) return '';
 
   const cardConfigTrade = cardConfig[0]?.needed[step];
   return (

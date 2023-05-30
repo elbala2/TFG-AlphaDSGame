@@ -70,7 +70,7 @@ const playerReducer = (state = initialState, action) => {
         ...state,
       };
 
-    case ACEPTTRADE: 
+    case ACEPTTRADE:
       return {
         ...state,
         players: action.players,
