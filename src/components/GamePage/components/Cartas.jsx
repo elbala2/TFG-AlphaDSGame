@@ -29,12 +29,16 @@ const Cartas = ({
   return (
     <div className={styles.cardscontainer}>
       {cards.map((card, index) => {
-        console.log('🚀 ~ file: Cartas.jsx:19 ~ {cards.map ~ selected.includes(card.id) && !card.selected:', selected, card.id, selected.includes(card.id) && !card.selected);
+        console.log(card.id, blocked, selected, cards )
         return (
           <div
             key={index}
             type={card.type[0]}
-            className={styles.card}
+            className={`
+              ${styles.card}
+              ${card.selected ? styles.selected : ''}
+              ${blocked.includes(card.id) ? styles.blocked : ''}
+            `}
             select={`${card.selected}`}
             onClick={() => {
               if (!blocked.includes(card.id) && !selected.includes(card.id)) dispatch(setCardSelected(actualPlayer, index));

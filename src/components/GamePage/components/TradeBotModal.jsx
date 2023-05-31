@@ -24,10 +24,10 @@ const TradeBotModal = () => {
         })
     }
   }
-  console.log(cardConfig)
   if (!cardConfig) return '';
-
+  
   const cardConfigTrade = cardConfig[0]?.needed[step];
+  console.log(players, cardConfig, cardConfigTrade)
   return (
     <Modal
       isOpen={cardConfig.length}
@@ -36,8 +36,8 @@ const TradeBotModal = () => {
     >
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
-          {players.filter(player => player.id === cardConfigTrade?.player || player.id === actualPlayer)
-            .map((player, index) => {
+          {players.map((player, index) => {
+              if (player.id !== cardConfigTrade?.player && player.id !== actualPlayer) return '';
               const selected = cardConfigTrade?.player === player.id ? cardConfigTrade?.cards ?? [] : [];
               return (
                 <div className={styles.playerContainer} id={index} key={player.id} type={index}>

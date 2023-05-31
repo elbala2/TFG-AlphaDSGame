@@ -63,8 +63,13 @@
       margin: auto;
     }
 
-    &[select='true'] {
+    &.selected {
       border: 5px solid #eeeeee;
+    }
+
+    &.blocked {
+      opacity: 0.8;
+      cursor: default;
     }
 
     &[type='Computer Science'] {
