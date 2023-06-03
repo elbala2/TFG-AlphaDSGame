@@ -26,10 +26,11 @@ const Cartas = ({
     })
   }, [actualPlayer, cards, dispatch, selected])
 
+  const canDiscard = cards.length === 4;
+
   return (
     <div className={styles.cardscontainer}>
       {cards.map((card, index) => {
-        console.log(card.id, blocked, selected, cards )
         return (
           <div
             key={index}
@@ -44,7 +45,7 @@ const Cartas = ({
               if (!blocked.includes(card.id) && !selected.includes(card.id)) dispatch(setCardSelected(actualPlayer, index));
             }}
           >
-            {descartable && (
+            {descartable && canDiscard && (
               <Button
                 variants='outlined secondary'
                 className={styles.closebutton}
