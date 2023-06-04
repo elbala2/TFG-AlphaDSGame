@@ -160,6 +160,7 @@ class Player:
 
   def canSolveRisk(self, risk):
     requiredCardsNeeded = list(filter(lambda f: risk.isCardNeeded(f), self.cards))
+    print(len(requiredCardsNeeded), risk.costs)
     return len(requiredCardsNeeded) >= risk.costs
 
   def getCloseLinks(self, coords, movement):

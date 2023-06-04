@@ -9,7 +9,7 @@ from bots import *
 def genCards():
   res = []
   for i in range(4):
-    res = res + [Card(1 + (9 * i), False, ['Mathematics', 'Fast Model']),
+    res += [Card(1 + (9 * i), False, ['Mathematics', 'Fast Model']),
             Card(2 + (9 * i), False, ['Mathematics', 'Simple Model']),
             Card(3 + (9 * i), False, ['Mathematics', 'Right Model']),
             Card(4 + (9 * i), False, ['Computer Science', 'New Technology']),
@@ -81,10 +81,9 @@ class Game():
         self.slabs.append(item)
     self.players = []
     for i in range(4):
-      cards = []
-      for j in range(4):
-        cards.append(self.cards.pop(0))
+      cards = self.cards[i * 4 : (i + 1) *4]
       self.players.append(Player(i, 'Player '+ str(i + 1), start, cards, colors[i], 1))
+    self.cards = self.cards[16:]
     self.actualPlayer = 0
     self.start = start
     self.pos = [start, 0, 0]
@@ -99,9 +98,7 @@ class Game():
     self.pos = [start, 0, 0]
     for i in range(4):
       name, type = players[i].values()
-      cards = self.cards[:4]
-      self.cards = self.cards[4:]
-      self.players[i] = Player(i, name, start, cards, colors[i], type)
+      self.players[i] = Player(i, name, start, self.players[i].cards, colors[i], type)
     
   def nextTurn(self):
     if (self.actualPlayer == 3):
@@ -109,7 +106,7 @@ class Game():
       if (self.pos[0] == 0 and self.pos[1] == 2):
         player.board[self.start][0].isHere = True
         self.finished = self.pos[2] == 4
-        self.pos = [self.start, 0, self.pos[2] + 1]
+        self.pos = [self.start, 0, (self.pos[2] + 1) % 4]
       else:
         mov = player.whereCanBePlace(
           player.board[self.pos[0]][self.pos[1]],
@@ -164,8 +161,8 @@ class Game():
     slab.rotation = rotation
     player = self.getActualPlayer()
     self.cards += player.buy(slab, cards)
-    player.putSlab(slab, destiny)
-    self.slabs.append(market.pop(realOrigin))
+    if player.putSlab(slab, destiny):
+      self.slabs.append(market.pop(realOrigin))
     
   def tradeCards(self, player1ID, cards1, player2ID, cards2):
     if (len(cards1) != len(cards2)):

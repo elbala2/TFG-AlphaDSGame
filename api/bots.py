@@ -16,7 +16,7 @@ class Bot:
     for riskIndex in range(len(game.specialMarket)):
       if game.specialMarket[riskIndex].isRisk and bot.canSolveRisk(game.specialMarket[riskIndex]):
         res += [{
-          'targetRiskId': riskIndex,
+          'targetRiskId': game.specialMarket[riskIndex].id,
           'cards': bot.getRiskCards(game.specialMarket[riskIndex]),
         }]
     return res
@@ -29,9 +29,10 @@ class Bot:
     hecho = False
     while (len(riskToResolve) != 0):
       targetRiskId, cards = riskToResolve.pop(0).values()
-      if bot.canSolveRisk(game.specialMarket[targetRiskId]):
+      riskIndex = findById(game.specialMarket, targetRiskId)
+      if bot.canSolveRisk(game.specialMarket[riskIndex]):
         hecho = True
-        game.fix(targetRiskId, cards)
+        game.fix(riskIndex, cards)
 
     return hecho
 
@@ -123,7 +124,7 @@ class Bot:
       if game.hasRisk:
         needed = False
         for risk in risks:
-          if risk.isCardNeeded(risk):
+          if risk.isCardNeeded(card):
             needed = True
             break
         if not needed:

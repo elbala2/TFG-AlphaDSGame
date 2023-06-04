@@ -27,7 +27,6 @@ const TradeBotModal = () => {
   if (!cardConfig) return '';
   
   const cardConfigTrade = cardConfig[0]?.needed[step];
-  console.log(players, cardConfig, cardConfigTrade)
   return (
     <Modal
       isOpen={cardConfig.length}
