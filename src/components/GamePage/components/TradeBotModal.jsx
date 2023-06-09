@@ -23,9 +23,7 @@ const TradeBotModal = () => {
           dispatch(clearCardConfig());
         })
     }
-  }
-  if (!cardConfig) return '';
-  
+  }  
   const cardConfigTrade = cardConfig[0]?.needed[step];
   return (
     <Modal
@@ -35,8 +33,9 @@ const TradeBotModal = () => {
     >
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
-          {players.map((player, index) => {
-              if (player.id !== cardConfigTrade?.player && player.id !== actualPlayer) return '';
+          {players
+          .filter(player => player.id === cardConfigTrade?.player || player.id === actualPlayer)
+          .map((player, index) => {
               const selected = cardConfigTrade?.player === player.id ? cardConfigTrade?.cards ?? [] : [];
               return (
                 <div className={styles.playerContainer} id={index} key={player.id} type={index}>
