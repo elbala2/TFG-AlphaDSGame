@@ -96,53 +96,56 @@ class Player:
           return 4
     return 0
 
-  def whereCanBePlace(self, slab, destiny, here=False):
+  def whereCanBePlace(self, slab, destiny, rotation = 0, here = False):
     arriba = 0
     derecha = 1
     abajo = 2
     izquierda = 3
 
+    slabLinks = slab.getRotatedLinks(rotation)
+
     hecho = True
     if (destiny[0] == 0 and destiny[1] == 2):
-      hecho = slab.ApplyRotation()[arriba] == 1
+      hecho = slabLinks[arriba] == 1
 
     # comprueba el de arriba del destino
     if (destiny[0] - 1 >= 0):
       slabEnTablero = self.board[destiny[0] - 1][destiny[1]]
       if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[arriba] and slabEnTablero.ApplyRotation()[abajo]) == 1 and hecho):
+        if ((slabLinks[arriba] and slabEnTablero.ApplyRotation()[abajo]) == 1 and hecho):
           return 1
 
     # comprueba el de la derecha del destino
     if (destiny[1] + 1 <= 3):
       slabEnTablero = self.board[destiny[0]][destiny[1] + 1]
       if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[derecha] and slabEnTablero.ApplyRotation()[izquierda]) == 1 and hecho):
+        if ((slabLinks[derecha] and slabEnTablero.ApplyRotation()[izquierda]) == 1 and hecho):
           return 2
 
     # comprueba el de abajo del destino
     if (destiny[0] + 1 <= 3):
       slabEnTablero = self.board[destiny[0] + 1][destiny[1]]
       if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[abajo] and slabEnTablero.ApplyRotation()[arriba]) == 1 and hecho):
+        if ((slabLinks[abajo] and slabEnTablero.ApplyRotation()[arriba]) == 1 and hecho):
           return 3
 
     # comprueba el de la izquierda del destino
     if (destiny[1] - 1 >= 0):
       slabEnTablero = self.board[destiny[0]][destiny[1] - 1]
       if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[izquierda] and slabEnTablero.ApplyRotation()[derecha]) == 1 and hecho):
+        if ((slabLinks[izquierda] and slabEnTablero.ApplyRotation()[derecha]) == 1 and hecho):
           return 4
     return 0
 
-  def putSlab(self, slab, destiny):
+  def putSlab(self, slab, destiny, rotation):
     if (destiny == None or self.board[destiny[0]][destiny[1]] != None):
       return False
 
-    if (self.whereCanBePlace(slab, destiny) == 0):
+    if (self.whereCanBePlace(slab, destiny, rotation) == 0):
       print('Not posible<')
       return False
 
+    slab.rotation = rotation
     self.board[destiny[0]][destiny[1]] = slab
     if (destiny[0] == 0 and destiny[1] == 2):
       self.points += 10
@@ -187,8 +190,7 @@ class Player:
           link_abajo     = self.getCloseLinks([y, x], abajo)
           link_izquierda = self.getCloseLinks([y, x], izquierda)
           for rot in range(4):
-            slab.rotation = rot
-            slabLinks = slab.ApplyRotation()
+            slabLinks = slab.getRotatedLinks(rot)
             
             if ((link_arriba   != None and slabLinks[0]  and link_arriba[2]   ) \
             or (link_derecha   != None and slabLinks[1]  and link_derecha[3]  ) \

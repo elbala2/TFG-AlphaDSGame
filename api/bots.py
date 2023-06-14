@@ -58,7 +58,7 @@ class Bot:
     x = place['pos'][0]
     y = place['pos'][1]
     mark -= slab.points * 4
-    links = slab.ApplyRotation()
+    links = slab.getRotatedLinks(place['rotation'])
     mark -= self.getDistance(x, y)
     mark += sum(slab.costs)
     if x == 2 and y == 0:
@@ -75,7 +75,6 @@ class Bot:
     if bot.canBuySlab(None, slab.costs):
       cards = bot.getCards(slab)
       for place in bot.getPosiblePlaces(slab):
-        slab.rotation = place['rotation']
         res += [{
           'targetSlabId': slabIndex,
           'mark': self.getMark(slab, place, bot.board),
@@ -194,7 +193,6 @@ class Bot:
       return 0
     best = 999
     for place in bot.getPosiblePlaces(slab):
-      slab.rotation = place['rotation']
       best = min(self.getMark(slab, place, bot.board), best)
     return best
 

@@ -76,6 +76,13 @@ class Slab:
     self.isRisk = False
     self.isSpecial = False
 
+  def getRotatedLinks(self, rotation):
+    #arriba,derecha,abajo,izquierda
+    result = self.links.copy()
+    for i in range(rotation):
+      result.insert(0, result.pop(-1))
+    return result
+
   def ApplyRotation(self):
     #arriba,derecha,abajo,izquierda
     result = self.links.copy()

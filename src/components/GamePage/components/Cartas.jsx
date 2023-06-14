@@ -33,7 +33,8 @@ const Cartas = ({
       {cards.map((card, index) => {
         return (
           <div
-            key={index}
+            key={card.id}
+            id={card.id}
             type={card.type[0]}
             className={`
               ${styles.card}

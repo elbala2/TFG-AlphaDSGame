@@ -108,9 +108,11 @@ class Game():
         self.finished = self.pos[2] == 4
         self.pos = [self.start, 0, (self.pos[2] + 1) % 4]
       else:
+        slab = player.board[self.pos[0]][self.pos[1]]
         mov = player.whereCanBePlace(
-          player.board[self.pos[0]][self.pos[1]],
+          slab,
           [self.pos[0], self.pos[1]],
+          slab.rotation,
           True,
         )
         if mov != 0:
@@ -158,10 +160,9 @@ class Game():
       realOrigin = origin - 4
   
     slab = market[realOrigin]
-    slab.rotation = rotation
     player = self.getActualPlayer()
     self.cards += player.buy(slab, cards)
-    if player.putSlab(slab, destiny):
+    if player.putSlab(slab, destiny, rotation):
       self.slabs.append(market.pop(realOrigin))
     
   def tradeCards(self, player1ID, cards1, player2ID, cards2):

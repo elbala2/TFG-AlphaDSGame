@@ -35,21 +35,22 @@ const TradeBotModal = () => {
         <div className={styles.playersContainer}>
           {players
           .filter(player => player.id === cardConfigTrade?.player || player.id === actualPlayer)
-          .map((player, index) => {
-              const selected = cardConfigTrade?.player === player.id ? cardConfigTrade?.cards ?? [] : [];
-              return (
-                <div className={styles.playerContainer} id={index} key={player.id} type={index}>
-                  <h3 className={styles.title}>{player.name}</h3>
-                  <div className={styles.playerCardsContainer}>
-                    <Cartas
-                      actualPlayer={index}
-                      titleStyles={{ fontSize: 'smaller' }}
-                      blocked={actualPlayer === index ? cardConfig[0]?.blocked : []}
-                      selected={selected}
-                    />
-                  </div>
+          .map((player) => {
+            console.log(player, cardConfigTrade)
+            const selected = cardConfigTrade?.player === player.id ? cardConfigTrade?.cards ?? [] : [];
+            return (
+              <div className={styles.playerContainer} id={player.id} key={player.id} type={player.id}>
+                <h3 className={styles.title}>{player.name}</h3>
+                <div className={styles.playerCardsContainer}>
+                  <Cartas
+                    actualPlayer={player.id}
+                    titleStyles={{ fontSize: 'smaller' }}
+                    blocked={actualPlayer === player.id ? cardConfig[0]?.blocked : []}
+                    selected={selected}
+                  />
                 </div>
-              );
+              </div>
+            );
           })}
         </div>
         <div className={styles.modalbuttoncontainer}>
