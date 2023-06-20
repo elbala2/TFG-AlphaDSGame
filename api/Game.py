@@ -101,9 +101,69 @@ class Game():
       name, type = players[i].values()
       self.players[i] = Player(i, name, start, self.players[i].cards, colors[i], type)
 
-  def getBestWay(self):
+  def getNextOpt(self, steps):
+    x = 0
+    y = 1
+    lastStep = steps[-1]
+    board = self.getActualPlayer().board
+    lastSlab = board[lastStep[y]][lastStep[x]]
+    lastSlabLinks = lastSlab.ApplyRotation() 
     res = []
+
+    if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] + 1 < 3  \
+      and lastSlabLinks[0] \
+      and board[lastStep[y] + 1][lastStep[x]] is not None \
+      and board[lastStep[y] + 1][lastStep[x]].ApplyRotation()[2] \
+      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] + 1), False):
+        res.append([lastStep[x], lastStep[y] + 1])
+
+    if 0 <= lastStep[x] + 1 < 3 and 0 <= lastStep[y] < 3 \
+      and lastSlabLinks[1] \
+      and board[lastStep[y]][lastStep[x] + 1] is not None \
+      and board[lastStep[y]][lastStep[x] + 1].ApplyRotation()[3] \
+      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + 1 and curr[y] == lastStep[y]), False):
+        res.append([lastStep[x] + 1, lastStep[y]])
+
+    if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] - 1 < 3 \
+      and lastSlabLinks[2] \
+      and board[lastStep[y] - 1][lastStep[x]] is not None \
+      and board[lastStep[y] - 1][lastStep[x]].ApplyRotation()[0] \
+      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] - 1), False):
+        res.append([lastStep[x], lastStep[y] - 1])
+
+    if 0 <= lastStep[x] - 1 < 3 and 0 <= lastStep[y] < 3 \
+      and lastSlabLinks[3] \
+      and board[lastStep[y]][lastStep[x] - 1] is not None \
+      and board[lastStep[y]][lastStep[x] - 1].ApplyRotation()[1] \
+      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] - 1 and curr[y] == lastStep[y]), False):
+        res.append([lastStep[x] - 1, lastStep[y]])
+
+    return res
+  
+  def rateSteps(self, steps):
+    pass
+
+  def getBestWay(self, steps):
+    x = 0
+    y = 1
+    lastStep = steps[-1]
+    board = self.getActualPlayer().board
+    lastSlab = board[lastStep[y]][lastStep[x]]
+    lastSlabLinks = lastSlab.ApplyRotation()
+
+    nextOpts = self.getNextOpt(steps)
+    if len(nextOpts) == 0 or (lastStep[x] == 2 and lastStep[y] == 0 and lastSlabLinks[0]):
+      return steps
     
+    bestWay = steps
+    bestWayMark = self.rateSteps(bestWay)
+    for nextOpt in nextOpts:
+      wayCandidate = self.getBestWay(steps + [nextOpt])
+      wayCandidateMark = self.rateSteps(wayCandidate)
+      if bestWayMark < wayCandidateMark:
+        bestWay = wayCandidate
+        bestWayMark = wayCandidateMark
+    return bestWay
     
   def nextTurn(self):
     if (self.actualPlayer == 3):
