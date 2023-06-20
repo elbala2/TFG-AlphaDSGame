@@ -64,8 +64,10 @@ class Risk:
     return card.type[1] == self.needed
 
 class Slab:
-  def __init__(self, id, links, type = ''):
-    self.id = id
+  id = 0
+  def __init__(self, links, type = ''):
+    Slab.id += 1
+    self.id = Slab.id
     self.points = getPointsValue(self)
     self.costs = getCosts()
     self.rotation = 0
@@ -75,6 +77,10 @@ class Slab:
     self.type = type
     self.isRisk = False
     self.isSpecial = False
+
+  def reCalculeId(self):
+    Slab.id += 1
+    self.id = Slab.id
 
   def getRotatedLinks(self, rotation):
     #arriba,derecha,abajo,izquierda
@@ -101,23 +107,23 @@ class Slab:
 
 
 class NormalSlab(Slab):
-  def __init__(self, id, linkers):
-    super().__init__(id, linkers)
+  def __init__(self, linkers):
+    super().__init__(linkers)
     self.type = 'NORMAL'
 
 class SilverSlab(Slab):
-  def __init__(self, id, linkers):
-    super().__init__(id, linkers)
+  def __init__(self, linkers):
+    super().__init__(linkers)
     self.type = 'SILVER'
 
 class GoldSlab(Slab):
-  def __init__(self, id, linkers):
-    super().__init__(id, linkers)
+  def __init__(self, linkers):
+    super().__init__(linkers)
     self.type = 'GOLD'
 
 class SpecialSlab(Slab):
-  def __init__(self, id, title, description, costs):
-    super().__init__(id, [1, 1, 1, 1])
+  def __init__(self, title, description, costs):
+    super().__init__([1, 1, 1, 1])
     self.description = description
     self.costs = costs
     self.title = title
@@ -129,8 +135,8 @@ blueDescription = ['Using graphical tools to view your data', 'Using mathematica
 blueCosts = [[2, 1, 0], [1, 0, 1], [2, 0, 2]]
 
 class SpecialBlue(SpecialSlab):
-  def __init__(self, id, type):
-    super().__init__(id, blueTitle[type], blueDescription[type], blueCosts[type])
+  def __init__(self, type):
+    super().__init__(blueTitle[type], blueDescription[type], blueCosts[type])
     self.type = 'BLUE'
 
 redTitle = ['Pattern Recognition', 'Outlier Detection', 'Model Evaluation']
@@ -138,8 +144,8 @@ redDescription = ['Looking for patterns in your data', 'Looking for strange data
 redCosts = [[0, 1, 2], [1, 0, 1], [2, 1, 1]]
 
 class SpecialRed(SpecialSlab):
-  def __init__(self, id, type):
-    super().__init__(id, redTitle[type], redDescription[type], redCosts[type])
+  def __init__(self, type):
+    super().__init__(redTitle[type], redDescription[type], redCosts[type])
     self.type = 'RED'
 
 yellowTitle = ['Graphical exploring', 'Numerical Exploring', 'Data Cleaning']
@@ -147,8 +153,8 @@ yellowDescription = ['Using graphical tools to view your data', 'Using mathemati
 yellowCosts = [[0, 1, 1], [0, 1, 2], [1, 2, 1]]
 
 class SpecialYellow(SpecialSlab):
-  def __init__(self, id, type):
-    super().__init__(id, yellowTitle[type], yellowDescription[type], yellowCosts[type])
+  def __init__(self, type):
+    super().__init__(yellowTitle[type], yellowDescription[type], yellowCosts[type])
     self.type = 'YELLOW'
 
 greenTitle = ['Mobile Application', 'Storytelling', 'Deployment']
@@ -156,6 +162,6 @@ greenDescription = ['An app for your mobile phone', 'To present the results to t
 greenCosts = [[1, 2, 0], [2, 1, 1], [0, 1, 1]]
 
 class SpecialGreen(SpecialSlab):
-  def __init__(self, id, type):
-    super().__init__(id, greenTitle[type], greenDescription[type], greenCosts[type])
+  def __init__(self, type):
+    super().__init__(greenTitle[type], greenDescription[type], greenCosts[type])
     self.type = 'GREEN'

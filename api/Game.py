@@ -1,4 +1,5 @@
 import random
+import copy
 
 from Cards import *
 from slabs import *
@@ -23,25 +24,25 @@ def genCards():
 
 def genSlabs():
   res = [] \
-  + [NormalSlab('n-' + str(i), [0, 1, 0, 1]) for i in range(6)] \
-  + [NormalSlab('nx' + str(i), [1, 1, 1, 1]) for i in range(6)] \
-  + [NormalSlab('nl' + str(i), [0, 1, 1, 0]) for i in range(12)] \
-  + [NormalSlab('nt' + str(i), [1, 0, 1, 1]) for i in range(14)] \
+  + [NormalSlab([1, 1, 1, 1]) for i in range(6)] \
+  + [NormalSlab([0, 1, 0, 1]) for i in range(6)] \
+  + [NormalSlab([0, 1, 1, 0]) for i in range(12)] \
+  + [NormalSlab([1, 0, 1, 1]) for i in range(14)] \
     \
-  + [GoldSlab('g-' + str(0), [0, 1, 0, 1]),
-  GoldSlab('gx' + str(1), [1, 1, 1, 1]),
-  GoldSlab('gl' + str(2), [0, 1, 1, 0]),
-  GoldSlab('gt' + str(3), [1, 0, 1, 1])] \
+  + [GoldSlab([0, 1, 0, 1]),
+  GoldSlab([1, 1, 1, 1]),
+  GoldSlab([0, 1, 1, 0]),
+  GoldSlab([1, 0, 1, 1])] \
     \
-  + [SilverSlab('s-' + str(0), [0, 1, 0, 1]),
-  SilverSlab('sx' + str(1), [1, 1, 1, 1]),
-  SilverSlab('sl' + str(2), [0, 1, 1, 0]),
-  SilverSlab('st' + str(3), [1, 0, 1, 1])] \
+  + [SilverSlab([0, 1, 0, 1]),
+  SilverSlab([1, 1, 1, 1]),
+  SilverSlab([0, 1, 1, 0]),
+  SilverSlab([1, 0, 1, 1])] \
     \
-  + [SpecialRed('sr' + str(i), i) for i in range(3)] \
-  + [SpecialBlue('sb' + str(i), i) for i in range(3)] \
-  + [SpecialGreen('sg', i) for i in range(3)] \
-  + [SpecialYellow('sy', i) for i in range(3)]
+  + [SpecialRed(i) for i in range(3)] \
+  + [SpecialBlue(i) for i in range(3)] \
+  + [SpecialGreen(i) for i in range(3)] \
+  + [SpecialYellow(i) for i in range(3)]
     
   risk = [Risk(0, 'Complex Model', 'Use Simple Model to fix the risk', 2),
     Risk(1, 'Danger Data', 'Use Protected Data to fix the risk', 1),
@@ -160,10 +161,13 @@ class Game():
       realOrigin = origin - 4
   
     slab = market[realOrigin]
+    newslab = copy.deepcopy(slab)
+    newslab.reCalculeId()
     player = self.getActualPlayer()
     self.cards += player.buy(slab, cards)
     if player.putSlab(slab, destiny, rotation):
-      self.slabs.append(market.pop(realOrigin))
+      market.pop(realOrigin)
+      self.slabs.append(newslab)
     
   def tradeCards(self, player1ID, cards1, player2ID, cards2):
     if (len(cards1) != len(cards2)):
@@ -212,7 +216,6 @@ class Game():
       hecho = actions[botActionIndex](self)
       if hecho != False:
         print(actionLiterals[botActionIndex])
-        print(hecho)
         self.nextBotAction = (botActionIndex + 1) % 5
         break
     return hecho
