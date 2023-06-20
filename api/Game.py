@@ -100,6 +100,10 @@ class Game():
     for i in range(4):
       name, type = players[i].values()
       self.players[i] = Player(i, name, start, self.players[i].cards, colors[i], type)
+
+  def getBestWay(self):
+    res = []
+    
     
   def nextTurn(self):
     if (self.actualPlayer == 3):
