@@ -12,12 +12,16 @@ const initialState = {
   pos: [1, 0, 0],
   cardConfig: [],
   players: [
-    { name: 'Player 1', cards: [], board: [
-      [null, null, null, null],
-      [{}, null, null, null],
-      [null, null, null, null],
-      [null, null, null, null],
-    ] }
+    { name: 'Player 1',
+      cards: [],
+      board: [
+        [null, null, null, null],
+        [{}, null, null, null],
+        [null, null, null, null],
+        [null, null, null, null],
+      ],
+      way: [],
+    },
   ],
 }
 

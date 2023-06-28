@@ -51,33 +51,79 @@ class Player:
     return deletedCards
   
   def rateSteps(self, steps):
-    mark = len(steps)
+    mark = len(steps) * 2
     x = 0
     y = 1
     lastStep = steps[-1]
     if (lastStep[x] != 2 or lastStep[y] != 0):
       mark += 20
-      mark += abs(2 - lastStep[x]) + abs(0 - lastStep[y])
+      mark += (abs(2 - lastStep[x]) + abs(0 - lastStep[y])) * 3
     return mark
+  
+    
+  def getNextOpt(self, steps):
+    x = 0
+    y = 1
+    lastStep = steps[-1]
+    board = self.board
+    lastSlab = board[lastStep[y]][lastStep[x]]
+    lastSlabLinks = lastSlab.ApplyRotation() 
+    res = []
+
+    if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] - 1 < 3  \
+      and lastSlabLinks[0] \
+      and board[lastStep[y] - 1][lastStep[x]] is not None \
+      and board[lastStep[y] - 1][lastStep[x]].ApplyRotation()[2] \
+      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] - 1), False):
+        res.append([lastStep[x], lastStep[y] - 1])
+
+    if 0 <= lastStep[x] + 1 < 3 and 0 <= lastStep[y] < 3 \
+      and lastSlabLinks[1] \
+      and board[lastStep[y]][lastStep[x] + 1] is not None \
+      and board[lastStep[y]][lastStep[x] + 1].ApplyRotation()[3] \
+      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + 1 and curr[y] == lastStep[y]), False):
+        res.append([lastStep[x] + 1, lastStep[y]])
+
+    if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] + 1 < 3 \
+      and lastSlabLinks[2] \
+      and board[lastStep[y] + 1][lastStep[x]] is not None \
+      and board[lastStep[y] + 1][lastStep[x]].ApplyRotation()[0] \
+      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] + 1), False):
+        res.append([lastStep[x], lastStep[y] + 1])
+
+    if 0 <= lastStep[x] - 1 < 3 and 0 <= lastStep[y] < 3 \
+      and lastSlabLinks[3] \
+      and board[lastStep[y]][lastStep[x] - 1] is not None \
+      and board[lastStep[y]][lastStep[x] - 1].ApplyRotation()[1] \
+      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] - 1 and curr[y] == lastStep[y]), False):
+        res.append([lastStep[x] - 1, lastStep[y]])
+
+    return res
+    
 
   def getBestWay(self, steps):
     x = 0
     y = 1
     lastStep = steps[-1]
-    lastSlab = self.board[lastStep[y]][lastStep[x]]
-    lastSlabLinks = lastSlab.ApplyRotation()
+
+    if lastStep[x] == 2 and lastStep[y] == 0:
+      return steps
 
     nextOpts = self.getNextOpt(steps)
-    if len(nextOpts) == 0 \
-      or (lastStep[x] == 2 and lastStep[y] == 0 and lastSlabLinks[0]):
-        return steps
+    if len(nextOpts) == 0 :
+      return steps
     
     bestWay = steps
     bestWayMark = self.rateSteps(bestWay)
+    print('bestWay', bestWay)
+    print('bestWayMark', bestWayMark)
     for nextOpt in nextOpts:
       wayCandidate = self.getBestWay(steps + [nextOpt])
       wayCandidateMark = self.rateSteps(wayCandidate)
-      if bestWayMark < wayCandidateMark:
+      print('wayCandidate', wayCandidate)
+      print('bestWayMark', wayCandidateMark)
+
+      if bestWayMark > wayCandidateMark:
         bestWay = wayCandidate
         bestWayMark = wayCandidateMark
     return bestWay
@@ -86,59 +132,18 @@ class Player:
     x = 0
     y = 1
 
+    if self.way[-1][x] == 2 and self.way[-1][y] == 0:
+      return True
+
     nextSteps = self.getBestWay(self.way)
-    self.way += [nextSteps[0]]
-    return nextSteps[0][x] == 2 or nextSteps[0][y] == 0
+    print(self.way)
+    if len(nextSteps) > len(self.way):
+      print(nextSteps)
+      print(nextSteps[len(self.way)])
+      self.way += [nextSteps[len(self.way)]]
+    return False
 
-  def validPlaces(self):
-    player = self.getActualPlayer()
-
-    visitedList = []
-    validList = []
-    slabList = [[0, self.start, self.board[0][self.start]]]
-
-    arriba = [0, 1]
-    derecha = [1, 0]
-    abajo = [0, -1]
-    izquierda = [-1, 0]
-
-    while len(slabList > 0):
-      [x, y, slab] = slabList.pop(0)
-
-    if (x == 2 and y == 0):
-      validList.push([x, y])
-      visitedList.push([x, y])
-
-    # comprueba el de arriba del destino
-    if (y + 1 >= 0):
-      slabEnTablero = self.board[y+1][x]
-      if (slabEnTablero != None):
-        if ((slab.ApplyRotation()[arriba] and slabEnTablero.ApplyRotation()[abajo]) == 1 and hecho):
-          return 1
-
-    # comprueba el de la derecha del destino
-    if (destiny[1] + 1 <= 3):
-      slabEnTablero = self.board[destiny[0]][destiny[1] + 1]
-      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[derecha] and slabEnTablero.ApplyRotation()[izquierda]) == 1 and hecho):
-          return 2
-
-    # comprueba el de abajo del destino
-    if (destiny[0] + 1 <= 3):
-      slabEnTablero = self.board[destiny[0] + 1][destiny[1]]
-      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[abajo] and slabEnTablero.ApplyRotation()[arriba]) == 1 and hecho):
-          return 3
-
-    # comprueba el de la izquierda del destino
-    if (destiny[1] - 1 >= 0):
-      slabEnTablero = self.board[destiny[0]][destiny[1] - 1]
-      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slab.ApplyRotation()[izquierda] and slabEnTablero.ApplyRotation()[derecha]) == 1 and hecho):
-          return 4
-    return 0
-
-  def whereCanBePlace(self, slab, destiny, rotation = 0, here = False):
+  def whereCanBePlace(self, slab, destiny, rotation = 0):
     arriba = 0
     derecha = 1
     abajo = 2
@@ -153,29 +158,25 @@ class Player:
     # comprueba el de arriba del destino
     if (destiny[0] - 1 >= 0):
       slabEnTablero = self.board[destiny[0] - 1][destiny[1]]
-      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slabLinks[arriba] and slabEnTablero.ApplyRotation()[abajo]) == 1 and hecho):
+      if slabEnTablero != None and slabLinks[arriba] and slabEnTablero.ApplyRotation()[abajo] and hecho:
           return 1
 
     # comprueba el de la derecha del destino
     if (destiny[1] + 1 <= 3):
       slabEnTablero = self.board[destiny[0]][destiny[1] + 1]
-      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slabLinks[derecha] and slabEnTablero.ApplyRotation()[izquierda]) == 1 and hecho):
+      if slabEnTablero and slabLinks[derecha] and slabEnTablero.ApplyRotation()[izquierda] and hecho:
           return 2
 
     # comprueba el de abajo del destino
     if (destiny[0] + 1 <= 3):
       slabEnTablero = self.board[destiny[0] + 1][destiny[1]]
-      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slabLinks[abajo] and slabEnTablero.ApplyRotation()[arriba]) == 1 and hecho):
+      if slabEnTablero != None and slabLinks[abajo] and slabEnTablero.ApplyRotation()[arriba] and hecho:
           return 3
 
     # comprueba el de la izquierda del destino
     if (destiny[1] - 1 >= 0):
       slabEnTablero = self.board[destiny[0]][destiny[1] - 1]
-      if (slabEnTablero != None and (not here or not slabEnTablero.wasHere)):
-        if ((slabLinks[izquierda] and slabEnTablero.ApplyRotation()[derecha]) == 1 and hecho):
+      if slabEnTablero != None and slabLinks[izquierda] and slabEnTablero.ApplyRotation()[derecha] and hecho:
           return 4
     return 0
 

@@ -71,8 +71,6 @@ class Slab:
     self.points = getPointsValue(self)
     self.costs = getCosts()
     self.rotation = 0
-    self.isHere = False
-    self.wasHere = False
     self.links = links
     self.type = type
     self.isRisk = False

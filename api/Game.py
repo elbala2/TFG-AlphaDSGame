@@ -105,65 +105,15 @@ class Game():
       if i == 0:
         self.players[i].startWay()
 
-  def getNextOpt(self, steps):
-    x = 0
-    y = 1
-    lastStep = steps[-1]
-    board = self.getActualPlayer().board
-    lastSlab = board[lastStep[y]][lastStep[x]]
-    lastSlabLinks = lastSlab.ApplyRotation() 
-    res = []
 
-    if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] + 1 < 3  \
-      and lastSlabLinks[0] \
-      and board[lastStep[y] + 1][lastStep[x]] is not None \
-      and board[lastStep[y] + 1][lastStep[x]].ApplyRotation()[2] \
-      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] + 1), False):
-        res.append([lastStep[x], lastStep[y] + 1])
-
-    if 0 <= lastStep[x] + 1 < 3 and 0 <= lastStep[y] < 3 \
-      and lastSlabLinks[1] \
-      and board[lastStep[y]][lastStep[x] + 1] is not None \
-      and board[lastStep[y]][lastStep[x] + 1].ApplyRotation()[3] \
-      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + 1 and curr[y] == lastStep[y]), False):
-        res.append([lastStep[x] + 1, lastStep[y]])
-
-    if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] - 1 < 3 \
-      and lastSlabLinks[2] \
-      and board[lastStep[y] - 1][lastStep[x]] is not None \
-      and board[lastStep[y] - 1][lastStep[x]].ApplyRotation()[0] \
-      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] - 1), False):
-        res.append([lastStep[x], lastStep[y] - 1])
-
-    if 0 <= lastStep[x] - 1 < 3 and 0 <= lastStep[y] < 3 \
-      and lastSlabLinks[3] \
-      and board[lastStep[y]][lastStep[x] - 1] is not None \
-      and board[lastStep[y]][lastStep[x] - 1].ApplyRotation()[1] \
-      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] - 1 and curr[y] == lastStep[y]), False):
-        res.append([lastStep[x] - 1, lastStep[y]])
-
-    return res
-    
   def nextTurn(self):
     if (self.actualPlayer == 3):
-      player = self.players[self.pos[2]]
-      if (self.pos[0] == 0 and self.pos[1] == 2):
-        player.board[self.start][0].isHere = True
-        self.finished = self.pos[2] == 4
-        self.pos = [self.start, 0, (self.pos[2] + 1) % 4]
-      else:
-        slab = player.board[self.pos[0]][self.pos[1]]
-        mov = self.getBestWay()
-        if mov != 0:
-          player.board[self.pos[0]][self.pos[1]].wasHere = True
-          if(mov == 1):
-            self.pos = [self.pos[0] - 1, self.pos[1], self.pos[2]]
-          elif(mov == 2):
-            self.pos = [self.pos[0], self.pos[1] + 1, self.pos[2]]
-          elif(mov == 3):
-            self.pos = [self.pos[0] + 1, self.pos[1], self.pos[2]]
-          elif(mov == 4):
-            self.pos = [self.pos[0], self.pos[1] - 1, self.pos[2]]
+      if (self.players[self.whereIsPilar].moveWay()):
+        self.whereIsPilar += 1
+        if self.whereIsPilar > 3:
+          self.finished = True
+        else:
+          self.players[self.whereIsPilar].startWay()
 
       for playerAux in self.players:
         self.cards += playerAux.cards
@@ -205,7 +155,8 @@ class Game():
     self.cards += player.buy(slab, cards)
     if player.putSlab(slab, destiny, rotation):
       market.pop(realOrigin)
-      self.slabs.append(newslab)
+      if not newslab.isSpecial:
+        self.slabs.append(newslab)
     
   def tradeCards(self, player1ID, cards1, player2ID, cards2):
     if (len(cards1) != len(cards2)):
