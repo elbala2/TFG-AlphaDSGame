@@ -47,6 +47,7 @@ const GamePage = () => {
       if (res.action === 'trade') {
         dispatch(setCardConfig(res.cardConfig))
       } else {
+        console.log('new', res)
         dispatch(setState(res));
       }
     })

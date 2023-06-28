@@ -20,8 +20,10 @@ class Player:
     self.board = [[None for i in range(4)] for i in range(4)]
     self.start = start
     self.board[start][0] = Slab([1, 1, 1, 1], 'Start_' + str(id))
-    if (id == 0):
-      self.board[start][0].isHere = True
+    self.way = []
+
+  def startWay(self):
+    self.way = [[0, 1]]
 
   def buy(self, slab, cards):
     costs = slab.costs
@@ -47,6 +49,46 @@ class Player:
         costs[2] -= 1
       i -= 1
     return deletedCards
+  
+  def rateSteps(self, steps):
+    mark = len(steps)
+    x = 0
+    y = 1
+    lastStep = steps[-1]
+    if (lastStep[x] != 2 or lastStep[y] != 0):
+      mark += 20
+      mark += abs(2 - lastStep[x]) + abs(0 - lastStep[y])
+    return mark
+
+  def getBestWay(self, steps):
+    x = 0
+    y = 1
+    lastStep = steps[-1]
+    lastSlab = self.board[lastStep[y]][lastStep[x]]
+    lastSlabLinks = lastSlab.ApplyRotation()
+
+    nextOpts = self.getNextOpt(steps)
+    if len(nextOpts) == 0 \
+      or (lastStep[x] == 2 and lastStep[y] == 0 and lastSlabLinks[0]):
+        return steps
+    
+    bestWay = steps
+    bestWayMark = self.rateSteps(bestWay)
+    for nextOpt in nextOpts:
+      wayCandidate = self.getBestWay(steps + [nextOpt])
+      wayCandidateMark = self.rateSteps(wayCandidate)
+      if bestWayMark < wayCandidateMark:
+        bestWay = wayCandidate
+        bestWayMark = wayCandidateMark
+    return bestWay
+  
+  def moveWay(self):
+    x = 0
+    y = 1
+
+    nextSteps = self.getBestWay(self.way)
+    self.way += [nextSteps[0]]
+    return nextSteps[0][x] == 2 or nextSteps[0][y] == 0
 
   def validPlaces(self):
     player = self.getActualPlayer()

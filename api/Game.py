@@ -139,31 +139,6 @@ class Game():
         res.append([lastStep[x] - 1, lastStep[y]])
 
     return res
-  
-  def rateSteps(self, steps):
-    pass
-
-  def getBestWay(self, steps):
-    x = 0
-    y = 1
-    lastStep = steps[-1]
-    board = self.getActualPlayer().board
-    lastSlab = board[lastStep[y]][lastStep[x]]
-    lastSlabLinks = lastSlab.ApplyRotation()
-
-    nextOpts = self.getNextOpt(steps)
-    if len(nextOpts) == 0 or (lastStep[x] == 2 and lastStep[y] == 0 and lastSlabLinks[0]):
-      return steps
-    
-    bestWay = steps
-    bestWayMark = self.rateSteps(bestWay)
-    for nextOpt in nextOpts:
-      wayCandidate = self.getBestWay(steps + [nextOpt])
-      wayCandidateMark = self.rateSteps(wayCandidate)
-      if bestWayMark < wayCandidateMark:
-        bestWay = wayCandidate
-        bestWayMark = wayCandidateMark
-    return bestWay
     
   def nextTurn(self):
     if (self.actualPlayer == 3):
@@ -174,12 +149,7 @@ class Game():
         self.pos = [self.start, 0, (self.pos[2] + 1) % 4]
       else:
         slab = player.board[self.pos[0]][self.pos[1]]
-        mov = player.whereCanBePlace(
-          slab,
-          [self.pos[0], self.pos[1]],
-          slab.rotation,
-          True,
-        )
+        mov = self.getBestWay()
         if mov != 0:
           player.board[self.pos[0]][self.pos[1]].wasHere = True
           if(mov == 1):
