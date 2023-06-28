@@ -84,10 +84,12 @@ class Game():
     for i in range(4):
       cards = self.cards[i * 4 : (i + 1) *4]
       self.players.append(Player(i, 'Player '+ str(i + 1), start, cards, colors[i], 1))
+      if i == 0:
+        self.players[i].startWay()
     self.cards = self.cards[16:]
     self.actualPlayer = 0
     self.start = start
-    self.pos = [start, 0, 0]
+    self.whereIsPilar = 0
     self.finished = False
     self.bot = Bot()
     
@@ -99,7 +101,9 @@ class Game():
     self.pos = [start, 0, 0]
     for i in range(4):
       name, type = players[i].values()
-      self.players[i] = Player(i, name, start, self.players[i].cards, colors[i], type)
+      self.players[i] = Player(i, name, 1, self.players[i].cards, colors[i], type)
+      if i == 0:
+        self.players[i].startWay()
 
   def getNextOpt(self, steps):
     x = 0
