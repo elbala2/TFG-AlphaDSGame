@@ -34,7 +34,10 @@ def startGame():
 
 @app.route('/getGame/<id>', methods=['GET'])
 def getGameEndpoint(id):
-  game = getGame(id)
+  try:
+    game = getGame(id)
+  except Exception:
+    game = Game(id)
   return jsonify(toJSON(game))
 
 @app.route('/moveSlab/<id>', methods=['POST'])   
