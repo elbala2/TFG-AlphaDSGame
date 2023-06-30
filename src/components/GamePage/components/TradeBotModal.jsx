@@ -23,12 +23,16 @@ const TradeBotModal = () => {
           dispatch(clearCardConfig());
         })
     }
-  }  
+  }
+  if (!cardConfig.length) return '';
   const cardConfigTrade = cardConfig[0]?.needed[step];
   return (
     <Modal
       isOpen={cardConfig.length}
-      onClose={() => dispatch(setCardConfig(cardConfig.slice(1, cardConfig.length)))}
+      onClose={() => {
+        dispatch(setCardConfig(cardConfig.slice(1, cardConfig.length)));
+        dispatch(clearCardConfig());
+      }}
       title='Seleccione las cartas que quiere intercambiar'
     >
       <div className={styles.modalContainer}>
