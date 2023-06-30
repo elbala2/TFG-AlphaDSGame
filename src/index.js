@@ -1,13 +1,16 @@
-import './index.scss';
 import React from 'react';
+
 import ReactDOM from 'react-dom';
-import store from './Store/Store';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import store from './Store/Store';
 import reportWebVitals from './reportWebVitals';
 import GamePage from './components/GamePage/Main';
 import HomePage from './components/MainPage/HomePage';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.scss';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,6 +18,7 @@ ReactDOM.render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path='Game/:id' element={<GamePage />} />
           <Route path='Game' element={<GamePage />} />
         </Routes>
       </BrowserRouter>

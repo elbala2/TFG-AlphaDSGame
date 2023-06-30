@@ -33,14 +33,15 @@ import RightModel from '../resources/Cards/Right Model.png';
 import SimpleModel from '../resources/Cards/Simple Model.png';
 import FastModel from '../resources/Cards/Fast Model.png';
 
-import Mision_Red from '../resources/Misiones/Mision_3.png';
-import Mision_Red_Completed from '../resources/Misiones/Mision_3_Completada.png';
-import Mision_Green from '../resources/Misiones/Mision_2.png';
-import Mision_Green_Completed from '../resources/Misiones/Mision_2_Completada.png';
-import Mision_Blue from '../resources/Misiones/Mision_1.png';
-import Mision_Blue_Completed from '../resources/Misiones/Mision_1_Completada.png';
-import Mision_Yellow from '../resources/Misiones/Mision_4.png';
-import Mision_Yellow_Completed from '../resources/Misiones/Mision_4_Completada.png';
+import Mision_Blue from '../resources/Misiones/Mision_4.png';
+import Mision_Blue_Completed from '../resources/Misiones/Mision_4_Completada.png';
+import Mision_Yellow from '../resources/Misiones/Mision_3.png';
+import Mision_Yellow_Completed from '../resources/Misiones/Mision_3_Completada.png';
+import Mision_Red from '../resources/Misiones/Mision_2.png';
+import Mision_Red_Completed from '../resources/Misiones/Mision_2_Completada.png';
+import Mision_Green from '../resources/Misiones/Mision_1.png';
+import Mision_Green_Completed from '../resources/Misiones/Mision_1_Completada.png';
+
 
 import ComplexModel from '../resources/Risks/Complex Model.png';
 import DangerData from '../resources/Risks/Danger Data.png';

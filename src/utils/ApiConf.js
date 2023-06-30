@@ -20,6 +20,10 @@ export async function StartGame(config = undefined) {
   return ApiCallBack('PUT', '/startGame', { ...config });
 }
 
+export async function GetGame(id) {
+  return ApiCallBack('GET', `/getGame/${id}`);
+}
+
 export function MoveSlab(id, origin, destiny, rotation, cards) {
   return ApiCallBack('POST', `/moveSlab/${id}`, { origin, destiny, rotation, cards });
 }
