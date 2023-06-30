@@ -29,7 +29,7 @@ const GamePage = () => {
     id,
     normalMarket,
     specialMarket,
-    pos: { 2: specialPlayer },
+    whereIsPilar,
   } = useSelector((state) => state);
 
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
@@ -83,7 +83,7 @@ const GamePage = () => {
             <div className={styles.header}>
               <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
               <div className='flex-fill' />
-              {(players[actualPlayer]?.type === 1 || specialPlayer === actualPlayer) ? (
+              {(players[actualPlayer]?.type === 1 || whereIsPilar === actualPlayer) ? (
                 <Button
                   onClick={handleBotNextAction}
                 >

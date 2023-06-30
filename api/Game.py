@@ -83,7 +83,7 @@ class Game():
     self.players = []
     for i in range(4):
       cards = self.cards[i * 4 : (i + 1) *4]
-      self.players.append(Player(i, 'Player '+ str(i + 1), start, cards, colors[i], 1))
+      self.players.append(Player(i, 'Player '+ str(i + 1), start, cards, colors[i], 0))
       if i == 0:
         self.players[i].startWay()
     self.cards = self.cards[16:]
@@ -194,17 +194,9 @@ class Game():
       self.bot.computeCards,
       Game.nextTurn,
     ]
-    actionLiterals = [
-      'Trade',
-      'Risk Resolve',
-      'Move Slab',
-      'Discard Cards',
-      'Next Turn',
-    ]
     for botActionIndex in range(self.nextBotAction, len(actions)):
       hecho = actions[botActionIndex](self)
       if hecho != False:
-        print(actionLiterals[botActionIndex])
         self.nextBotAction = (botActionIndex + 1) % 5
         break
     return hecho

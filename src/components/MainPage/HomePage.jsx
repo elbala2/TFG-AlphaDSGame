@@ -3,7 +3,6 @@ import { useState } from 'react';
 
 import styles from './styles/HomePage.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { StartGame } from '../../utils/ApiConf';
 import PlayerInput from './PlayerInput';
 import Button from '../UI/Button';
@@ -24,8 +23,6 @@ const HomePage = () => {
       return [...p];
     });
   };
-
-  const dispatch = useDispatch();
 
   return (
     <HeaderAndFooter>

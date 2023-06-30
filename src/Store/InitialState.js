@@ -9,7 +9,7 @@ const initialState = {
   target: null,
   finished: false,
   actualPlayer: 0,
-  pos: [1, 0, 0],
+  whereIsPilar: 0,
   cardConfig: [],
   players: [
     { name: 'Player 1',
