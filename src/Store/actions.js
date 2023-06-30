@@ -72,24 +72,10 @@ export const fix = (callbackRes) => {
   }
 }
 
-export const initialConfig = (callbackRes) => {
-  return {
-    type: CONFIG,
-    callbackRes,
-  }
-}
-
 export const descartar = (callbackRes) => {
   return {
     type: DESCARTAR,
     ...callbackRes,
-  }
-}
-
-export const start = (callbackRes) => {
-  return {
-    type: START,
-    callbackRes,
   }
 }
 

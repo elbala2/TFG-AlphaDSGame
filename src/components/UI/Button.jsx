@@ -39,7 +39,7 @@ function Button({
   }
 
   function getClassName() {
-    const res = variants?.trim().split(/ |\,/).map((variant) => classes[variant.toLowerCase()] || '') || [classes.primary]
+    const res = variants?.trim().split(/ |,/).map((variant) => classes[variant.toLowerCase()] || '') || [classes.primary]
     res.push(commonClasses, className)
     if (error) res.push(classes.error)
     return res.join(' ')

@@ -1,31 +1,29 @@
-import { initialConfig } from '../../Store/actions';
 import { useState } from 'react';
 
-import HeaderAndFooter from '../UI/Header&Footer';
 
 import styles from './styles/HomePage.module.scss';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { StartGame } from '../../utils/ApiConf'
+import { StartGame } from '../../utils/ApiConf';
 import PlayerInput from './PlayerInput';
 import Button from '../UI/Button';
+import HeaderAndFooter from '../UI/Header&Footer';
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [players, setPlayers] = useState([
-    { name: 'Player 1', type: 0},
-    { name: 'Player 2', type: 0},
-    { name: 'Player 3', type: 0},
-    { name: 'Player 4', type: 0},
+    { name: 'Player 1', type: 0 },
+    { name: 'Player 2', type: 0 },
+    { name: 'Player 3', type: 0 },
+    { name: 'Player 4', type: 0 },
   ]);
 
   const handleChangePlayer = (player, i) => {
-    setPlayers(p => {
+    setPlayers((p) => {
       p[i] = player;
       return [...p];
-    })
+    });
   };
-  const [save, setSave] = useState(false);
-  const [start, setstart] = useState(1);
 
   const dispatch = useDispatch();
 
@@ -45,34 +43,29 @@ const HomePage = () => {
         </div>
 
         <div className='d-flex align-items-center'>
-          <label style={{ marginRight: '10px' }}>Iniciar en la fila:</label>
-          <select
-            value={start}
-            onChange={(e) => setstart(e.target.value)}
-          >
+          {/* <label style={{ marginRight: '10px' }}>Iniciar en la fila:</label>
+          <select value={start} onChange={(e) => setstart(e.target.value)}>
             <option value={0}>1</option>
             <option value={1}>2</option>
             <option value={2}>3</option>
             <option value={3}>4</option>
-          </select>
-          <div className='flex-fill'/>
+          </select> */}
+          <div className='flex-fill' />
           <Button
             onClick={async () => {
               const res = await StartGame({
                 players,
-                start,
+                start: 1,
               })
-              dispatch(initialConfig(res));
-              setSave(true);
+              navigate(`/Game/${res.id}`);
             }}
           >
             Start
           </Button>
         </div>
       </div>
-      {save && <Navigate to='/Game' replace/>}
     </HeaderAndFooter>
   );
-}
+};
 
 export default HomePage;

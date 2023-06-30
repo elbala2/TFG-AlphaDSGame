@@ -32,6 +32,11 @@ def startGame():
   storeGame(id, game)
   return jsonify(toJSON(game))
 
+@app.route('/getGame/<id>', methods=['GET'])
+def getGameEndpoint(id):
+  game = getGame(id)
+  return jsonify(toJSON(game))
+
 @app.route('/moveSlab/<id>', methods=['POST'])   
 def moveSlab(id):
   game = getGame(id)

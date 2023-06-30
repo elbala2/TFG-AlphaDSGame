@@ -1,34 +1,28 @@
-
-
-.modal {
-  width: 500px;
+.title {
   text-align: center;
   padding: 20px;
+}
 
-  .title {
-    text-align: center;
-    padding: 20px;
-  }
+.winnerMSG {
+  padding: 10px;
+  font-size: large;
+  text-align: center;
+}
 
-  .winnerMSG {
-    padding: 10px;
-    font-size: large;
-  }
+.loserMSG {
+  font-size: medium;
+  text-align: center;
+}
 
-  .loserMSG {
-    font-size: medium;
-  }
+.button {
+  text-align: center;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: rgb(21, 161, 3);
+  color: white;
 
-  .button {
-    text-align: center;
-    border-radius: 5px;
-    padding: 20px;
-    background-color: rgb(21, 161, 3);
-    color: white;
-
-    &:hover {
-      background-color: white;
-      color: black;
-    }
+  &:hover {
+    background-color: white;
+    color: black;
   }
 }

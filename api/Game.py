@@ -84,10 +84,12 @@ class Game():
     for i in range(4):
       cards = self.cards[i * 4 : (i + 1) *4]
       self.players.append(Player(i, 'Player '+ str(i + 1), start, cards, colors[i], 1))
+      if i == 0:
+        self.players[i].startWay()
     self.cards = self.cards[16:]
     self.actualPlayer = 0
     self.start = start
-    self.pos = [start, 0, 0]
+    self.whereIsPilar = 0
     self.finished = False
     self.bot = Bot()
     
@@ -99,37 +101,19 @@ class Game():
     self.pos = [start, 0, 0]
     for i in range(4):
       name, type = players[i].values()
-      self.players[i] = Player(i, name, start, self.players[i].cards, colors[i], type)
+      self.players[i] = Player(i, name, 1, self.players[i].cards, colors[i], type)
+      if i == 0:
+        self.players[i].startWay()
 
-  def getBestWay(self):
-    res = []
-    
-    
+
   def nextTurn(self):
     if (self.actualPlayer == 3):
-      player = self.players[self.pos[2]]
-      if (self.pos[0] == 0 and self.pos[1] == 2):
-        player.board[self.start][0].isHere = True
-        self.finished = self.pos[2] == 4
-        self.pos = [self.start, 0, (self.pos[2] + 1) % 4]
-      else:
-        slab = player.board[self.pos[0]][self.pos[1]]
-        mov = player.whereCanBePlace(
-          slab,
-          [self.pos[0], self.pos[1]],
-          slab.rotation,
-          True,
-        )
-        if mov != 0:
-          player.board[self.pos[0]][self.pos[1]].wasHere = True
-          if(mov == 1):
-            self.pos = [self.pos[0] - 1, self.pos[1], self.pos[2]]
-          elif(mov == 2):
-            self.pos = [self.pos[0], self.pos[1] + 1, self.pos[2]]
-          elif(mov == 3):
-            self.pos = [self.pos[0] + 1, self.pos[1], self.pos[2]]
-          elif(mov == 4):
-            self.pos = [self.pos[0], self.pos[1] - 1, self.pos[2]]
+      if (self.players[self.whereIsPilar].moveWay()):
+        self.whereIsPilar += 1
+        if self.whereIsPilar > 3:
+          self.finished = True
+        else:
+          self.players[self.whereIsPilar].startWay()
 
       for playerAux in self.players:
         self.cards += playerAux.cards
@@ -171,7 +155,8 @@ class Game():
     self.cards += player.buy(slab, cards)
     if player.putSlab(slab, destiny, rotation):
       market.pop(realOrigin)
-      self.slabs.append(newslab)
+      if not newslab.isSpecial:
+        self.slabs.append(newslab)
     
   def tradeCards(self, player1ID, cards1, player2ID, cards2):
     if (len(cards1) != len(cards2)):

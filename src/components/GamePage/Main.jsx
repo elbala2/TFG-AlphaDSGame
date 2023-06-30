@@ -1,24 +1,27 @@
 import { useEffect, useState } from 'react';
 
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { mover, setState, setCardConfig, start } from '../../Store/actions';
-import { getBotAction, MoveSlab, StartGame } from '../../utils/ApiConf';
+import { mover, setState, setCardConfig } from '../../Store/actions';
+import { getBotAction, GetGame, MoveSlab, StartGame } from '../../utils/ApiConf';
 
+import NexPlayerModal from './components/NexPlayerModal';
+import TradeBotModal from './components/TradeBotModal';
 import SuccessModal from './components/SuccessModal';
-import HeaderAndFooter from '../UI/Header&Footer';
 import TradeModal from './components/TradeModal';
 import Market from './components/Market/Market';
 import Tablero from './components/Tablero';
 import Cartas from './components/Cartas';
 import Button from '../UI/Button';
+import HeaderAndFooter from '../UI/Header&Footer';
 
 import styles from './Main.module.scss';
-import NexPlayerModal from './components/NexPlayerModal';
-import TradeBotModal from './components/TradeBotModal';
 
 const GamePage = () => {
+  const params = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     actualPlayer,
@@ -33,13 +36,16 @@ const GamePage = () => {
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
 
   useEffect(() => {
-    if (id === 0) {
+    if (params.id){
+      GetGame(params.id).then((res) => {
+        dispatch(setState(res))
+      });
+    } else {
       StartGame().then((res) => {
-        console.log('new', res)
-        dispatch(start(res))
+        navigate(`/Game/${res.id}`)
       });
     }
-  }, [dispatch, id]);
+  }, [params, dispatch, id]);
 
 
   function handleBotNextAction() {
@@ -47,6 +53,7 @@ const GamePage = () => {
       if (res.action === 'trade') {
         dispatch(setCardConfig(res.cardConfig))
       } else {
+        console.log('new', res)
         dispatch(setState(res));
       }
     })
@@ -76,7 +83,7 @@ const GamePage = () => {
             <div className={styles.header}>
               <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
               <div className='flex-fill' />
-              {(players[actualPlayer]?.type === 1 || specialPlayer === actualPlayer) && false ? (
+              {(players[actualPlayer]?.type === 1 || specialPlayer === actualPlayer) ? (
                 <Button
                   onClick={handleBotNextAction}
                 >
@@ -84,11 +91,6 @@ const GamePage = () => {
                 </Button>
               ) : (
                 <>
-                  <Button
-                    onClick={handleBotNextAction}
-                  >
-                    Bot Next Action
-                  </Button>
                   <Button
                     className='mx-2'
                     onClick={() => setTradeModalOpen((prevstate) => !prevstate)}

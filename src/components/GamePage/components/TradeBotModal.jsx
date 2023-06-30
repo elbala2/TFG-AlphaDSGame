@@ -36,7 +36,6 @@ const TradeBotModal = () => {
           {players
           .filter(player => player.id === cardConfigTrade?.player || player.id === actualPlayer)
           .map((player) => {
-            console.log(player, cardConfigTrade)
             const selected = cardConfigTrade?.player === player.id ? cardConfigTrade?.cards ?? [] : [];
             return (
               <div className={styles.playerContainer} id={player.id} key={player.id} type={player.id}>

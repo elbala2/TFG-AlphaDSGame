@@ -6,9 +6,7 @@ import {
   NEXTPLAYER,
   ROTAR_ACTION,
   SETTARGET_ACTION,
-  CONFIG,
   DESCARTAR,
-  START,
   RESET,
   SETSTATE,
   SET_CARD_CONFIG,
@@ -31,9 +29,7 @@ const playerReducer = (state = initialState, action) => {
     case RESET: 
       return initialState;
 
-    case START:
     case SETSTATE:
-    case CONFIG:
       return {
         ...state,
         ...action.callbackRes,

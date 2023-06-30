@@ -9,13 +9,25 @@ import styles from './Styles/Tablero.module.scss';
 import Tooltip from '../../UI/Tooltip';
 
 const Tablero = () => {
-  const {  start, actualPlayer, pos, board } = useSelector(state => ({
+  const {  start, actualPlayer, board, way } = useSelector(state => ({
     start: state.start,
     actualPlayer: state.actualPlayer,
     pos: state.pos,
     board: state.players[state.actualPlayer].board,
+    way: state.players[state.actualPlayer].way,
   }))
   const dispatch = useDispatch();
+  function isWayPart(x, y) {
+    const xcoord = 0;
+    const ycoord = 1;
+
+    let res = false;
+    way.every(step => {
+      res = step[xcoord] === x && step[ycoord] === y;
+      return !res;
+    })
+    return res;
+  }
 
   return (
     <div className='d-flex'>
@@ -70,7 +82,7 @@ const Tablero = () => {
                         src={getSlabImg(casilla)}
                         alt={``}
                         draggable={false}
-                        ishere={`${i === pos[0] && j === pos[1] && actualPlayer === pos[2]}`}
+                        ishere={`${isWayPart(j, i)}`}
                       />
                     ) : (
                       <>
@@ -84,7 +96,7 @@ const Tablero = () => {
                           id={`img_${casilla.id}`}
                           src={getSlabImg(casilla)}
                           alt={``}
-                          ishere={`${i === pos[0] && j === pos[1] && actualPlayer === pos[2]}`}
+                          ishere={`${isWayPart(j, i)}`}
                           draggable={false}
                         />
                       </>
