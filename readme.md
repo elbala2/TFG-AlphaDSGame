@@ -4,7 +4,7 @@
 - python
 - flask 'pip install Flask'
 - flask cors 'pip install -U flask-cors'
-- mysql-connector 'pip install mysql-connector'
+- mysql-connector 'pip install mysql-connector-python'
 
     \sql
     \connect root@localhost
