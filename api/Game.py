@@ -62,8 +62,7 @@ def genSlabs():
 colors = ['RED', 'GREEN', 'BLUE', 'YELLOW']
 
 class Game():
-  def __init__(self, id, start = 1):
-    self.id = id
+  def __init__(self, start = 1):
     self.cards = genCards()
     self.slabs = genSlabs()
     self.normalMarket = []
