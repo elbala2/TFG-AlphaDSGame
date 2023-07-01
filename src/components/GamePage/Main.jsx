@@ -20,13 +20,12 @@ import HeaderAndFooter from '../UI/Header&Footer';
 import styles from './Main.module.scss';
 
 const GamePage = () => {
-  const params = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     actualPlayer,
     players,
-    id,
     normalMarket,
     specialMarket,
     whereIsPilar,
@@ -36,8 +35,8 @@ const GamePage = () => {
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
 
   useEffect(() => {
-    if (params.id){
-      GetGame(params.id).then((res) => {
+    if (id){
+      GetGame(id).then((res) => {
         dispatch(setState(res))
       });
     } else {
@@ -45,7 +44,7 @@ const GamePage = () => {
         navigate(`/Game/${res.id}`)
       });
     }
-  }, [params, dispatch, id]);
+  }, [dispatch, id, navigate]);
 
 
   function handleBotNextAction() {
@@ -53,7 +52,6 @@ const GamePage = () => {
       if (res.action === 'trade') {
         dispatch(setCardConfig(res.cardConfig))
       } else {
-        console.log('new', res)
         dispatch(setState(res));
       }
     })

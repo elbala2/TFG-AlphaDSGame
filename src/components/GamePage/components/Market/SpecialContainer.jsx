@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom';
+
 import { getSlabImg } from '../../../../Store/GetSlabImg';
 import { mover, rotar } from '../../../../Store/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,7 +35,9 @@ const canbebougth = (cartas, costes, type, actualplayer) => {
 };
 
 const SpecialContainer = ({ disabled, slab, index }) => {
-  const { target, actualPlayer, players, id } = useSelector(state => state);
+  const { id } = useParams();
+
+  const { target, actualPlayer, players } = useSelector(state => state);
   const { cards, hasBougth } = players[actualPlayer];
   const dispatch = useDispatch();
 

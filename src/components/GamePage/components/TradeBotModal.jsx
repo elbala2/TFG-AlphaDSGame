@@ -1,4 +1,7 @@
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { aceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../../Store/actions';
 
 import Cartas from './Cartas';
@@ -7,11 +10,12 @@ import styles from './Styles/tradeModal.module.scss';
 import { TradeCards } from '../../../utils/ApiConf';
 import Button from '../../UI/Button';
 import Modal from '../../UI/Modal';
-import { useState } from 'react';
+
 
 const TradeBotModal = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { players, id, cardConfig, actualPlayer } = useSelector((state) => ({ players: state.players, id: state.id, actualPlayer: state.actualPlayer, cardConfig: state.cardConfig }));
+  const { players, cardConfig, actualPlayer } = useSelector((state) => ({ players: state.players, actualPlayer: state.actualPlayer, cardConfig: state.cardConfig }));
   const [step, setStep] = useState(0);
 
   async function handleTrade() {

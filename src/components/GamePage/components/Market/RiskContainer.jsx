@@ -1,11 +1,14 @@
-import { getSlabImg } from '../../../../Store/GetSlabImg';
-import { fix } from '../../../../Store/actions';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import styles from './Styles/RiskContainer.module.scss';
+import { getSlabImg } from '../../../../Store/GetSlabImg';
+import { fix } from '../../../../Store/actions';
 import { fixRisk } from '../../../../utils/ApiConf';
+
 import Button from '../../../UI/Button';
 import Tooltip from '../../../UI/Tooltip';
+
+import styles from './Styles/RiskContainer.module.scss';
 
 const canbebougth = (cartas, costes, type) => {
   switch (type) {
@@ -33,7 +36,9 @@ const canbebougth = (cartas, costes, type) => {
 };
 
 const RiskContainer = ({ slab, index }) => {
-  const { actualPlayer, id } = useSelector(state => state);
+  const { id } = useParams();
+
+  const { actualPlayer } = useSelector(state => state);
   const cards = useSelector(state => state.players[actualPlayer].cards);
   const dispatch = useDispatch();
 

@@ -185,7 +185,6 @@ class Player:
       return False
 
     if (self.whereCanBePlace(slab, destiny, rotation) == 0):
-      print('Not posible<')
       return False
 
     slab.rotation = rotation
