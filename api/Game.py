@@ -63,6 +63,7 @@ colors = ['RED', 'GREEN', 'BLUE', 'YELLOW']
 
 class Game():
   def __init__(self, start = 1):
+    self.id = 0
     self.cards = genCards()
     self.slabs = genSlabs()
     self.normalMarket = []

@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { aceptTrade } from '../../../Store/actions';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+
+import { aceptTrade } from '../../../Store/actions';
 
 import Cartas from './Cartas';
 
@@ -13,8 +15,9 @@ const TradeModal = ({
   isOpen,
   onClose,
 }) => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { players, id } = useSelector((state) => ({ players: state.players, id: state.id }));
+  const { players } = useSelector((state) => ({ players: state.players }));
 
   const [acept1, setacept1] = useState(false);
   const [acept2, setacept2] = useState(false);

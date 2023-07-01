@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import { getCardIMG } from '../../../Store/GetSlabImg';
 import { descartar, setCardSelected } from '../../../Store/actions';
@@ -8,7 +10,7 @@ import { Discard } from '../../../utils/ApiConf';
 import Button from '../../UI/Button';
 
 import styles from './Styles/Cartas.module.scss';
-import { useEffect } from 'react';
+
 
 const Cartas = ({
   actualPlayer = 0,
@@ -17,8 +19,10 @@ const Cartas = ({
   blocked = [],
   selected = [],
 }) => {
+  const { id } = useParams();
+
   const dispatch = useDispatch();
-  const { id, cards } = useSelector((state) => ({ id: state.id, cards: state.players[actualPlayer].cards }));
+  const { cards } = useSelector((state) => ({ cards: state.players[actualPlayer].cards }));
 
   useEffect(() => {
     cards.forEach((card, index) => {

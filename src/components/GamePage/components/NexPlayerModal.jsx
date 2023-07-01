@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useParams } from 'react-router-dom';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import Modal from '../../UI/Modal'
 import Button from '../../UI/Button'
@@ -13,9 +14,8 @@ function NexPlayerModal({
   isOpen,
   onClose,
 }) {
+  const { id } = useParams();
   const dispatch = useDispatch();
-
-  const id = useSelector((state) => state.id);
 
   function onSubmit() {
     NextTurn(id).then(res => dispatch(nextPlayer(res)))
