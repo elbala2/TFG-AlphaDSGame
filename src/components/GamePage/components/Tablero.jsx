@@ -17,6 +17,7 @@ const Tablero = () => {
     way: state.players[state.actualPlayer].way,
   }))
   const dispatch = useDispatch();
+
   function isWayPart(x, y) {
     const xcoord = 0;
     const ycoord = 1;
@@ -27,6 +28,53 @@ const Tablero = () => {
       return !res;
     })
     return res;
+  }
+
+  function renderSlab(slab, x, y) {
+    if (!slab) {
+      return (
+        <Droppable droppableId={`boardDrop_${y}-${x}`}>
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className='h-100 w-100'
+            >
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      );
+    }
+
+    return !slab.isSpecial ? (
+      <img
+        className={styles.slab}
+        rotation={slab.rotation}
+        key={`img_${slab.id}`}
+        id={`img_${slab.id}`}
+        src={getSlabImg(slab)}
+        alt={``}
+        draggable={false}
+        ishere={`${isWayPart(x, y)}`}
+      />
+    ) : (
+      <>
+        <h1 className={styles.title}>{slab.title}</h1>
+        <Tooltip title={<p className={styles.descriptionTooltip}>{slab.description}</p>}>
+          <p className={styles.description}>{slab.description}</p>
+        </Tooltip>
+        <img
+          className={styles.slab}
+          key={`img_${slab.id}`}
+          id={`img_${slab.id}`}
+          src={getSlabImg(slab)}
+          alt={``}
+          ishere={`${isWayPart(x, y)}`}
+          draggable={false}
+        />
+      </>
+    )
   }
 
   return (
@@ -72,48 +120,7 @@ const Tablero = () => {
                       dispatch(setTarget([ i, j ]));
                   }}
                 >
-                  {casilla ? (
-                    !casilla.isSpecial ? (
-                      <img
-                        className={styles.slab}
-                        rotation={casilla.rotation}
-                        key={`img_${casilla.id}`}
-                        id={`img_${casilla.id}`}
-                        src={getSlabImg(casilla)}
-                        alt={``}
-                        draggable={false}
-                        ishere={`${isWayPart(j, i)}`}
-                      />
-                    ) : (
-                      <>
-                        <h1 className={styles.title}>{casilla.title}</h1>
-                        <Tooltip title={<p className={styles.descriptionTooltip}>{casilla.description}</p>}>
-                          <p className={styles.description}>{casilla.description}</p>
-                        </Tooltip>
-                        <img
-                          className={styles.slab}
-                          key={`img_${casilla.id}`}
-                          id={`img_${casilla.id}`}
-                          src={getSlabImg(casilla)}
-                          alt={``}
-                          ishere={`${isWayPart(j, i)}`}
-                          draggable={false}
-                        />
-                      </>
-                    )
-                  ) : (
-                    <Droppable droppableId={`boardDrop_${i}-${j}`}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          className='h-100 w-100'
-                        >
-                          {provided.placeholder}
-                        </div>
-                      )}
-                    </Droppable>
-                  )}
+                  {renderSlab(casilla, j, i)}
                 </div>
               );
             });

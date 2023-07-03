@@ -42,8 +42,8 @@ def startGame():
   if bool(request.get_json()):
     players, start = request.get_json().values()
     game.setConfig(players, start)
-  id = createGame(game)
-  game.id = id
+  createdId = createGame(game)
+  game.id = createdId
   return jsonify(toJSON(game))
 
 @app.route('/getGame/<id>', methods=['GET'])

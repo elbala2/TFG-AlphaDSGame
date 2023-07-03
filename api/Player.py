@@ -1,7 +1,7 @@
 import json
 
 from slabs import *
-from utils import *
+from utils import indexOf, apply
 
 
 def toJSON(obj):
@@ -217,29 +217,37 @@ class Player:
         link = slab.ApplyRotation()
     return link
 
-  def getPosiblePlaces(self, slab):
-    res = []
+  def getPositionPlaces(self, slab, x, y):
+    if self.board[y][x] != None:
+      return []
+    
     arriba = [-1, 0]
     derecha = [0, 1]
     abajo = [1, 0]
     izquierda = [0, -1]
+
+    res = []
+    link_arriba    = self.getCloseLinks([y, x], arriba)
+    link_derecha   = self.getCloseLinks([y, x], derecha)
+    link_abajo     = self.getCloseLinks([y, x], abajo)
+    link_izquierda = self.getCloseLinks([y, x], izquierda)
+    for rot in range(4):
+      slabLinks = slab.getRotatedLinks(rot)
+      
+      if ((link_arriba   != None and slabLinks[0]  and link_arriba[2]   ) \
+      or (link_derecha   != None and slabLinks[1]  and link_derecha[3]  ) \
+      or (link_abajo     != None and slabLinks[2]  and link_abajo[0]    ) \
+      or (link_izquierda != None and slabLinks[3]  and link_izquierda[1]))\
+      and (x != 2 or y != 0 or (slabLinks[0] and x == 2 and y == 0)):
+        res += [{ 'pos': [x, y], 'rotation': rot }]
+    
+    return res
+
+  def getPosiblePlaces(self, slab):
+    res = []
     for y in range(4):
       for x in range(4):
-        if self.board[y][x] == None:
-          link_arriba    = self.getCloseLinks([y, x], arriba)
-          link_derecha   = self.getCloseLinks([y, x], derecha)
-          link_abajo     = self.getCloseLinks([y, x], abajo)
-          link_izquierda = self.getCloseLinks([y, x], izquierda)
-          for rot in range(4):
-            slabLinks = slab.getRotatedLinks(rot)
-            
-            if ((link_arriba   != None and slabLinks[0]  and link_arriba[2]   ) \
-            or (link_derecha   != None and slabLinks[1]  and link_derecha[3]  ) \
-            or (link_abajo     != None and slabLinks[2]  and link_abajo[0]    ) \
-            or (link_izquierda != None and slabLinks[3]  and link_izquierda[1]))\
-            and (x != 2 or y != 0 or (slabLinks[0] and x == 2 and y == 0)):
-              res += [{ 'pos': [x, y], 'rotation': rot }]
-
+        res += self.getPositionPlaces(slab, x, y)
     return res
 
   def getCards(self, slab):

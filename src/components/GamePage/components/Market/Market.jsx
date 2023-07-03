@@ -16,9 +16,7 @@ const Market = () => {
     (prevState, state) => {
       if (JSON.stringify(prevState.normalMarket) !== JSON.stringify(state.normalMarket))
         return false
-      if (JSON.stringify(prevState.specialMarket) !== JSON.stringify(state.specialMarket))
-        return false
-      return true
+      return !JSON.stringify(prevState.specialMarket) !== JSON.stringify(state.specialMarket)
     }
   );
   const [open, setOpen] = useState(true);

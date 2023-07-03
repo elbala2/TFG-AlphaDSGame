@@ -83,14 +83,14 @@ class Slab:
   def getRotatedLinks(self, rotation):
     #arriba,derecha,abajo,izquierda
     result = self.links.copy()
-    for i in range(rotation):
+    for _ in range(rotation):
       result.insert(0, result.pop(-1))
     return result
 
   def ApplyRotation(self):
     #arriba,derecha,abajo,izquierda
     result = self.links.copy()
-    for i in range(self.rotation):
+    for _ in range(self.rotation):
       result.insert(0, result.pop(-1))
     return result
 

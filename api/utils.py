@@ -5,7 +5,7 @@ def indexOf(array, obj):
       return i
   return -1
 
-def find(array, object):
+def findIndex(array, object):
   for i in range(len(array)):
     if (array[i].id == object.id):
       return i

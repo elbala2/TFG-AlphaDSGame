@@ -1,11 +1,11 @@
 import random
 import copy
 
-from Cards import *
+from Cards import Card
 from slabs import *
-from Player import *
-from utils import *
-from bots import *
+from Player import Player
+from utils import findIndex, findById
+from bots import Bot
 
 def genCards():
   res = []
@@ -24,10 +24,10 @@ def genCards():
 
 def genSlabs():
   res = [] \
-  + [NormalSlab([1, 1, 1, 1]) for i in range(6)] \
-  + [NormalSlab([0, 1, 0, 1]) for i in range(6)] \
-  + [NormalSlab([0, 1, 1, 0]) for i in range(12)] \
-  + [NormalSlab([1, 0, 1, 1]) for i in range(14)] \
+  + [NormalSlab([1, 1, 1, 1]) for _ in range(6)] \
+  + [NormalSlab([0, 1, 0, 1]) for _ in range(6)] \
+  + [NormalSlab([0, 1, 1, 0]) for _ in range(12)] \
+  + [NormalSlab([1, 0, 1, 1]) for _ in range(14)] \
     \
   + [GoldSlab([0, 1, 0, 1]),
   GoldSlab([1, 1, 1, 1]),
@@ -105,6 +105,28 @@ class Game():
       if i == 0:
         self.players[i].startWay()
 
+  def distributeCards(self):
+    for player in self.players:
+      self.cards += player.cards
+      player.cards = []
+      player.hasBougth = False
+      x = 4 - len(player.cards)
+      self.cards = self.cards[x:]
+      player.cards += self.cards[:x]
+
+  def distributeSlabs(self):
+    self.slabs += self.normalMarket
+    self.normalMarket = []
+    while (len(self.normalMarket) < 4):
+      slab = self.slabs.pop(0)
+      if (not slab.isSpecial):
+        self.normalMarket.append(slab)
+      elif (len(self.specialMarket) < 4):
+        if slab.isRisk:
+          self.hasRisk += 1
+        self.specialMarket.append(slab)
+      else:
+        self.slabs.append(slab)
 
   def nextTurn(self):
     if (self.actualPlayer == 3):
@@ -114,28 +136,10 @@ class Game():
           self.finished = True
         else:
           self.players[self.whereIsPilar].startWay()
-
-      for playerAux in self.players:
-        self.cards += playerAux.cards
-        playerAux.cards = []
-        playerAux.hasBougth = False
-        x = 4 - len(playerAux.cards)
-        self.cards = self.cards[x:]
-        playerAux.cards += self.cards[:x]
-
-      self.slabs += self.normalMarket
-      self.normalMarket = []
-
-      while (len(self.normalMarket) < 4):
-        slab = self.slabs.pop(0)
-        if (not slab.isSpecial):
-          self.normalMarket.append(slab)
-        elif (len(self.specialMarket) < 4):
-          if slab.isRisk:
-            self.hasRisk += 1
-          self.specialMarket.append(slab)
-        else:
-          self.slabs.append(slab)
+  
+      self.distributeCards()
+      self.distributeSlabs()
+      
     self.actualPlayer = (self.actualPlayer + 1) % 4
     self.nextBotAction = 0
     return True
@@ -163,18 +167,18 @@ class Game():
       raise Exception('The trade must be equivalent')
     
     for i in range(len(cards1)):
-      index1 = find(self.players[player1ID].cards, cards1[i])
+      index1 = findIndex(self.players[player1ID].cards, cards1[i])
       if (index1 != -1):
         self.players[player2ID].cards.append(self.players[player1ID].cards.pop(index1))
         
-      index2 = find(self.players[player2ID].cards, cards2[i])
+      index2 = findIndex(self.players[player2ID].cards, cards2[i])
       if (index2 != -1):
         self.players[player1ID].cards.append(self.players[player2ID].cards.pop(index2))
 
   def fix(self, index, cards):
     player = self.getActualPlayer()
     for i in range(len(cards)):
-      index1 = find(player.cards, cards[i])
+      index1 = findIndex(player.cards, cards[i])
       if (index1 != -1):
         self.cards.append(player.cards.pop(index1))
     self.specialMarket.pop(index)
