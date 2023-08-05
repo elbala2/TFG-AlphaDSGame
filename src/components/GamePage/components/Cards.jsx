@@ -9,7 +9,7 @@ import { Discard } from '../../../utils/ApiConf';
 
 import Button from '../../UI/Button';
 
-import styles from './Styles/Cartas.module.scss';
+import styles from './Styles/Cards.module.scss';
 
 
 const Cartas = ({

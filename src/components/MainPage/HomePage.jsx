@@ -11,10 +11,10 @@ import HeaderAndFooter from '../UI/Header&Footer';
 const HomePage = () => {
   const navigate = useNavigate();
   const [players, setPlayers] = useState([
-    { name: 'Player 1', type: 0 },
-    { name: 'Player 2', type: 0 },
-    { name: 'Player 3', type: 0 },
-    { name: 'Player 4', type: 0 },
+    { name: 'Jugador 1', type: 0 },
+    { name: 'Jugador 2', type: 0 },
+    { name: 'Jugador 3', type: 0 },
+    { name: 'Jugador 4', type: 0 },
   ]);
 
   const handleChangePlayer = (player, i) => {
@@ -57,7 +57,7 @@ const HomePage = () => {
               navigate(`/Game/${res.id}`);
             }}
           >
-            Start
+            Comenzar
           </Button>
         </div>
       </div>
