@@ -28,7 +28,7 @@ function NexPlayerModal({
       title='¿Esta seguro de terminar el turno?'
       onClose={onClose}
     >
-      <div>
+      <div className='m-5'>
         <Button
           className='mx-2'
           variants='secondary outlined'

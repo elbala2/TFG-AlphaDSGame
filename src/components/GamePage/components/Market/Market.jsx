@@ -13,13 +13,10 @@ import Modal from '../../../UI/Modal';
 const Market = () => {
   const { normalMarket, specialMarket } = useSelector(
     (state) => state,
-    (prevState, state) => {
-      if (JSON.stringify(prevState.normalMarket) !== JSON.stringify(state.normalMarket))
-        return false
-      if (JSON.stringify(prevState.specialMarket) !== JSON.stringify(state.specialMarket))
-        return false
-      return true
-    }
+    (prevState, state) => (
+      JSON.stringify(prevState.specialMarket) === JSON.stringify(state.specialMarket)
+      && JSON.stringify(prevState.normalMarket) === JSON.stringify(state.normalMarket)
+    )
   );
   const [open, setOpen] = useState(true);
 

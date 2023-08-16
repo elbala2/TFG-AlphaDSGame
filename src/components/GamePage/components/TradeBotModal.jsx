@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { aceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../../Store/actions';
 
-import Cartas from './Cartas';
+import Cartas from './Cards';
 
 import styles from './Styles/tradeModal.module.scss';
 import { TradeCards } from '../../../utils/ApiConf';
@@ -28,7 +28,7 @@ const TradeBotModal = () => {
         })
     }
   }
-  if (!cardConfig.length) return '';
+  if (!cardConfig?.length) return '';
   const cardConfigTrade = cardConfig[0]?.needed[step];
   return (
     <Modal

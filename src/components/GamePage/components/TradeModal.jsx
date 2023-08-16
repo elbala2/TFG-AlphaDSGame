@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { aceptTrade } from '../../../Store/actions';
 
-import Cartas from './Cartas';
+import Cartas from './Cards';
 
 import styles from './Styles/tradeModal.module.scss';
 import { TradeCards } from '../../../utils/ApiConf';

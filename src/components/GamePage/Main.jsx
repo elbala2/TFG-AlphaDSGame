@@ -13,7 +13,7 @@ import SuccessModal from './components/SuccessModal';
 import TradeModal from './components/TradeModal';
 import Market from './components/Market/Market';
 import Tablero from './components/Tablero';
-import Cartas from './components/Cartas';
+import Cartas from './components/Cards';
 import Button from '../UI/Button';
 import HeaderAndFooter from '../UI/Header&Footer';
 
@@ -82,18 +82,21 @@ const GamePage = () => {
               <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
               <div className='flex-fill' />
               {(players[actualPlayer]?.type === 1 || whereIsPilar === actualPlayer) ? (
-                <Button
-                  onClick={handleBotNextAction}
-                >
-                  Bot Next Action
-                </Button>
+                <>
+                  {whereIsPilar === actualPlayer && <span className='me-3'>El dato esta en tu camino de datos, pierdes tu turno</span>}
+                  <Button
+                    onClick={handleBotNextAction}
+                  >
+                    Siguiente acción
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button
                     className='mx-2'
                     onClick={() => setTradeModalOpen((prevstate) => !prevstate)}
                   >
-                    Trade
+                    Negociar
                   </Button>
                   <Button
                     variants='secondary'

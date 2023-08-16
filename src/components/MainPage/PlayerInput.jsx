@@ -9,7 +9,7 @@ export default function PlayerInput({ player, setPlayer, id }) {
       <input
         type='text'
         className='bg-transparent text-center'
-        placeholder='Player name'
+        placeholder='Nombre'
         value={player.name}
         onChange={(e) => setPlayer({ ...player, name: e.target.value })}
       />
@@ -22,7 +22,7 @@ export default function PlayerInput({ player, setPlayer, id }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
         </Button>
-        <span className='mx-auto'>{player.type === 0 ? 'Player' : 'Bot'}</span>
+        <span className='mx-auto'>{player.type === 0 ? 'Jugador' : 'Bot'}</span>
         <Button
           className={styles.button}
           onClick={() => setPlayer({ ...player, type: abs(player.type - 1) % 2 })}

@@ -22,7 +22,7 @@ const SuccessModal = () => {
     >
       <div className='d-flex flex-column'>
         {players
-          .sort((a, b) => b.puntos - a.puntos)
+          .sort((a, b) => b.points - a.points)
           .map((player, index) =>
             index === 0 ? (
               <p key={index} className={styles.winnerMSG}>

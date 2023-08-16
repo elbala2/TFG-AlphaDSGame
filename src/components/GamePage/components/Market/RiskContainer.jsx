@@ -43,7 +43,7 @@ const RiskContainer = ({ slab, index }) => {
   const dispatch = useDispatch();
 
   const { costs, type, description } = slab;
-  const canbuy = canbebougth(cards, costs, type, actualPlayer);
+  const canbuy = canbebougth(cards, costs, type);
   return (
     <div className={`${styles.marketContainer}`} key={index}>
       <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`}>
