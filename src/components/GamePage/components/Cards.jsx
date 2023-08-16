@@ -22,15 +22,13 @@ const Cartas = ({
   const { id } = useParams();
 
   const dispatch = useDispatch();
-  const { cards } = useSelector((state) => ({ cards: state.players[actualPlayer].cards }));
+  const { cards, hasBougth } = useSelector((state) => ({ cards: state.players[actualPlayer].cards, hasBougth: state.players[actualPlayer].hasBougth }));
 
   useEffect(() => {
     cards.forEach((card, index) => {
       if (selected.includes(card.id) && !card.selected) dispatch(setCardSelected(actualPlayer, index));
     })
   }, [actualPlayer, cards, dispatch, selected])
-
-  const canDiscard = cards.length === 4;
 
   return (
     <div className={styles.cardscontainer}>
@@ -50,7 +48,7 @@ const Cartas = ({
               if (!blocked.includes(card.id) && !selected.includes(card.id)) dispatch(setCardSelected(actualPlayer, index));
             }}
           >
-            {descartable && canDiscard && (
+            {descartable && !hasBougth && (
               <Button
                 variants='outlined secondary'
                 className={styles.closebutton}

@@ -181,6 +181,7 @@ class Game():
       index1 = findIndex(player.cards, cards[i])
       if (index1 != -1):
         self.cards.append(player.cards.pop(index1))
+    player.hasBougthhasBougth = True
     self.specialMarket.pop(index)
     self.hasRisk -= 1
 

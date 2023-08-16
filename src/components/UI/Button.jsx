@@ -63,7 +63,7 @@ function Button({
           </>
         ) : (
           <>
-            {(forcedLoading || loading) && <Loader />}
+            {(forcedLoading || loading) && <Loader className='me-1' />}
             {children}
           </>
         )}
