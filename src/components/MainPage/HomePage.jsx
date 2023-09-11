@@ -27,38 +27,40 @@ const HomePage = () => {
   return (
     <HeaderAndFooter>
       <div className={styles.mainCard}>
-        <h1>Bienvenido a AlphaDSGame</h1>
-        <div className={styles.playerButtonsContainer}>
-          {players.map((player, index) => (
-            <PlayerInput
-              key={index}
-              id={index}
-              player={player}
-              setPlayer={(p) => handleChangePlayer(p, index)}
-            />
-          ))}
-        </div>
+        <div className={styles.container}>
+          <h1>Bienvenido a AlphaDSGame</h1>
+          <div className={styles.playerButtonsContainer}>
+            {players.map((player, index) => (
+              <PlayerInput
+                key={index}
+                id={index}
+                player={player}
+                setPlayer={(p) => handleChangePlayer(p, index)}
+              />
+            ))}
+          </div>
 
-        <div className='d-flex align-items-center'>
-          {/* <label style={{ marginRight: '10px' }}>Iniciar en la fila:</label>
-          <select value={start} onChange={(e) => setstart(e.target.value)}>
-            <option value={0}>1</option>
-            <option value={1}>2</option>
-            <option value={2}>3</option>
-            <option value={3}>4</option>
-          </select> */}
-          <div className='flex-fill' />
-          <Button
-            onClick={async () => {
-              const res = await StartGame({
-                players,
-                start: 1,
-              })
-              navigate(`/Game/${res.id}`);
-            }}
-          >
-            Comenzar
-          </Button>
+          <div className='d-flex align-items-center'>
+            {/* <label style={{ marginRight: '10px' }}>Iniciar en la fila:</label>
+            <select value={start} onChange={(e) => setstart(e.target.value)}>
+              <option value={0}>1</option>
+              <option value={1}>2</option>
+              <option value={2}>3</option>
+              <option value={3}>4</option>
+            </select> */}
+            <div className='flex-fill' />
+            <Button
+              onClick={async () => {
+                const res = await StartGame({
+                  players,
+                  start: 1,
+                })
+                navigate(`/Game/${res.id}`);
+              }}
+            >
+              Comenzar
+            </Button>
+          </div>
         </div>
       </div>
     </HeaderAndFooter>

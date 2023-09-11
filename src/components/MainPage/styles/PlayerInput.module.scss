@@ -1,6 +1,6 @@
 .playerButton {
-  height: 7.5rem;
-  width: 7.5rem;
+  height: 9rem;
+  width: 9rem;
   border-radius: 10px;
   
   &[type='0'] {
@@ -33,6 +33,7 @@
     padding: 0px 5px;
     display: flex;
     align-items: center;
+    justify-content: space-around;
 
     .button {
       display: none;

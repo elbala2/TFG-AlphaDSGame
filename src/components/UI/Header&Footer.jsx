@@ -10,9 +10,7 @@ const HeaderAndFooter = (props) => {
           <Navbar.Brand href='/'><img src={icon} alt='icono' /> AlphaDSGame</Navbar.Brand>
         </Container>
       </Navbar>
-      <div className='d-flex align-items-center justify-content-center'>
-        {props.children}
-      </div>
+      {props.children}
       <Navbar fixed='bottom' bg='dark' variant='dark'>     
       </Navbar>
     </>
