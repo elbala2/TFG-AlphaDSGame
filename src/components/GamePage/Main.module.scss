@@ -1,6 +1,6 @@
 .mainCard {
+  height: 90vh;
   display: flex;
-  margin-top: 1rem;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
@@ -17,13 +17,13 @@
     background-color: rgba(255, 240, 153, 0.7);
   }
 
-  .leftcard {
-    width: 800px;
-    padding: 1rem;
+  .halfCard {
+    width: 50%;
+    padding: 0rem 6rem;
     padding-top: 0px;
-    display: block;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 
     .header {
       display: flex;

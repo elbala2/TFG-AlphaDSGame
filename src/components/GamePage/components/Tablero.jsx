@@ -5,16 +5,18 @@ import { Droppable } from 'react-beautiful-dnd';
 
 import conexion_borde from '../../../resources/border-conexion.png';
 
-import styles from './Styles/Tablero.module.scss';
 import Tooltip from '../../UI/Tooltip';
 
-const Tablero = () => {
-  const {  start, actualPlayer, board, way } = useSelector(state => ({
+import styles from './Styles/Tablero.module.scss';
+
+const Tablero = ({
+  playerIndex,
+}) => {
+  const {  start, board, way } = useSelector(state => ({
     start: state.start,
-    actualPlayer: state.actualPlayer,
     pos: state.pos,
-    board: state.players[state.actualPlayer].board,
-    way: state.players[state.actualPlayer].way,
+    board: state.players[playerIndex].board,
+    way: state.players[playerIndex].way,
   }))
   const dispatch = useDispatch();
 
@@ -78,7 +80,7 @@ const Tablero = () => {
   }
 
   return (
-    <div className='d-flex'>
+    <div className={`${styles.rightBoardContainer}`}>
       <div className={`${styles.bordecontainer}`}>
         <div className={`${styles.bordecontainerSpace}`} />
         {board.map((fila, i) => {
@@ -100,8 +102,8 @@ const Tablero = () => {
       <div>
         <img
           draggable='false'
-          src={getMision(actualPlayer, board[0][2] !== null)}
-          alt={`mision ${actualPlayer}`}
+          src={getMision(playerIndex, board[0][2] !== null)}
+          alt={`mision ${playerIndex}`}
           className={`${styles.misionImg}`}
         />
         <div className={`${styles.board}`}>

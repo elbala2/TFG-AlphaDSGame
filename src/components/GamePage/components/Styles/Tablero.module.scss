@@ -1,111 +1,115 @@
-.bordecontainer {
-  border: 4px solid black;
-  border-right: none;
-  background-color: #9eef65;
-  width: 2rem;
-  height: 57.78rem;
-
-  .bordecontainerSpace {
-    height: 19.3rem;
-  }
-
-  .bordecontainerZone {
-    height: 9.5rem;
-
-    .conexion {
-      height: 9.5rem;
-      user-select: none;
-    }
-  }
-}
-
-.misionImg {
-  width: 38.38rem;
-  height: 19.4rem;
-  user-select: none;
-}
-
-.board {
-  box-sizing: border-box;
+.rightBoardContainer {
   display: flex;
-  flex-wrap: wrap;
-  width: 38.38rem;
-  height: 38.38rem;
-  border: 3px solid black;
-  background-color: rgb(1, 106, 37);
 
-  .slabChessContainer {
-    position: relative;
-    box-sizing: border-box;
-    border: 1px solid white;
-    justify-content: center;
-    align-items: center;
-    height: 9.5rem;
-    width: 9.5rem;
+  .bordecontainer {
+    border: 4px solid black;
+    background-color: #9eef65;
+    width: 6rem;
 
-    .title {
-      position: absolute;
-      margin-top: 10px;
-      top: 10px;
-      left: 7px;
-      width: 8.5rem;
-      z-index: 2;
-      padding: 10px;
-      padding-bottom: 0px;
-      font-size: large;
-      text-align: center;
-      font-weight: 900;
-      color: white;
-      -webkit-text-stroke: 0.7px black;
-      user-select: none;
+    height: 90vh;
+  
+    .bordecontainerSpace {
+      height: 19.3rem;
     }
   
-    .description {
-      position: absolute;
-      top: 90px;
-      left: 10px;
-      z-index: 2;
-      padding: 10px;
-      padding-top: 0px;
-      text-align: center;
-      font-size: medium;
-      color: black;
-      -webkit-text-stroke: 0.7px black;
-      width: 8.5rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      user-select: none;
-    }
+    .bordecontainerZone {
+      height: var(--slabSize);
   
-
-    .slab{
-      width: 9.5rem;
-      height: 9.5rem;
-      background-color: rgb(158, 239, 101);
-      user-select: none;
-
-      &[ishere='true']{
-        background-color: rgb(251, 255, 0);
-      }
-
-      &[rotation='1'] {
-        transform: rotate(90deg);
-      }
-      &[rotation='2'] {
-        transform: rotate(180deg);
-      }
-      &[rotation='3'] {
-        transform: rotate(270deg);
+      .conexion {
+        height: var(--slabSize);
+        user-select: none;
       }
     }
   }
-}
-
-.descriptionTooltip{
-  font-size: small;
-  width: 9.5rem;
-  padding: 5px;
-  margin-bottom: 0px;
-  text-align: center;
+  
+  .misionImg {
+    width: 38.38rem;
+    height: 19.4rem;
+    user-select: none;
+  }
+  
+  .board {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    height: calc(var(--slabSize) * 4 + 5px);
+    width: calc(var(--slabSize) * 4 + 5px);
+    border: 3px solid black;
+    background-color: rgb(1, 106, 37);
+  
+    .slabChessContainer {
+      position: relative;
+      box-sizing: border-box;
+      border: 1px solid white;
+      justify-content: center;
+      align-items: center;
+      height: var(--slabSize);
+      width: var(--slabSize);
+  
+      .title {
+        position: absolute;
+        margin-top: 10px;
+        top: 10px;
+        left: 7px;
+        width: 8.5rem;
+        z-index: 2;
+        padding: 10px;
+        padding-bottom: 0px;
+        font-size: large;
+        text-align: center;
+        font-weight: 900;
+        color: white;
+        -webkit-text-stroke: 0.7px black;
+        user-select: none;
+      }
+    
+      .description {
+        position: absolute;
+        top: 90px;
+        left: 10px;
+        z-index: 2;
+        padding: 10px;
+        padding-top: 0px;
+        text-align: center;
+        font-size: medium;
+        color: black;
+        -webkit-text-stroke: 0.7px black;
+        width: 8.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        user-select: none;
+      }
+    
+  
+      .slab{
+        width: var(--slabSize);
+        height: var(--slabSize);
+        background-color: rgb(158, 239, 101);
+        user-select: none;
+  
+        &[ishere='true']{
+          background-color: rgb(251, 255, 0);
+        }
+  
+        &[rotation='1'] {
+          transform: rotate(90deg);
+        }
+        &[rotation='2'] {
+          transform: rotate(180deg);
+        }
+        &[rotation='3'] {
+          transform: rotate(270deg);
+        }
+      }
+    }
+  }
+  
+  .descriptionTooltip{
+    font-size: small;
+    height: var(--slabSize);
+    padding: 5px;
+    margin-bottom: 0px;
+    text-align: center;
+  }
 }

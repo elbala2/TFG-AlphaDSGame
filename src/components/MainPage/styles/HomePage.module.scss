@@ -1,16 +1,18 @@
 
 .mainCard {
-  padding: 30px;
+  height: 90vh;
+  padding: 0px 30px;
   display: flex;
   align-content: center;
   justify-content: center;
 
   .container {
     margin-top: 1rem;
-    min-width: 1000px;
+    padding: 90px 0px;
   }
 
   .playerButtonsContainer{
+    padding: 0px 50px;
     display: flex;
     align-items: center;
     gap: 20px;

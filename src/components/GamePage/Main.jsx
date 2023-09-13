@@ -18,6 +18,7 @@ import Button from '../UI/Button';
 import HeaderAndFooter from '../UI/Header&Footer';
 
 import styles from './Main.module.scss';
+import PlayerUI from './components/PlayerUI';
 
 const GamePage = () => {
   const { id } = useParams();
@@ -25,14 +26,9 @@ const GamePage = () => {
   const dispatch = useDispatch();
   const {
     actualPlayer,
-    players,
-    normalMarket,
-    specialMarket,
-    whereIsPilar,
   } = useSelector((state) => state);
 
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
-  const [tradeModalOpen, setTradeModalOpen] = useState(false);
 
   useEffect(() => {
     if (id){
@@ -46,86 +42,15 @@ const GamePage = () => {
     }
   }, [dispatch, id, navigate]);
 
-
-  function handleBotNextAction() {
-    getBotAction(id).then(res => {
-      if (res.action === 'trade') {
-        dispatch(setCardConfig(res.cardConfig))
-      } else {
-        dispatch(setState(res));
-      }
-    })
-  };
-
   return (
     <HeaderAndFooter>
-      <DragDropContext
-        onDragEnd={({ draggableId, destination: { droppableId } }) => {
-          const slabIndex = parseInt(draggableId);
-          const target = droppableId.replace('boardDrop_', '').split('-').map(n => parseInt(n));
-          const rotation = (slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4]).rotation;
-          const cards = players[actualPlayer].cards.filter(c => c.selected);
-          MoveSlab(
-            id,
-            slabIndex,
-            target,
-            rotation,
-            cards,
-          ).then((res) => {
-            dispatch(mover(res));
-          });
-        }}
-      >
-        <div className={styles.mainCard} type={actualPlayer}>
-          <div className={styles.leftcard}>
-            <div className={styles.header}>
-              <p className='h2 my-0 '>{players[actualPlayer]?.name}</p>
-              <div className='flex-fill' />
-              {(players[actualPlayer]?.type === 1 || whereIsPilar === actualPlayer) ? (
-                <>
-                  {whereIsPilar === actualPlayer && <span className='me-3'>El dato esta en tu camino de datos, pierdes tu turno</span>}
-                  <Button
-                    onClick={handleBotNextAction}
-                  >
-                    Siguiente acción
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    className='mx-2'
-                    onClick={() => setTradeModalOpen((prevstate) => !prevstate)}
-                  >
-                    Negociar
-                  </Button>
-                  <Button
-                    variants='secondary'
-                    onClick={() => setnextPlayerModalOpen((prevstate) => !prevstate)}
-                  >
-                    Terminar Turno
-                  </Button>
-                </>
-              )}
-            </div>
-            <hr />
-            <Market />
-            <div className={styles.cartsContainer}>
-              <Cartas actualPlayer={actualPlayer} titleStyles={{ fontSize: 'medium' }} descartable/>
-            </div>
-          </div>
-          <Tablero />
-        </div>
-        <TradeModal
-          isOpen={tradeModalOpen}
-          onClose={() => setTradeModalOpen(prevstate => !prevstate)}
-        />
-        <NexPlayerModal
-          isOpen={nextPlayerModalOpen}
-          onClose={() => setnextPlayerModalOpen(prevstate => !prevstate)}
-        />
-        <TradeBotModal />
-        <SuccessModal />
-      </DragDropContext>
+      <PlayerUI playerIndex={actualPlayer} handleNextPlayer={() => setnextPlayerModalOpen(true)} />
+      <NexPlayerModal
+        isOpen={nextPlayerModalOpen}
+        onClose={() => setnextPlayerModalOpen(prevstate => !prevstate)}
+      />
+      <TradeBotModal />
+      <SuccessModal />
     </HeaderAndFooter>
   );
 };
