@@ -16,7 +16,8 @@
       height: var(--slabSize);
   
       .conexion {
-        height: var(--slabSize);
+        height: 100%;// var(--slabSize);
+        width: 100%;
         user-select: none;
       }
     }
