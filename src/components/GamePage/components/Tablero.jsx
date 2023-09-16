@@ -3,12 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getMision, getSlabImg } from "../../../Store/GetSlabImg";
 import { Droppable } from 'react-beautiful-dnd';
 
-import  { ReactComponent as LCable } from '../../../resources/cableL.svg';
-
 import Tooltip from '../../UI/Tooltip';
 
 import styles from './Styles/Tablero.module.scss';
-import Cable from '../../UI/Cable';
+import CableL from '../../UI/CableL';
 
 const Tablero = ({
   playerIndex,
@@ -89,9 +87,7 @@ const Tablero = ({
             <div key={`borde${i}`} className={`${styles.bordecontainerZone}`}>
               {start === i && (
                 <div className={styles.conexion}> 
-                  <Cable
-                    size={24}
-                  />
+                  <CableL/>
                   {/* <LCable
                     className='w-100 h-100'
                     key='cnx1'
