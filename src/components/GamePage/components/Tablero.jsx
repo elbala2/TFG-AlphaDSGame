@@ -6,7 +6,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import Tooltip from '../../UI/Tooltip';
 
 import styles from './Styles/Tablero.module.scss';
-import CableL from '../../UI/CableL';
+import Cable from '../../UI/Cable';
 
 const Tablero = ({
   playerIndex,
@@ -79,54 +79,85 @@ const Tablero = ({
   }
 
   return (
-    <div className={`${styles.rightBoardContainer}`}>
-      <div className={`${styles.bordecontainer}`}>
-        <div className={`${styles.bordecontainerSpace}`} />
-        {board.map((fila, i) => {
+    <div className={`${styles.boardUI}`}>
+      <div className={`${styles.boardHeader}`}>
+        <div className={`${styles.cableContainer}`}>
+          <Cable
+            links={[1, 1, 0, 0]}
+          />
+        </div>
+        <div
+          className={`${styles.misionImg} bg-red`}
+        />
+        {/* <img
+          draggable='false'
+          src={getMision(playerIndex, board[0][2] !== null)}
+          alt={`mision ${playerIndex}`}
+        /> */}
+      </div>
+      <div className={`${styles.boardBody}`}>
+        {board.map((f, i) => {
           return (
-            <div key={`borde${i}`} className={`${styles.bordecontainerZone}`}>
+            <div className=''>
+              {start > i && <div key={`borde${i}`} className={`${styles.cableContainer}`} />}
               {start === i && (
-                <div className={styles.conexion}> 
-                  <CableL/>
-                  {/* <LCable
-                    className='w-100 h-100'
-                    key='cnx1'
-                    draggable='false'
-                    alt='conexion'
-                  /> */}
+                <div key={`borde${i}`} className={`${styles.cableContainer}`}>
+                  <Cable
+                    links={[0, 1, 1, 0]}
+                  />
+                </div>
+              )}
+              {start < i && (
+                <div className={`flex-fill ${styles.cableContainer}`}>
+                  <Cable
+                    links={[1, 0, 1, 0]}
+                    key={`borde${i} `}
+                  />
                 </div>
               )}
             </div>
           );
         })}
-      </div>
-      <div>
-        <img
-          draggable='false'
-          src={getMision(playerIndex, board[0][2] !== null)}
-          alt={`mision ${playerIndex}`}
-          className={`${styles.misionImg}`}
-        />
         <div className={`${styles.board}`}>
-          {board.map((fila, i) => {
-            return fila.map((casilla, j) => {
-              return (
-                <div
-                  key={`fila${j}`}
-                  className={`${styles.slabChessContainer}`}
-                  onDragOver={(event) => {
-                    if (!casilla)
-                      event.preventDefault();
-                  }}
-                  onDrop={() => {
-                    if (!casilla)
-                      dispatch(setTarget([ i, j ]));
-                  }}
-                >
-                  {renderSlab(casilla, j, i)}
-                </div>
-              );
-            });
+          {board.map((f, i) => {
+            return (
+              <div key={`col${i}`} className={`${styles.boardRow}`}>
+                {start > i && <div key={`borde${i}`} className={`${styles.cableContainer}`} />}
+                {start === i && (
+                  <div key={`borde${i}`} className={`${styles.cableContainer}`}>
+                    <Cable
+                      links={[0, 1, 1, 0]}
+                    />
+                  </div>
+                )}
+                {start < i && (
+                  <div className={`flex-fill ${styles.cableContainer}`}>
+                    <Cable
+                      links={[1, 0, 1, 0]}
+                      key={`borde${i} `}
+                    />
+                  </div>
+                )}
+                {f.map((casilla, j) => {
+                  return (
+                    <div
+                      key={`fila${j}`}
+                      className={`${styles.slabChessContainer}`}
+                      onDragOver={(event) => {
+                        if (!casilla)
+                          event.preventDefault();
+                      }}
+                      onDrop={() => {
+                        if (!casilla)
+                          dispatch(setTarget([ i, j ]));
+                      }}
+                    >
+                      {renderSlab(casilla, j, i)}
+                    </div>
+                  );
+                })}
+              </div>
+            );          
           })}
         </div>
       </div>

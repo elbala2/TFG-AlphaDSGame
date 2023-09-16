@@ -45,6 +45,7 @@ const GamePage = () => {
   return (
     <HeaderAndFooter>
       <PlayerUI playerIndex={actualPlayer} handleNextPlayer={() => setnextPlayerModalOpen(true)} />
+      {/* <PlayerUI playerIndex={actualPlayer+1} handleNextPlayer={() => setnextPlayerModalOpen(true)} /> */}
       <NexPlayerModal
         isOpen={nextPlayerModalOpen}
         onClose={() => setnextPlayerModalOpen(prevstate => !prevstate)}

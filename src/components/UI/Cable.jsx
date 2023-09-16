@@ -1,54 +1,105 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-function Cable({
-  width = 28,
-  heigth = 28,
+export function Cable({
+  space = 7,
+  linesNumber = 4,
+  lineWidth = 7,
+  links = [1, 1, 1, 1],
+  width = 24,
+  height = 24,
   ...other
 }) {
 
-  const space = 2;
-  const wDeplazamiento = (width - (space * 4) - (2 * 4)) / 2;
-  const hDeplazamiento = (heigth - (space * 4) - (2 * 4)) / 2;
-  const steps = (width - (space * 4)) / 4;
-
-  const lines= [];
+  const wDeplazamiento = (width - (space * (linesNumber - 1)) - (lineWidth * linesNumber)) / 2;
+  const hDeplazamiento = (height - (space * (linesNumber - 1)) - (lineWidth * linesNumber)) / 2;
   
-  for (let i = 0; i < 4; i += 1) {
+  const lines= [];
+
+  console.log(2, width, height)
+  
+  for (let i = 0; i < linesNumber; i += 1) {
+    const step = ((space * i) + lineWidth * i);
     lines.push(
       <>
-        <line
-          x1={(steps * i) + space + wDeplazamiento}
-          y1="0"
-          x2={(steps * i) + space + wDeplazamiento}
-          y2={heigth - ((steps * i) + space + hDeplazamiento) + 1}
-          style={{
-            stroke: '#d0bfc7',
-            strokeWidth: 2,
-          }}
-        />
+        {links[0] && (
+          <line
+            x1={step + wDeplazamiento}
+            y1="0"
+            x2={step + wDeplazamiento}
+            y2={height - hDeplazamiento + (lineWidth / 2)}
+            style={{
+              stroke: '#d0bfc7',
+              strokeWidth: lineWidth,
+            }}
+          />
+        )}
 
-        <line
-          x1={(steps * i) + space + wDeplazamiento}
-          y1={heigth - ((steps * i) + space + hDeplazamiento)}
-          x2={width}
-          y2={heigth - ((steps * i) + space + hDeplazamiento)}
-          style={{
-            stroke: '#d0bfc7',
-            strokeWidth: 2,
-          }}
-        />
+        {links[1] && (
+          <line
+            x1={wDeplazamiento}
+            y1={height - (step + hDeplazamiento)}
+            x2={width}
+            y2={height - (step + hDeplazamiento)}
+            style={{
+              stroke: '#d0bfc7',
+              strokeWidth: lineWidth,
+            }}
+          />
+        )}
+
+        {links[2] && (
+          <line
+            x1={step + wDeplazamiento}
+            y1={hDeplazamiento + (lineWidth / 2)}
+            x2={step + wDeplazamiento}
+            y2={height}
+            style={{
+              stroke: '#d0bfc7',
+              strokeWidth: lineWidth,
+            }}
+          />
+        )}
+
+        {links[3] && (
+          <line
+            x1={0}
+            y1={height - (step + hDeplazamiento)}
+            x2={width}
+            y2={height - (step + hDeplazamiento)}
+            style={{
+              stroke: '#d0bfc7',
+              strokeWidth: lineWidth,
+            }}
+          />
+        )}
       </>
     )
   }
 
   return (
-    <svg {...other} viewBox={`0 0 ${width} ${heigth}`} preserveAspectRatio="slice">
-      {lines}
-    </svg>
+      <svg {...other} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="">
+        {lines}
+      </svg>
   )
 }
 
-Cable.propTypes = {}
+function CableContainer(props) {
+  const ref = useRef();
+  const { width, height } = ref.current?.getBoundingClientRect() ?? {};
 
-export default Cable
+  console.log(1, width, height)
+  return (
+    <div className='w-100 h-100' ref={ref}>
+      {ref.current && (
+        <Cable
+          {...props}
+          width={width}
+          height={height}
+        />
+      )}
+    </div>
+  );
+}
+
+export default CableContainer
