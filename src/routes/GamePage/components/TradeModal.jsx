@@ -8,8 +8,8 @@ import Cartas from './Cards';
 
 import styles from './Styles/tradeModal.module.scss';
 import { TradeCards } from '../../../utils/ApiConf';
-import Button from '../../UI/Button';
-import Modal from '../../UI/Modal';
+import Button from '../../../components/UI/Button';
+import Modal from '../../../components/UI/Modal';
 
 const TradeModal = ({
   isOpen,

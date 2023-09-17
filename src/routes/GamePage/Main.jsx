@@ -2,23 +2,16 @@ import { useEffect, useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { DragDropContext } from 'react-beautiful-dnd';
 
-import { mover, setState, setCardConfig } from '../../Store/actions';
-import { getBotAction, GetGame, MoveSlab, StartGame } from '../../utils/ApiConf';
+import { setState, } from '../../Store/actions';
+import { GetGame, StartGame } from '../../utils/ApiConf';
 
 import NexPlayerModal from './components/NexPlayerModal';
 import TradeBotModal from './components/TradeBotModal';
 import SuccessModal from './components/SuccessModal';
-import TradeModal from './components/TradeModal';
-import Market from './components/Market/Market';
-import Tablero from './components/Tablero';
-import Cartas from './components/Cards';
-import Button from '../UI/Button';
-import HeaderAndFooter from '../UI/Header&Footer';
 
-import styles from './Main.module.scss';
 import PlayerUI from './components/PlayerUI';
+import HeaderAndFooter from '../../components/UI/Header&Footer';
 
 const GamePage = () => {
   const { id } = useParams();

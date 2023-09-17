@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { MoveSlab } from '../../../../utils/ApiConf';
 
-import Tooltip from '../../../UI/Tooltip';
+import Tooltip from '../../../../components/UI/Tooltip';
 
 import styles from './Styles/SpecialContainer.module.scss';
 

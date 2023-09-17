@@ -1,12 +1,14 @@
 import { useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
+import { StartGame } from '../../utils/ApiConf';
+
+import HeaderAndFooter from '../../components/UI/Header&Footer';
+import Button from '../../components/UI/Button';
+import PlayerInput from './PlayerInput';
 
 import styles from './styles/HomePage.module.scss';
-import { useNavigate } from 'react-router-dom';
-import { StartGame } from '../../utils/ApiConf';
-import PlayerInput from './PlayerInput';
-import Button from '../UI/Button';
-import HeaderAndFooter from '../UI/Header&Footer';
 
 const HomePage = () => {
   const navigate = useNavigate();

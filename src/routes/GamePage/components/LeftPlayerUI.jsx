@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCardConfig, setState } from '../../../Store/actions';
 import { getBotAction } from '../../../utils/ApiConf';
 
-import Button from '../../UI/Button';
+import Button from '../../../components/UI/Button';
 import Market from './Market/Market';
 import Cartas from './Cards';
 

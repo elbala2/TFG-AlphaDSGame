@@ -7,7 +7,7 @@ import { descartar, setCardSelected } from '../../../Store/actions';
 
 import { Discard } from '../../../utils/ApiConf';
 
-import Button from '../../UI/Button';
+import Button from '../../../components/UI/Button';
 
 import styles from './Styles/Cards.module.scss';
 

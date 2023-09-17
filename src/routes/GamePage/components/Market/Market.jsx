@@ -8,7 +8,7 @@ import SpecialContainer from './SpecialContainer';
 
 import styles from './Styles/Market.module.scss';
 import icon from '../../../../resources/Icon.png';
-import Modal from '../../../UI/Modal';
+import Modal from '../../../../components/UI/Modal';
 
 const Market = () => {
   const { normalMarket, specialMarket } = useSelector(

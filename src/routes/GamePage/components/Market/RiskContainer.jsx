@@ -5,8 +5,8 @@ import { getSlabImg } from '../../../../Store/GetSlabImg';
 import { fix } from '../../../../Store/actions';
 import { fixRisk } from '../../../../utils/ApiConf';
 
-import Button from '../../../UI/Button';
-import Tooltip from '../../../UI/Tooltip';
+import Button from '../../../../components/UI/Button';
+import Tooltip from '../../../../components/UI/Tooltip';
 
 import styles from './Styles/RiskContainer.module.scss';
 

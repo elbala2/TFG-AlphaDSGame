@@ -13,7 +13,7 @@ const HeaderAndFooter = (props) => {
         </Container>
       </Navbar>
       {props.children}
-      <Navbar sticky='bottom' bg='dark' variant='dark' className={Styles.footer}>     
+      <Navbar fixed='bottom' bg='dark' variant='dark' className={Styles.footer}>     
       </Navbar>
     </>
   );

@@ -5,7 +5,7 @@ import { rotar } from '../../../../Store/actions';
 
 import styles from './Styles/MarketContainer.module.scss';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import Button from '../../../UI/Button';
+import Button from '../../../../components/UI/Button';
 
 const canbebougth = (cards, costs) => {
   const canbebougth =

@@ -1,5 +1,5 @@
 .mainCard {
-  height: 90vh;
+  height: var(--maxHeigth);
   display: flex;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -20,10 +20,11 @@
   .halfCard {
     width: 50%;
     padding: 0rem 6rem;
-    padding-top: 0px;
     display: flex;
     justify-content: center;
     flex-direction: column;
+    align-content: center;
+    align-items: center;
 
     .header {
       display: flex;
@@ -38,6 +39,7 @@
 
     .cartsContainer {
       height: 310px;
+      width: 100%;
     }
   }
 }
