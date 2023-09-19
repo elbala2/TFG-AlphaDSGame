@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setState, } from '../../Store/actions';
 import { GetGame, StartGame } from '../../utils/ApiConf';
 
-import NexPlayerModal from './components/NexPlayerModal';
-import TradeBotModal from './components/TradeBotModal';
-import SuccessModal from './components/SuccessModal';
+import TradeBotModal from '../../components/TradeBotModal';
 
 import PlayerUI from './components/PlayerUI';
 import HeaderAndFooter from '../../components/UI/Header&Footer';
+import NexPlayerModal from '../../components/NextPlayerModal';
+import SuccessModal from '../../components/SuccessModal';
 
 const GamePage = () => {
   const { id } = useParams();

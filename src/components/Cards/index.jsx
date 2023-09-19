@@ -2,17 +2,17 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { getCardIMG } from '../../../Store/GetSlabImg';
-import { descartar, setCardSelected } from '../../../Store/actions';
+import { getCardIMG } from '../../Store/GetSlabImg';
+import { descartar, setCardSelected } from '../../Store/actions';
 
-import { Discard } from '../../../utils/ApiConf';
+import { Discard } from '../../utils/ApiConf';
 
-import Button from '../../../components/UI/Button';
+import Button from '../UI/Button';
 
-import styles from './Styles/Cards.module.scss';
+import styles from './Cards.module.scss';
 
 
-const Cartas = ({
+const Cards = ({
   actualPlayer = 0,
   titleStyles,
   descartable = false,
@@ -78,4 +78,4 @@ const Cartas = ({
   );
 };
 
-export default Cartas;
+export default Cards;

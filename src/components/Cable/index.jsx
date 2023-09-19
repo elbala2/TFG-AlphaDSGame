@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
-export function Cable({
+function Links({
   space = 7,
   linesNumber = 4,
   lineWidth = 7,
@@ -105,7 +105,7 @@ export function Cable({
   )
 }
 
-function CableContainer(props) {
+function Cable(props) {
   const [, setValue] = useState(0);
   const ref = useRef();
   
@@ -118,7 +118,7 @@ function CableContainer(props) {
   return (
     <div className='w-100 h-100' ref={ref}>
       {ref.current && (
-        <Cable
+        <Links
           {...props}
           width={width}
           height={height}
@@ -128,4 +128,4 @@ function CableContainer(props) {
   );
 }
 
-export default CableContainer
+export default Cable

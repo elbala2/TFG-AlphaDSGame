@@ -7,14 +7,11 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { mover, setState } from '../../../Store/actions';
 import { GetGame, MoveSlab, StartGame } from '../../../utils/ApiConf';
 
-import TradeBotModal from './TradeBotModal';
-import SuccessModal from './SuccessModal';
 import TradeModal from './TradeModal';
-import Tablero from './Tablero';
 import LeftPlayerUI from './LeftPlayerUI';
 
 import styles from '../Main.module.scss';
-import RigthPlayerUI from './RigthPlayerUI';
+import RigthUI from './RigthUI';
 
 const PlayerUI = ({
   playerIndex,
@@ -67,7 +64,7 @@ const PlayerUI = ({
           handleNextPlayer={handleNextPlayer}
           handleTrade={() => setTradeModalOpen(prevstate => !prevstate)}
         />
-        <RigthPlayerUI
+        <RigthUI
           playerIndex={playerIndex}
         />
       </div>

@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 
-import Modal from '../../../components/UI/Modal'
-import Button from '../../../components/UI/Button'
+import Modal from '../UI/Modal'
+import Button from '../UI/Button'
 
-import { NextTurn } from '../../../utils/ApiConf';
-import { nextPlayer } from '../../../Store/actions';
+import { NextTurn } from '../../utils/ApiConf';
+import { nextPlayer } from '../../Store/actions';
 
 function NexPlayerModal({
   isOpen,

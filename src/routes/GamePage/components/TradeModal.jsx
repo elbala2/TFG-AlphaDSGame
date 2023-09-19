@@ -4,12 +4,11 @@ import { useEffect, useState } from 'react';
 
 import { aceptTrade } from '../../../Store/actions';
 
-import Cartas from './Cards';
-
 import styles from './Styles/tradeModal.module.scss';
 import { TradeCards } from '../../../utils/ApiConf';
 import Button from '../../../components/UI/Button';
 import Modal from '../../../components/UI/Modal';
+import Cards from '../../../components/Cards';
 
 const TradeModal = ({
   isOpen,
@@ -46,7 +45,7 @@ const TradeModal = ({
               <div className={styles.playerContainer} id={index} key={player.id} type={index}>
                 <h3 className={styles.title}>{player.name}</h3>
                 <div className={styles.playerCardsContainer}>
-                  <Cartas actualPlayer={index} titleStyles={{ fontSize: 'smaller' }}/>
+                  <Cards actualPlayer={index} titleStyles={{ fontSize: 'smaller' }}/>
                 </div>
               </div>
             );

@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import Button from '../../UI/Button'
 import Modal from '../../UI/Modal';
 
-import styles from './Styles/FailModal.module.scss'
+import styles from './FailModal.module.scss'
 
 const FailModal = () => {
   const [closeModal, setCloseModal] = useState(false);

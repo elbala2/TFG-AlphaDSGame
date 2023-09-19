@@ -22,7 +22,6 @@ export const mover = (callbackRes) => {
 }
 
 export const rotar = (marketId, dir) => {
-  console.log('rotar')
   return {
     type: ROTAR_ACTION,
     id: marketId,

@@ -8,9 +8,9 @@ import { getBotAction } from '../../../utils/ApiConf';
 
 import Button from '../../../components/UI/Button';
 import Market from './Market/Market';
-import Cartas from './Cards';
 
 import styles from '../Main.module.scss';
+import Cards from '../../../components/Cards';
 
 function LeftPlayerUI({
   playerIndex,
@@ -37,7 +37,7 @@ function LeftPlayerUI({
   return (
     <div className={`pe-4 ${styles.halfCard}`}>
       <div className={styles.header}>
-        <p className='h2 my-0 '>{players[playerIndex]?.name}</p>
+        <p className='h2 my-0 me-3'>{players[playerIndex]?.name}</p>
         <div className='flex-fill' />
         {(players[playerIndex]?.type === 1 || whereIsPilar === playerIndex) ? (
           <>
@@ -68,7 +68,7 @@ function LeftPlayerUI({
       <hr />
       <Market />
       <div className={styles.cartsContainer}>
-        <Cartas actualPlayer={playerIndex} titleStyles={{ fontSize: 'medium' }} descartable/>
+        <Cards actualPlayer={playerIndex} titleStyles={{ fontSize: 'medium' }} descartable/>
       </div>
     </div>
   )

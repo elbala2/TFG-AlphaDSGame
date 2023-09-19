@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { aceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../../Store/actions';
+import { aceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../Store/actions';
 
-import Cartas from './Cards';
 
-import styles from './Styles/tradeModal.module.scss';
-import { TradeCards } from '../../../utils/ApiConf';
-import Button from '../../../components/UI/Button';
-import Modal from '../../../components/UI/Modal';
+import styles from './tradeModal.module.scss';
+import { TradeCards } from '../../utils/ApiConf';
+import Button from '../UI/Button';
+import Modal from '../UI/Modal';
+import Cards from '../Cards';
 
 
 const TradeBotModal = () => {
@@ -49,7 +49,7 @@ const TradeBotModal = () => {
               <div className={styles.playerContainer} id={player.id} key={player.id} type={player.id}>
                 <h3 className={styles.title}>{player.name}</h3>
                 <div className={styles.playerCardsContainer}>
-                  <Cartas
+                  <Cards
                     actualPlayer={player.id}
                     titleStyles={{ fontSize: 'smaller' }}
                     blocked={actualPlayer === player.id ? cardConfig[0]?.blocked : []}
