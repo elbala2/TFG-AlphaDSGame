@@ -1,14 +1,15 @@
 import { useParams } from 'react-router-dom';
 
-import { getSlabImg } from '../../../../Store/GetSlabImg';
-import { mover, rotar } from '../../../../Store/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { mover, rotar } from '../../../../stores/gameStore/actions';
+import { connect, useDispatch, useSelector } from 'react-redux';
 
 import { MoveSlab } from '../../../../utils/ApiConf';
 
 import Tooltip from '../../../../components/UI/Tooltip';
 
 import styles from './Styles/SpecialContainer.module.scss';
+import { getSlabImg } from '../../../../utils/GetSlabImg';
+import { bindActionCreators } from 'redux';
 
 const canbebougth = (cartas, costes, type, actualplayer) => {
   const canbebougth =
@@ -34,12 +35,19 @@ const canbebougth = (cartas, costes, type, actualplayer) => {
   }
 };
 
-const SpecialContainer = ({ disabled, slab, index }) => {
-  const { id } = useParams();
+const SpecialContainer = ({
+  disabled,
+  slab,
+  index,
+  target,
+  cards,
+  hasBougth,
+  actualPlayer,
 
-  const { target, actualPlayer, players } = useSelector(state => state);
-  const { cards, hasBougth } = players[actualPlayer];
-  const dispatch = useDispatch();
+  rotar,
+  mover,
+}) => {
+  const { id } = useParams();
 
   const { rotation, costs, type, title, description } = slab;
   const canbuy = !hasBougth && canbebougth(cards, costs, type, actualPlayer) && !disabled;
@@ -58,14 +66,13 @@ const SpecialContainer = ({ disabled, slab, index }) => {
           src={getSlabImg(slab)}
           draggable={canbuy && !disabled}
           onKeyUp={keyEvent => {
-            if (keyEvent.key === 'r' && !disabled) dispatch(rotar(index));
+            if (keyEvent.key === 'r' && !disabled) rotar(index);
           }}
           onDragEnd={result => {
             if (target) {
               MoveSlab(id, index, target, slab.rotation, cards.filter(f => f.selected))
                 .then(res => {
-                  console.log(res);
-                  dispatch(mover(res));
+                  mover(res);
                 })
             }
           }}
@@ -85,4 +92,21 @@ const SpecialContainer = ({ disabled, slab, index }) => {
   );
 };
 
-export default SpecialContainer;
+function stateToProps(state, { playerIndex }) {
+  const player = state.game.players[state.game.actualPlayer];
+  return {
+    target: state.game.target,
+    cards: player.cards,
+    hasBougth: player.hasBougth,
+    actualPlayer: state.game.actualPlayer,
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+    rotar: bindActionCreators(rotar, dispatch),
+    mover: bindActionCreators(mover, dispatch),
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(SpecialContainer);

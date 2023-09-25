@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import { bindActionCreators } from 'redux';
 
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
-import { setState, } from '../../Store/actions';
 import { GetGame, StartGame } from '../../utils/ApiConf';
+import { setState } from '../../stores/gameStore/actions';
 
 import TradeBotModal from '../../components/TradeBotModal';
 
@@ -13,27 +14,24 @@ import HeaderAndFooter from '../../components/UI/Header&Footer';
 import NexPlayerModal from '../../components/NextPlayerModal';
 import SuccessModal from '../../components/SuccessModal';
 
-const GamePage = () => {
+const GamePage = ({
+  actualPlayer,
+  setState,
+}) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const {
-    actualPlayer,
-  } = useSelector((state) => state);
 
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
 
   useEffect(() => {
     if (id){
-      GetGame(id).then((res) => {
-        dispatch(setState(res))
-      });
+      GetGame(id).then((res) => setState(res));
     } else {
       StartGame().then((res) => {
         navigate(`/Game/${res.id}`)
       });
     }
-  }, [dispatch, id, navigate]);
+  }, [setState, id, navigate]);
 
   return (
     <HeaderAndFooter>
@@ -49,4 +47,16 @@ const GamePage = () => {
   );
 };
 
-export default GamePage;
+function stateToProps(state) {
+  return {
+    actualPlayer: state.game.actualPlayer,
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+    setState: bindActionCreators(setState, dispatch),
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(GamePage);

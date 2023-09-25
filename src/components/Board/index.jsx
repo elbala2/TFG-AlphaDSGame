@@ -6,16 +6,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './board.module.scss';
 import { Droppable } from 'react-beautiful-dnd';
 import Slab from '../Slab';
-import { setTarget } from '../../Store/actions';
+import { setTarget } from '../../stores/gameStore/actions';
 
 function Board({
   playerIndex,
 }) {
   const {  start, board, way } = useSelector(state => ({
-    start: state.start,
-    pos: state.pos,
-    board: state.players[playerIndex].board,
-    way: state.players[playerIndex].way,
+    start: state.game.start,
+    pos: state.game.pos,
+    board: state.game.players[playerIndex].board,
+    way: state.game.players[playerIndex].way,
   }))
 
   const dispatch = useDispatch();

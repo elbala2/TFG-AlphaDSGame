@@ -1,22 +1,23 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import { aceptTrade } from '../../../Store/actions';
+import { aceptTrade } from '../../../stores/gameStore/actions';
 
 import styles from './Styles/tradeModal.module.scss';
 import { TradeCards } from '../../../utils/ApiConf';
 import Button from '../../../components/UI/Button';
 import Modal from '../../../components/UI/Modal';
 import Cards from '../../../components/Cards';
+import { bindActionCreators } from 'redux';
 
 const TradeModal = ({
   isOpen,
   onClose,
+  players,
+  aceptTrade,
 }) => {
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const { players } = useSelector((state) => ({ players: state.players }));
 
   const [acept1, setacept1] = useState(false);
   const [acept2, setacept2] = useState(false);
@@ -25,12 +26,12 @@ const TradeModal = ({
     const tradePlayers = players.filter(f => f.cards.find(f => f.selected) !== undefined);
     if (acept1 && acept2 && tradePlayers.length === 2) {
       TradeCards(id, tradePlayers[0], tradePlayers[1])
-        .then((res) => dispatch(aceptTrade(res)))
+        .then((res) => aceptTrade(res))
       setacept1(false);
       setacept2(false);
       onClose();
     }
-  }, [acept1, acept2, dispatch, id, onClose, players])
+  }, [acept1, acept2, aceptTrade, id, onClose, players])
 
   return (
     <Modal
@@ -70,4 +71,16 @@ const TradeModal = ({
   );
 };
 
-export default TradeModal;
+function stateToProps(state) {
+  return {
+    players: state.game.players,
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+    aceptTrade: bindActionCreators(aceptTrade, dispatch)
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(TradeModal);

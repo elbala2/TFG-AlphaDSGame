@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { getCardIMG } from '../../Store/GetSlabImg';
-import { descartar, setCardSelected } from '../../Store/actions';
+import { descartar, setCardSelected } from '../../stores/gameStore/actions';
 
 import { Discard } from '../../utils/ApiConf';
 
 import Button from '../UI/Button';
 
 import styles from './Cards.module.scss';
+import { getCardIMG } from '../../utils/GetSlabImg';
 
 
 const Cards = ({
@@ -22,7 +22,7 @@ const Cards = ({
   const { id } = useParams();
 
   const dispatch = useDispatch();
-  const { cards, hasBougth } = useSelector((state) => ({ cards: state.players[actualPlayer].cards, hasBougth: state.players[actualPlayer].hasBougth }));
+  const { cards, hasBougth } = useSelector((state) => ({ cards: state.game.players[actualPlayer].cards, hasBougth: state.game.players[actualPlayer].hasBougth }));
 
   useEffect(() => {
     cards.forEach((card, index) => {

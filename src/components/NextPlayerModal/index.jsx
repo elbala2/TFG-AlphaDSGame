@@ -8,7 +8,7 @@ import Modal from '../UI/Modal'
 import Button from '../UI/Button'
 
 import { NextTurn } from '../../utils/ApiConf';
-import { nextPlayer } from '../../Store/actions';
+import { nextPlayer } from '../../stores/gameStore/actions';
 
 function NexPlayerModal({
   isOpen,

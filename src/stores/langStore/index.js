@@ -1,4 +1,3 @@
-import { merge } from "lodash";
 import { INIT_LANGUAGE, SET_LANGUAGE } from "./actions";
 
 const initialState = {

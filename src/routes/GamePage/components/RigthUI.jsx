@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 import mainStyles from '../Main.module.scss';
 import styles from './Styles/rigthUI.module.scss';
@@ -10,14 +10,11 @@ import Cable from '../../../components/Cable';
 
 function RigthUI({
   playerIndex,
-}) {
-  const {  start, board } = useSelector(state => ({
-    start: state.start,
-    pos: state.pos,
-    board: state.players[playerIndex].board,
-    way: state.players[playerIndex].way,
-  }))
-  
+  start,
+  pos,
+  board,
+  way,
+}) {  
   return (
     <div className={`ps-4 ${mainStyles.halfCard}`}>
       <div className={`${styles.boardUI}`}>
@@ -100,4 +97,18 @@ function RigthUI({
 
 RigthUI.propTypes = {}
 
-export default RigthUI
+function stateToProps(state, { playerIndex }) {
+  return {
+    start: state.game.start,
+    pos: state.game.pos,
+    board: state.game.players[playerIndex].board,
+    way: state.game.players[playerIndex].way,
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(RigthUI);

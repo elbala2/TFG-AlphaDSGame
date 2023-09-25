@@ -1,6 +1,6 @@
 /* eslint-disable default-case */
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { connect } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 import RiskContainer from './RiskContainer';
 import MarketContainer from './MarketContainer';
@@ -10,15 +10,14 @@ import styles from './Styles/Market.module.scss';
 import icon from '../../../../resources/Icon.png';
 import Modal from '../../../../components/UI/Modal';
 
-const Market = () => {
-  const { normalMarket, specialMarket } = useSelector(
-    (state) => state,
-    (prevState, state) => (
-      JSON.stringify(prevState.specialMarket) === JSON.stringify(state.specialMarket)
-      && JSON.stringify(prevState.normalMarket) === JSON.stringify(state.normalMarket)
-    )
-  );
+const Market = ({
+  normalMarket,
+  specialMarket,
+}) => {
+
   const [open, setOpen] = useState(true);
+
+  const hasRisk = !!specialMarket.find(f => f.isRisk);
 
   return (
     <div className={styles.market}>
@@ -30,7 +29,7 @@ const Market = () => {
           {normalMarket?.map((slab, i) => {
             return (
               <div key={i}>
-                <MarketContainer disabled={specialMarket.find(f => f.isRisk) !== undefined} index={i} slab={slab}/>
+                <MarketContainer disabled={hasRisk} index={i} slab={slab}/>
               </div>
             );
           })}
@@ -41,7 +40,7 @@ const Market = () => {
               <div key={i + 4}>
                 {slab.isRisk 
                   ? <RiskContainer index={i + 4} slab={slab}/>
-                  : <SpecialContainer disabled={specialMarket.find(f => f.isRisk) !== undefined} index={i + 4} slab={slab}/>
+                  : <SpecialContainer disabled={hasRisk} index={i + 4} slab={slab}/>
                 }
               </div>
             );
@@ -61,4 +60,16 @@ const Market = () => {
   );
 };
 
-export default Market;
+function stateToProps(state) {
+  return {
+    normalMarket: state.game.normalMarket,
+    specialMarket: state.game.specialMarket,
+  };
+}
+
+function dispatchToProps() {
+  return {
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(Market);

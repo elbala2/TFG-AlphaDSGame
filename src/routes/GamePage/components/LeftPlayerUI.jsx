@@ -1,9 +1,8 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
-import { setCardConfig, setState } from '../../../Store/actions';
+import { setCardConfig, setState } from '../../../stores/gameStore/actions';
 import { getBotAction } from '../../../utils/ApiConf';
 
 import Button from '../../../components/UI/Button';
@@ -11,25 +10,25 @@ import Market from './Market/Market';
 
 import styles from '../Main.module.scss';
 import Cards from '../../../components/Cards';
+import { bindActionCreators } from 'redux';
 
 function LeftPlayerUI({
   playerIndex,
   handleNextPlayer,
   handleTrade,
+  players,
+  whereIsPilar,
+  setCardConfig,
+  setState,
 }) {
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const {
-    players,
-    whereIsPilar,
-  } = useSelector((state) => state);
 
   function handleBotNextAction() {
     getBotAction(id).then(res => {
       if (res.action === 'trade') {
-        dispatch(setCardConfig(res.cardConfig))
+        setCardConfig(res.cardConfig)
       } else {
-        dispatch(setState(res));
+        setState(res);
       }
     })
   };
@@ -76,4 +75,18 @@ function LeftPlayerUI({
 
 LeftPlayerUI.propTypes = {}
 
-export default LeftPlayerUI
+function stateToProps(state, { playerIndex }) {
+  return {
+    players: state.game.players,
+    whereIsPilar: state.game.whereIsPilar,
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+    setCardConfig: bindActionCreators(setCardConfig, dispatch),
+    setState: bindActionCreators(setState, dispatch),
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(LeftPlayerUI);

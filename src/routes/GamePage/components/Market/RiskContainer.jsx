@@ -1,14 +1,15 @@
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 
-import { getSlabImg } from '../../../../Store/GetSlabImg';
-import { fix } from '../../../../Store/actions';
+import { fix } from '../../../../stores/gameStore/actions';
 import { fixRisk } from '../../../../utils/ApiConf';
 
 import Button from '../../../../components/UI/Button';
 import Tooltip from '../../../../components/UI/Tooltip';
 
 import styles from './Styles/RiskContainer.module.scss';
+import { getSlabImg } from '../../../../utils/GetSlabImg';
+import { bindActionCreators } from 'redux';
 
 const canbebougth = (cartas, costes, type) => {
   switch (type) {
@@ -35,12 +36,14 @@ const canbebougth = (cartas, costes, type) => {
   }
 };
 
-const RiskContainer = ({ slab, index }) => {
-  const { id } = useParams();
+const RiskContainer = ({
+  slab,
+  index,
+  cards,
 
-  const { actualPlayer } = useSelector(state => state);
-  const cards = useSelector(state => state.players[actualPlayer].cards);
-  const dispatch = useDispatch();
+  fix,
+}) => {
+  const { id } = useParams();
 
   const { costs, type, description } = slab;
   const canbuy = canbebougth(cards, costs, type);
@@ -62,7 +65,7 @@ const RiskContainer = ({ slab, index }) => {
       <Button
         disabled={!canbuy}
         className={styles.button}
-        onClick={() => fixRisk(id, index - 4, cards.filter(f => f.selected)).then((calbackRes) => dispatch(fix(calbackRes)))}
+        onClick={() => fixRisk(id, index - 4, cards.filter(f => f.selected)).then((calbackRes) => fix(calbackRes))}
       >
         Fix
       </Button>
@@ -70,4 +73,17 @@ const RiskContainer = ({ slab, index }) => {
   );
 }
 
-export default RiskContainer;
+function stateToProps(state, { playerIndex }) {
+  const player = state.game.players[state.game.actualPlayer];
+  return {
+    cards: player.cards,
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+    fix: bindActionCreators(fix, dispatch),
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(RiskContainer);

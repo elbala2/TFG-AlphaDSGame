@@ -9,8 +9,8 @@ import styles from './SuccessModal.module.scss';
 
 const SuccessModal = () => {
   const { players, finished } = useSelector((state) => ({
-    players: state.players,
-    finished: state.finished,
+    players: state.game.players,
+    finished: state.game.finished,
   }));
   const [closeModal, setCloseModal] = useState(false);
 

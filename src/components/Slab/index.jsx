@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 
 import Cable from '../Cable';
 import Tooltip from '../UI/Tooltip';
-import { getSlabImg } from '../../Store/GetSlabImg';
+import { getSlabImg } from '../../utils/GetSlabImg';
 
 import styles from './slab.module.scss'
 

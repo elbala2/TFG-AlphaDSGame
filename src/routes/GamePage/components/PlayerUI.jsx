@@ -1,44 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import { mover, setState } from '../../../Store/actions';
-import { GetGame, MoveSlab, StartGame } from '../../../utils/ApiConf';
+import { mover } from '../../../stores/gameStore/actions';
+import { MoveSlab } from '../../../utils/ApiConf';
 
 import TradeModal from './TradeModal';
 import LeftPlayerUI from './LeftPlayerUI';
 
 import styles from '../Main.module.scss';
 import RigthUI from './RigthUI';
+import { bindActionCreators } from 'redux';
 
 const PlayerUI = ({
   playerIndex,
   handleNextPlayer,
+  players,
+  normalMarket,
+  specialMarket,
+  mover,
 }) => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const {
-    players,
-    normalMarket,
-    specialMarket,
-  } = useSelector((state) => state);
-
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (id){
-      GetGame(id).then((res) => {
-        dispatch(setState(res))
-      });
-    } else {
-      StartGame().then((res) => {
-        navigate(`/Game/${res.id}`)
-      });
-    }
-  }, [dispatch, id, navigate]);
 
   return (
     <DragDropContext
@@ -54,7 +39,7 @@ const PlayerUI = ({
           rotation,
           cards,
         ).then((res) => {
-          dispatch(mover(res));
+          mover(res);
         });
       }}
     >
@@ -76,5 +61,18 @@ const PlayerUI = ({
   );
 };
 
-export default PlayerUI;
+function stateToProps(state, { playerIndex }) {
+  return {
+    players: state.game.players,
+    normalMarket: state.game.normalMarket,
+    specialMarket: state.game.specialMarket,
+  };
+}
 
+function dispatchToProps(dispatch) {
+  return {
+    mover: bindActionCreators(mover, dispatch),
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(PlayerUI);
