@@ -1,4 +1,4 @@
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -16,6 +16,7 @@ const TradeModal = ({
   onClose,
   players,
   aceptTrade,
+  dictionary,
 }) => {
   const { id } = useParams();
 
@@ -37,7 +38,7 @@ const TradeModal = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title='Seleccione las cartas que quiere intercambiar'
+      title={dictionary.title}
     >
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
@@ -57,13 +58,13 @@ const TradeModal = ({
             variants={acept1 ? 'outlined secondary' : 'primary'}
             onClick={() => setacept1(x => !x)}
           >
-            {acept1 ? 'Cancelar' : 'Aceptar'}
+            {acept1 ? dictionary.cancel : dictionary.accept}
           </Button>
           <Button
             variants={acept2 ? 'outlined secondary' : 'primary'}
             onClick={() => setacept2(x => !x)}
           >
-            {acept2 ? 'Cancelar' : 'Aceptar'}
+            {acept2 ? dictionary.cancel : dictionary.accept}
           </Button>
         </div>
       </div>
@@ -74,6 +75,10 @@ const TradeModal = ({
 function stateToProps(state) {
   return {
     players: state.game.players,
+    dictionary: {
+      ...state.lang.dictionary.tradeModal,
+      ...state.lang.dictionary.utils,
+    },
   };
 }
 

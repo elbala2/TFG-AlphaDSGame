@@ -79,6 +79,9 @@ function stateToProps(state, { playerIndex }) {
   return {
     players: state.game.players,
     whereIsPilar: state.game.whereIsPilar,
+    dictionary: {
+      ...state.lang.dictionary.utils,
+    }
   };
 }
 

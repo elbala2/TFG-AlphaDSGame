@@ -1,6 +1,6 @@
 /* eslint-disable default-case */
 import { connect } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import RiskContainer from './RiskContainer';
 import MarketContainer from './MarketContainer';

@@ -1,25 +1,33 @@
-import { INIT_LANGUAGE, SET_LANGUAGE } from "./actions";
+import { SET_LANGUAGE } from "./actions";
 
-const initialState = {
-  lang: window.navigator.language || window.navigator.userLanguage,
+import ESLiterals from './languages/es';
+import ENLiterals from './languages/en';
+
+import { ALLOWED_LANGS, EN, ES } from "./constants";
+
+const langDict = {
+  [ES]: ESLiterals,
+  [EN]: ENLiterals,
+};
+
+const getInitialState = () => {
+  let lang = window.navigator.language ?? window.navigator.userLanguage;
+  if (!ALLOWED_LANGS.includes(lang)) lang = EN;
+  return ({
+    lang,
+    dictionary: langDict[lang],
+  });
 }
 
-export default function langReducer(state = initialState, action) {
+export default function langReducer(state = getInitialState(), action) {
   const { type, lang } = action;
 
   switch (type) {
-    case INIT_LANGUAGE:
-      const InitialLiterals = require(`./languages/${state.lang}`)
-      return {
-        ...state,
-        literals: InitialLiterals[state.lang],
-      }
-
     case SET_LANGUAGE:
-      const newLiterals = require(`./languages/${lang}`)
       return {
         ...state,
-        literals: newLiterals[lang],
+        lang,
+        dictionary: langDict[lang],
       }
     default:
       return state;

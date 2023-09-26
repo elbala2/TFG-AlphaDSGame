@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 import mainStyles from '../Main.module.scss';
 import styles from './Styles/rigthUI.module.scss';
@@ -11,10 +11,10 @@ import Cable from '../../../components/Cable';
 function RigthUI({
   playerIndex,
   start,
-  pos,
   board,
-  way,
-}) {  
+  color,
+  dictionary,
+}) {
   return (
     <div className={`ps-4 ${mainStyles.halfCard}`}>
       <div className={`${styles.boardUI}`}>
@@ -23,12 +23,17 @@ function RigthUI({
             <div className={`${styles.cableContainer}`}>
               <Cable
                 links={[1, 0, 1, 0]}
-                />
+              />
             </div>
             <div className='flex-fill'>
               <div className='p-5'>
-                <h3><b>Misión</b></h3>
-                <p>{board[0][2] ? 'mision Completada' : 'mi mision'}</p>
+                <h3><b>{dictionary.misionTitles[color]}</b></h3>
+                <p className='text-balance'>
+                  {board[0][2]
+                    ? dictionary.misionCompletedDescription[color]
+                    : dictionary.misionDescription[color]
+                  }
+                </p>
               </div>
             </div>
           </div>
@@ -54,11 +59,6 @@ function RigthUI({
                 />
             </div>
           </div>
-          {/* <img
-            draggable='false'
-            src={getMision(playerIndex, board[0][2] !== null)}
-            alt={`mision ${playerIndex}`}
-          /> */}
         </div>
         <div className={`${styles.boardBody}`}>
           <div className={`${styles.boardCables}`}>
@@ -102,7 +102,12 @@ function stateToProps(state, { playerIndex }) {
     start: state.game.start,
     pos: state.game.pos,
     board: state.game.players[playerIndex].board,
-    way: state.game.players[playerIndex].way,
+    color: state.game.players[playerIndex].color,
+
+    dictionary: {
+      ...state.lang.dictionary.rigthUI,
+      ...state.lang.dictionary.utils,
+    },
   };
 }
 

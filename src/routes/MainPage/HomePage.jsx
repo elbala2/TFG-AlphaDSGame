@@ -9,14 +9,17 @@ import Button from '../../components/UI/Button';
 import PlayerInput from './PlayerInput';
 
 import styles from './styles/HomePage.module.scss';
+import { connect } from 'react-redux';
 
-const HomePage = () => {
+const HomePage = ({
+  dictionary,
+}) => {
   const navigate = useNavigate();
   const [players, setPlayers] = useState([
-    { name: 'Jugador 1', type: 0 },
-    { name: 'Jugador 2', type: 0 },
-    { name: 'Jugador 3', type: 0 },
-    { name: 'Jugador 4', type: 0 },
+    { name: `${dictionary.player} 1`, type: 0 },
+    { name: `${dictionary.player} 2`, type: 0 },
+    { name: `${dictionary.player} 3`, type: 0 },
+    { name: `${dictionary.player} 4`, type: 0 },
   ]);
 
   const handleChangePlayer = (player, i) => {
@@ -30,7 +33,7 @@ const HomePage = () => {
     <HeaderAndFooter>
       <div className={styles.mainCard}>
         <div className={styles.container}>
-          <h1>Bienvenido a AlphaDSGame</h1>
+          <h1>{dictionary.wellcomeTo}</h1>
           <div className={styles.playerButtonsContainer}>
             {players.map((player, index) => (
               <PlayerInput
@@ -60,7 +63,7 @@ const HomePage = () => {
                 navigate(`/Game/${res.id}`);
               }}
             >
-              Comenzar
+              {dictionary.start}
             </Button>
           </div>
         </div>
@@ -69,4 +72,18 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+function stateToProps(state) {
+  return {
+    dictionary: {
+      ...state.lang.dictionary.homePage,
+      ...state.lang.dictionary.utils,
+    },
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(HomePage);
