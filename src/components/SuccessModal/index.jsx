@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 import Modal from '../UI/Modal';
@@ -7,18 +7,18 @@ import Button from '../UI/Button';
 
 import styles from './SuccessModal.module.scss';
 
-const SuccessModal = () => {
-  const { players, finished } = useSelector((state) => ({
-    players: state.game.players,
-    finished: state.game.finished,
-  }));
+const SuccessModal = ({
+  dictionary,
+  players,
+  finished,
+}) => {
   const [closeModal, setCloseModal] = useState(false);
 
   return (
     <Modal
       isOpen={finished}
       onClose={() => setCloseModal(true)}
-      title='Game Over'
+      title={dictionary.gameOver}
     >
       <div className='d-flex flex-column'>
         {players
@@ -26,16 +26,16 @@ const SuccessModal = () => {
           .map((player, index) =>
             index === 0 ? (
               <p key={index} className={styles.winnerMSG}>
-                El ganador es: <b>{player.name}</b> ({player.points} puntos)
+                {dictionary.winnerAnnouncement}: <b>{player.name}</b> ({player.points} {dictionary.points})
               </p>
             ) : (
               <p key={index} className={styles.loserMSG}>
-                {index + 1}: {player.name} ({player.points} puntos)
+                {index + 1}: {player.name} ({player.points} {dictionary.points})
               </p>
             ),
           )}
         <Button onClick={() => setCloseModal(true)}>
-          Volver a la pantalla de inicio
+          {dictionary.goBackHome}
         </Button>
       </div>
       {closeModal && <Navigate to='/' />}
@@ -43,4 +43,20 @@ const SuccessModal = () => {
   );
 };
 
-export default SuccessModal;
+function stateToProps(state) {
+  return {
+    players: state.game.players,
+    finished: state.game.finished,
+    dictionary: {
+      ...state.lang.dictionary.successModal,
+      ...state.lang.dictionary.utils,
+    },
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(SuccessModal);

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 import { fix } from '../../../../stores/gameStore/actions';
 import { fixRisk } from '../../../../utils/ApiConf';
@@ -42,6 +42,7 @@ const RiskContainer = ({
   cards,
 
   fix,
+  dictionary,
 }) => {
   const { id } = useParams();
 
@@ -67,7 +68,7 @@ const RiskContainer = ({
         className={styles.button}
         onClick={() => fixRisk(id, index - 4, cards.filter(f => f.selected)).then((calbackRes) => fix(calbackRes))}
       >
-        Fix
+        {dictionary.fix}
       </Button>
     </div>
   );
@@ -77,6 +78,9 @@ function stateToProps(state, { playerIndex }) {
   const player = state.game.players[state.game.actualPlayer];
   return {
     cards: player.cards,
+    dictionary: {
+      ...state.lang.dictionary.utils,
+    },
   };
 }
 

@@ -2,30 +2,32 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom';
 
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import Modal from '../UI/Modal'
 import Button from '../UI/Button'
 
 import { NextTurn } from '../../utils/ApiConf';
 import { nextPlayer } from '../../stores/gameStore/actions';
+import { bindActionCreators } from 'redux';
 
 function NexPlayerModal({
   isOpen,
   onClose,
+  nextPlayer,
+  dictionary,
 }) {
   const { id } = useParams();
-  const dispatch = useDispatch();
 
   function onSubmit() {
-    NextTurn(id).then(res => dispatch(nextPlayer(res)))
+    NextTurn(id).then(res => nextPlayer(res))
     onClose()
   }
 
   return (
     <Modal
       isOpen={isOpen}
-      title='¿Esta seguro de terminar el turno?'
+      title={dictionary.title}
       onClose={onClose}
     >
       <div className='m-5'>
@@ -34,13 +36,13 @@ function NexPlayerModal({
           variants='secondary outlined'
           onClick={onClose}
         >
-          Cerrar
+          {dictionary.cancel}
         </Button>
         <Button
           variants='secondary'
           onClick={onSubmit}
         >
-          Terminar el turno
+          {dictionary.endTurn}
         </Button>
       </div>
     </Modal>
@@ -52,4 +54,19 @@ NexPlayerModal.propTypes = {
   onClose: PropTypes.func.isRequired,
 }
 
-export default NexPlayerModal
+function stateToProps(state) {
+  return {
+    dictionary: {
+      ...state.lang.dictionary.nextPlayerModal,
+      ...state.lang.dictionary.utils,
+    },
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+    nextPlayer: bindActionCreators(nextPlayer, dispatch),
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(NexPlayerModal);

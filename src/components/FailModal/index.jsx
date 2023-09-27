@@ -5,22 +5,25 @@ import Button from '../../UI/Button'
 import Modal from '../../UI/Modal';
 
 import styles from './FailModal.module.scss'
+import { connect } from 'react-redux';
 
-const FailModal = () => {
+const FailModal = ({
+  dictionary,
+}) => {
   const [closeModal, setCloseModal] = useState(false);
   return (
     <Modal
       isOpen
       onClose={() => setCloseModal(true)}
-      title='Game Over'
+      title={dictionary.gameOver}
     >
       <div>
-        <p className={styles.errorMSG}>El sistema se vio comprometido</p>
+        <p className={styles.errorMSG}>{dictionary.systemCompromised}</p>
         <Button
           variants=''
           onClick={() => setCloseModal(true)}
         >
-          Volver a la pantalla de inicio
+          {dictionary.goBackHome}
         </Button>
       </div>
       {closeModal && <Navigate to='/' />}
@@ -28,4 +31,18 @@ const FailModal = () => {
   );
 }
 
-export default FailModal;
+function stateToProps(state) {
+  return {
+    dictionary: {
+      ...state.lang.dictionary.failModal,
+      ...state.lang.dictionary.utils,
+    },
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(FailModal);

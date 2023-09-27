@@ -13,6 +13,7 @@ import Modal from '../../../../components/UI/Modal';
 const Market = ({
   normalMarket,
   specialMarket,
+  dictionary,
 }) => {
 
   const [open, setOpen] = useState(true);
@@ -51,7 +52,7 @@ const Market = ({
             title='Informacion importante'
           >
             <div className={styles.modal}>
-              <p className={styles.text}>El juego se pausara hasta que se resuelva el riesgo.</p>
+              <p className={styles.text}>{dictionary.riskMsg}</p>
             </div>
           </Modal>
         </div>
@@ -64,6 +65,11 @@ function stateToProps(state) {
   return {
     normalMarket: state.game.normalMarket,
     specialMarket: state.game.specialMarket,
+
+    dictionary: {
+      ...state.lang.dictionary.market,
+      ...state.lang.dictionary.utils,
+    },
   };
 }
 

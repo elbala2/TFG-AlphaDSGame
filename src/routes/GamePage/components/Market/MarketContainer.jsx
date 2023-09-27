@@ -74,11 +74,11 @@ const MarketContainer = ({
         </Droppable>
       </div>
       <div className={`d-flex ${styles.MarketCostsContainer}`}>
-        {costs.map((coste, type) => {
+        {costs.map((cost, type) => {
           // type 0 => blue, 1 => red, 2 => green
           return (
             <span key={`c${type}`} type={type} className={styles.MarketCosts}>
-              {coste}
+              {cost}
             </span>
           );
         })}

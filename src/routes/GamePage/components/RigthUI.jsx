@@ -25,15 +25,18 @@ function RigthUI({
                 links={[1, 0, 1, 0]}
               />
             </div>
-            <div className='flex-fill'>
-              <div className='p-5'>
+            <div className='p-5 d-flex'>
+              <div className=''>
                 <h3><b>{dictionary.misionTitles[color]}</b></h3>
-                <p className='text-balance'>
+                <p className={`${styles.misionDescription}`}>
                   {board[0][2]
                     ? dictionary.misionCompletedDescription[color]
                     : dictionary.misionDescription[color]
                   }
                 </p>
+              </div>              
+              <div className={`${styles.missionLogoContainer}`}>
+                WIP
               </div>
             </div>
           </div>

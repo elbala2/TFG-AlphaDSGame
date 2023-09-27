@@ -7,8 +7,18 @@ const utils = {
     start: 'Start',
     cancel: 'Cancel',
     accept: 'Accept',
+    trade: 'Trade',
+    endTurn: 'Finish turn',
+    nextAction: 'Next action',
+    fix: 'Fix',
+    gameOver: 'Game over',
+    goBackHome: 'Go back home',
     [EN]: 'English',
     [ES]: 'Spanish',
+};
+
+const leftUI = {
+  dataInWay: 'The data is in your data way, you lose your turn',
 };
 
 const homePage = {
@@ -40,9 +50,31 @@ const rigthUI = {
   },
 };
 
+const market = {
+  riskMsg: 'The game will pause until the risk is resolved.',
+};
+
+const successModal = {
+  points: 'points',
+  winnerAnnouncement: 'The winner is',
+};
+
+const nextPlayerModal = {
+  title: 'Are you sure to finish the turn?',
+};
+
+const failModal = {
+  systemCompromised: 'The system was compromised',
+};
+
 export default {
   homePage,
-  rigthUI,
   tradeModal,
+  rigthUI,
+  leftUI,
+  market,
+  successModal,
+  nextPlayerModal,
+  failModal,
   utils,
 };

@@ -20,6 +20,7 @@ function LeftPlayerUI({
   whereIsPilar,
   setCardConfig,
   setState,
+  dictionary,
 }) {
   const { id } = useParams();
 
@@ -40,11 +41,11 @@ function LeftPlayerUI({
         <div className='flex-fill' />
         {(players[playerIndex]?.type === 1 || whereIsPilar === playerIndex) ? (
           <>
-            {whereIsPilar === playerIndex && <span className='me-3'>El dato esta en tu camino de datos, pierdes tu turno</span>}
+            {whereIsPilar === playerIndex && <span className='me-3'>{dictionary.leftUI}</span>}
             <Button
               onClick={handleBotNextAction}
             >
-              Siguiente acción
+              {dictionary.nextAction}
             </Button>
           </>
         ) : (
@@ -53,13 +54,13 @@ function LeftPlayerUI({
               className='mx-2'
               onClick={() => handleTrade()}
             >
-              Negociar
+              {dictionary.trade}
             </Button>
             <Button
               variants='secondary'
               onClick={() => handleNextPlayer()}
             >
-              Terminar Turno
+              {dictionary.endTurn}
             </Button>
           </>
         )}
@@ -80,6 +81,7 @@ function stateToProps(state, { playerIndex }) {
     players: state.game.players,
     whereIsPilar: state.game.whereIsPilar,
     dictionary: {
+      ...state.lang.dictionary.leftUI,
       ...state.lang.dictionary.utils,
     }
   };

@@ -7,12 +7,22 @@ const utils = {
     start: 'Comenzar',
     cancel: 'Cancelar',
     accept: 'Aceptar',
+    trade: 'Negociar',
+    endTurn: 'Terminar el turno',
+    nextAction: 'Siguiente acción',
+    fix: 'Solucionar',
+    gameOver: 'Fin del juego',
+    goBackHome: 'Volver a la pantalla de inicio',
     [EN]: 'Ingles',
     [ES]: 'Español',
 };
 
 const homePage = {
   wellcomeTo: `Bienvenido a ${utils.appName}`,
+};
+
+const leftUI = {
+  dataInWay: 'El dato esta en tu camino de datos, pierdes tu turno',
 };
 
 const tradeModal = { // will be deleted
@@ -40,9 +50,31 @@ const rigthUI = {
   },
 };
 
+const market = {
+  riskMsg: 'El juego se pausara hasta que se resuelva el riesgo.',
+};
+
+const successModal = {
+  points: 'puntos',
+  winnerAnnouncement: 'El ganador es',
+};
+
+const nextPlayerModal = {
+  title: '¿Esta seguro de terminar el turno?',
+};
+
+const failModal = {
+  systemCompromised: 'El sistema se vio comprometido',
+};
+
 export default {
   homePage,
   tradeModal,
   rigthUI,
+  leftUI,
+  market,
+  successModal,
+  nextPlayerModal,
+  failModal,
   utils,
 };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 import { aceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../stores/gameStore/actions';
 
@@ -10,12 +10,20 @@ import { TradeCards } from '../../utils/ApiConf';
 import Button from '../UI/Button';
 import Modal from '../UI/Modal';
 import Cards from '../Cards';
+import { bindActionCreators } from 'redux';
 
 
-const TradeBotModal = () => {
+const TradeBotModal = ({
+  aceptTrade,
+  setCardConfig,
+  clearCardConfig,
+  clearSelected,
+  players,
+  cardConfig,
+  actualPlayer,
+  dictionary,
+}) => {
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const { players, cardConfig, actualPlayer } = useSelector((state) => ({ players: state.game.players, actualPlayer: state.game.actualPlayer, cardConfig: state.game.cardConfig }));
   const [step, setStep] = useState(0);
 
   async function handleTrade() {
@@ -23,8 +31,8 @@ const TradeBotModal = () => {
     if (tradePlayers.length === 2) {
       await TradeCards(id, tradePlayers[0], tradePlayers[1])
         .then((res) => {
-          dispatch(aceptTrade(res));
-          dispatch(clearCardConfig());
+          aceptTrade(res);
+          clearCardConfig();
         })
     }
   }
@@ -34,10 +42,10 @@ const TradeBotModal = () => {
     <Modal
       isOpen={cardConfig.length}
       onClose={() => {
-        dispatch(setCardConfig(cardConfig.slice(1, cardConfig.length)));
-        dispatch(clearCardConfig());
+        setCardConfig(cardConfig.slice(1, cardConfig.length));
+        clearCardConfig();
       }}
-      title='Seleccione las cartas que quiere intercambiar'
+      title={dictionary.title}
     >
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
@@ -65,17 +73,17 @@ const TradeBotModal = () => {
             variants='outlined secondary'
             onClick={() => {
               if (step + 1 < cardConfig.length) setStep(s => s + 1)
-              else dispatch(setCardConfig(cardConfig.slice(1, cardConfig.length)))
-              dispatch(clearSelected())
+              else setCardConfig(cardConfig.slice(1, cardConfig.length))
+              clearSelected()
             }}
           >
-            Cancelar
+            {dictionary.cancel}
           </Button>
           <Button
             variants='primary'
             onClick={handleTrade}
           >
-            Aceptar
+            {dictionary.accept}
           </Button>
         </div>
       </div>
@@ -83,4 +91,26 @@ const TradeBotModal = () => {
   );
 };
 
-export default TradeBotModal;
+function stateToProps(state) {
+  return {
+    dictionary: {
+      ...state.lang.dictionary.tradeModal,
+      ...state.lang.dictionary.utils,
+    },
+
+    players: state.game.players,
+    actualPlayer: state.game.actualPlayer,
+    cardConfig: state.game.cardConfig,
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+    aceptTrade: bindActionCreators(aceptTrade, dispatch),
+    setCardConfig: bindActionCreators(setCardConfig, dispatch),
+    clearCardConfig: bindActionCreators(clearCardConfig, dispatch),
+    clearSelected: bindActionCreators(clearSelected, dispatch),
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(TradeBotModal);

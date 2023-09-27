@@ -9,6 +9,7 @@
 
   .cableContainer {
     width: calc(var(--slabSize) / 2);
+    min-width: calc(var(--slabSize) / 2);
   }
 
   .longCableContainer {
@@ -30,6 +31,14 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+
+    .misionDescription {
+      text-wrap: balance;
+    }
+
+    .missionLogoContainer {
+      min-width: var(--slabSize);
+    }
   }
 
   .boardBody {
