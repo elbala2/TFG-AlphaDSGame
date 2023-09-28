@@ -77,7 +77,7 @@ function Links({
   }
 
   return (
-      <svg {...other} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="">
+      <svg {...other} viewBox={`0 0 ${width} ${height}`} className='position-absolute' preserveAspectRatio="">
         {lines}
         {rect && (
           <>
@@ -109,14 +109,17 @@ function Cable(props) {
   const [, setValue] = useState(0);
   const ref = useRef();
   
-  const forceUpdate = () => setValue(value => value + 1);
-
-  const { width, height } = ref.current?.getBoundingClientRect() ?? {};
+  const forceUpdate = () => {
+    setValue(value => value + 1);
+  }
   
-  useEffect(forceUpdate, [ref.current, width, height]);
+  const { width, height } = ref.current?.getBoundingClientRect() ?? {};
+  console.log(width, height)
+  
+  useEffect(forceUpdate, [width, height]);
 
   return (
-    <div className='w-100 h-100' ref={ref}>
+    <div className='w-100 h-100 position-relative' ref={ref}>
       {ref.current && (
         <Links
           {...props}

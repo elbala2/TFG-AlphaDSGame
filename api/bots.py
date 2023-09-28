@@ -2,9 +2,9 @@ from slabs import *
 from utils import *
 
 cardTypes = [
-  'Domain',
-  'Computer Science',
-  'Mathematics',
+  'domain',
+  'compSci',
+  'math',
 ]
 
 class Bot:

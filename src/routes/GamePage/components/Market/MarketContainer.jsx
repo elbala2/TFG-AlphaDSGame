@@ -11,8 +11,8 @@ import { useCallback } from 'react';
 
 const canbebougth = (cards, costs) => {
   const canbebougth =
-    cards.filter((f) => f.type[0] === 'Domain').length >= costs[0] &&
-    cards.filter((f) => f.type[0] === 'Computer Science').length >= costs[1] &&
+    cards.filter((f) => f.type[0] === 'domain').length >= costs[0] &&
+    cards.filter((f) => f.type[0] === 'compSci').length >= costs[1] &&
     cards.filter((f) => f.type[0] === 'Mathematics').length >= costs[2];
   return canbebougth; 
 };

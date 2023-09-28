@@ -142,32 +142,32 @@ export const getSlabImg = (slab) => {
 
 export const getCardIMG = (type) => {
   switch (type[1]) {
-    case 'Fast Model': //Green
+    case 'fastModel': //Green
       return FastModel;
 
-    case 'Simple Model':
+    case 'simpModel':
       return SimpleModel;
 
-    case 'Right Model':
+    case 'rightModel':
       return RightModel;
 
-    case 'New Technology': //Red
+    case 'newTech': //Red
       return NewTechnology;
 
-    case 'Antivirus':
+    case 'antivirus':
       return Antivirus;
 
-    case 'Open Source':
+    case 'openSource':
       return OpenSource;
 
-    case 'Data Base': //Blue
+    case 'dataBase': //Blue
       return DataBase;
 
-    case 'Team Spirit':
-      return TeamSpirit;
+    case 'protData':
+      return ProtectedData;  
 
-    case 'Protected Data':
-      return ProtectedData;
+    case 'teamSpirit':
+      return TeamSpirit;
 
     default:
   }

@@ -2,9 +2,9 @@ import random
 import json
 
 cardTypes = [
-  'Domain',
-  'Computer Science',
-  'Mathematics',
+  'domain',
+  'compSci',
+  'math',
 ]
 
 def getPointsValue(slab):
@@ -29,33 +29,41 @@ def getCosts():
   return [blue, red, green]
 
 def getRiskFixCardType(type):
-  if type == 'Complex Model':
-    return 'Simple Model'
-  if type == 'Danger Data':
-    return 'Protected Data'
-  if type == 'No Data':
-    return 'Data Base'
-  if type == 'Old Software':
-    return 'Open Source'
-  if type == 'Old Technology':
-    return 'New Technology'
-  if type == 'Slow Model':
-    return 'Fast Model'
-  if type == 'Virus':
-    return 'Antivirus'
-  if type == 'Working Alone':
-    return 'Team Spirit'
-  if type == 'Wrong Model':
-    return 'Right Model'
+  if type == 'cmplxModel':
+    return 'simpModel'
+  
+  if type == 'dngData':
+    return 'protData'
+  
+  if type == 'noData':
+    return 'dataBase'
+  
+  if type == 'oldSW':
+    return 'openSource'
+  
+  if type == 'oldTech':
+    return 'newTech'
+  
+  if type == 'slowModel':
+    return 'fastModel'
+  
+  if type == 'virus':
+    return 'antivirus'
+  
+  if type == 'workingAlone':
+    return 'teamSpirit'
+  
+  if type == 'wrongModel':
+    return 'rightModel'
+  
   return ''
 
 class Risk:
-  def __init__(self, id, type, description, costs):
+  def __init__(self, id, type, costs):
     self.id = id
     self.puntos = getPointsValue(self)
     self.costs = costs
     self.type = type
-    self.description = description
     self.needed = getRiskFixCardType(type)
     self.isRisk = True
     self.isSpecial = True

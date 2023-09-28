@@ -38,10 +38,10 @@ class Player:
       if index == -1:
         raise Exception('Card not found')
       cardType = self.cards[index].type
-      if (costs[0] > 0 and cardType[0] == 'Domain'):
+      if (costs[0] > 0 and cardType[0] == 'domain'):
         deletedCards += [self.cards.pop(index)]
         costs[0] -= 1
-      if (costs[1] > 0 and cardType[0] == 'Computer Science'):
+      if (costs[1] > 0 and cardType[0] == 'compSci'):
         deletedCards += [self.cards.pop(index)]
         costs[1] -= 1
       if (costs[2] > 0 and cardType[0] == 'Mathematics'):
@@ -198,9 +198,9 @@ class Player:
   def canBuySlab(self, cards, costs):
     if cards == None:
       cards = self.cards
-    domainList = list(filter(lambda f: f.type[0] == 'Domain', cards))
-    computerScienceList = list(filter(lambda f: f.type[0] == 'Computer Science', cards))
-    mathematicsList = list(filter(lambda f: f.type[0] == 'Mathematics', cards))
+    domainList = list(filter(lambda f: f.type[0] == 'domain', cards))
+    computerScienceList = list(filter(lambda f: f.type[0] == 'compSci', cards))
+    mathematicsList = list(filter(lambda f: f.type[0] == 'math', cards))
     return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
 
   def canSolveRisk(self, risk):
@@ -254,10 +254,10 @@ class Player:
     res = []
     costs = slab.costs.copy()
     for card in self.cards:
-      if costs[0] >= 1 and card.type[0] == 'Domain':
+      if costs[0] >= 1 and card.type[0] == 'domain':
         res += [card]
         costs[0] -= 1
-      if costs[1] >= 1 and card.type[0] == 'Computer Science':
+      if costs[1] >= 1 and card.type[0] == 'compSci':
         res += [card]
         costs[1] -= 1
       if costs[2] >= 1 and card.type[0] == 'Mathematics':

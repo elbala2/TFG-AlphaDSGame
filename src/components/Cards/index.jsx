@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { descartar, setCardSelected } from '../../stores/gameStore/actions';
@@ -18,6 +18,7 @@ const Cards = ({
   descartable = false,
   blocked = [],
   selected = [],
+  dictionary,
 }) => {
   const { id } = useParams();
 
@@ -63,14 +64,14 @@ const Cards = ({
                 </svg>
               </Button>
             )}
-            <p className={styles.title} style={titleStyles}>{card.type[0]}</p>
+            <p className={styles.title} style={titleStyles}>{dictionary.cards.types[card.type[0]]}</p>
             <img
               alt='card'
               draggable={false}
               className={styles.imagen}
               src={getCardIMG(card.type)}
             />
-            <p className={styles.title} style={titleStyles}>{card.type[1]}</p>
+            <p className={styles.title} style={titleStyles}>{dictionary.cards.subTypes[card.type[1]]}</p>
           </div>
         );
       })}
@@ -78,4 +79,21 @@ const Cards = ({
   );
 };
 
-export default Cards;
+
+
+
+function stateToProps(state, { playerIndex }) {
+  return {
+    dictionary: {
+      cards: state.lang.dictionary.cards,
+      ...state.lang.dictionary.utils
+    },
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(Cards);

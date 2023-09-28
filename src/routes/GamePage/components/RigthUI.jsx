@@ -28,12 +28,12 @@ function RigthUI({
             <div className='p-5 d-flex'>
               <div className=''>
                 <h3><b>{dictionary.misionTitles[color]}</b></h3>
-                <p className={`${styles.misionDescription}`}>
+                <h6 className={`${styles.misionDescription}`}>
                   {board[0][2]
                     ? dictionary.misionCompletedDescription[color]
                     : dictionary.misionDescription[color]
                   }
-                </p>
+                </h6>
               </div>              
               <div className={`${styles.missionLogoContainer}`}>
                 WIP

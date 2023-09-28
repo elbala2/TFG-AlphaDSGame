@@ -11,31 +11,6 @@ import styles from './Styles/RiskContainer.module.scss';
 import { getSlabImg } from '../../../../utils/GetSlabImg';
 import { bindActionCreators } from 'redux';
 
-const canbebougth = (cartas, costes, type) => {
-  switch (type) {
-    case 'Complex Model':
-      return cartas.filter(f => f.type[1] === 'Simple Model' && f.selected).length >= costes;
-    case 'Danger Data':
-      return cartas.filter(f => f.type[1] === 'Protected Data' && f.selected).length >= costes;
-    case 'No Data':
-      return cartas.filter(f => f.type[1] === 'Data Base' && f.selected).length >= costes;
-    case 'Old Software':
-      return cartas.filter(f => f.type[1] === 'Open Source' && f.selected).length >= costes;
-    case 'Old Technology':
-      return cartas.filter(f => f.type[1] === 'New Technology' && f.selected).length >= costes;
-    case 'Slow Model':
-      return cartas.filter(f => f.type[1] === 'Fast Model' && f.selected).length >= costes;
-    case 'Virus':
-      return cartas.filter(f => f.type[1] === 'Antivirus' && f.selected).length >= costes;
-    case 'Working Alone':
-      return cartas.filter(f => f.type[1] === 'Team Spirit' && f.selected).length >= costes;
-    case 'Wrong Model':
-      return cartas.filter(f => f.type[1] === 'Right Model' && f.selected).length >= costes;
-    default:
-      return true;
-  }
-};
-
 const RiskContainer = ({
   slab,
   index,
@@ -46,13 +21,13 @@ const RiskContainer = ({
 }) => {
   const { id } = useParams();
 
-  const { costs, type, description } = slab;
-  const canbuy = canbebougth(cards, costs, type);
+  const { costs, type, needed } = slab;
+  const canbuy = cards.filter(f => f.type[1] === needed && f.selected).length >= costs;
   return (
     <div className={`${styles.marketContainer}`} key={index}>
       <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`}>
-        <h1 className={styles.title}>{type}</h1>
-        <Tooltip title={<p className={styles.descriptionTooltip}>{description}</p>}>
+        <h1 className={styles.title}>{dictionary.risks.types[type]}</h1>
+        <Tooltip title={<p className={styles.descriptionTooltip}>{dictionary.risks.descriptions[type]}</p>}>
           <p className={styles.cost}>{costs}</p>
         </Tooltip>
         <input
@@ -79,6 +54,7 @@ function stateToProps(state, { playerIndex }) {
   return {
     cards: player.cards,
     dictionary: {
+      risks: state.lang.dictionary.risks,
       ...state.lang.dictionary.utils,
     },
   };

@@ -10,24 +10,25 @@ import Tooltip from '../../../../components/UI/Tooltip';
 import styles from './Styles/SpecialContainer.module.scss';
 import { getSlabImg } from '../../../../utils/GetSlabImg';
 import { bindActionCreators } from 'redux';
+import { BLUE, GREEN, RED, YELLOW } from '../../../../constants';
 
 const canbebougth = (cartas, costes, type, actualplayer) => {
   const canbebougth =
-    cartas.filter(f => f.type[0] === 'Domain').length >= costes[0] &&
-    cartas.filter(f => f.type[0] === 'Computer Science').length >= costes[1] &&
-    cartas.filter(f => f.type[0] === 'Mathematics').length >= costes[2];
+    cartas.filter(f => f.type[0] === 'domain').length >= costes[0] &&
+    cartas.filter(f => f.type[0] === 'compSci').length >= costes[1] &&
+    cartas.filter(f => f.type[0] === 'math').length >= costes[2];
 
   switch (type) {
-    case 'RED':
+    case RED:
       if (actualplayer !== 0) return false;
       else return canbebougth;
-    case 'GREEN':
+    case GREEN:
       if (actualplayer !== 1) return false;
       else return canbebougth;
-    case 'BLUE':
+    case BLUE:
       if (actualplayer !== 2) return false;
       else return canbebougth;
-    case 'YELLOW':
+    case YELLOW:
       if (actualplayer !== 3) return false;
       else return canbebougth;
     default:

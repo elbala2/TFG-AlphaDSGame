@@ -67,6 +67,50 @@ const failModal = {
   systemCompromised: 'The system was compromised',
 };
 
+const cards = {
+  types: {
+    math: 'Mathematics',
+    compSci: 'Computer Science',
+    domain: 'Domain',
+  },
+  subTypes: {
+    fastModel: 'Fast model',
+    simpModel: 'Simple model',
+    rightModel: 'Right model',
+    newTech: 'New technology',
+    antivirus: 'Antivirus',
+    openSource: 'Open source',
+    dataBase: 'Data base',
+    protData: 'Protected data',
+    teamSpirit: 'Team spirit',
+  },
+};
+
+const risks = {
+  types: {
+    cmplxModel: 'Complex model',
+    dngData: 'Danger data',
+    noData: 'No data',
+    oldSW: 'Old software',
+    oldTech: 'Old technology',
+    slowModel: 'Slow model',
+    virus: 'Virus',
+    workingAlone: 'Working alone',
+    wrongModel: 'Wrong model',
+  },
+  descriptions: {
+    cmplxModel: `Use ${cards.subTypes.simpModel} to fix the risk`,
+    dngData: `Use ${cards.subTypes.protData} to fix the risk`,
+    noData: `Use ${cards.subTypes.dataBase} to fix the risk`,
+    oldSW: `Use ${cards.subTypes.openSource} to fix the risk`,
+    oldTech: `Use ${cards.subTypes.newTech} to fix the risk`,
+    slowModel: `Use ${cards.subTypes.fastModel} to fix the risk`,
+    virus: `Use ${cards.subTypes.antivirus} to fix the risk`,
+    workingAlone: `Use ${cards.subTypes.teamSpirit} to fix the risk`,
+    wrongModel: `Use ${cards.subTypes.rightModel} to fix the risk`,
+  },
+};
+
 export default {
   homePage,
   tradeModal,
@@ -76,5 +120,7 @@ export default {
   successModal,
   nextPlayerModal,
   failModal,
+  cards,
+  risks,
   utils,
 };

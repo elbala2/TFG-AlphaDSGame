@@ -43,10 +43,10 @@ const rigthUI = {
     [GREEN]: '¡Ayuda al informático a crear una aplicación móvil que avise a Shannon cuando el lobo se acerque peligrosamente a sus ovejas!',
   },
   misionCompletedDescription: {
-    [BLUE]: 'Entiendes perfectamente lo que Shannon necesita.\NHas recopilado los datos sobre las ovejas.\NHas almacenado los datos en un ordenador.',
-    [YELLOW]: 'Tienes una visión general de las ovejas y sus características.\NDespués de organizar y limpiar tus datos, están listos para el siguiente paso',
-    [RED]: 'Has probado y evaluado diferentes modelos.\NHas elegido el mejor para detectar el ataque del lobo. \Están listos para dar la buena noticia a Shannon',
-    [GREEN]: 'Has desarrollado una útil aplicación móvil que alerta a Shannon cuando el lobo está a punto de atacar a sus ovejas.\NLe has explicado el modelo y la aplicación a Shannon y está muy contenta porque lo domina',
+    [BLUE]: 'Entiendes perfectamente lo que Shannon necesita.\nHas recopilado los datos sobre las ovejas.\nHas almacenado los datos en un ordenador.',
+    [YELLOW]: 'Tienes una visión general de las ovejas y sus características.\nDespués de organizar y limpiar tus datos, están listos para el siguiente paso',
+    [RED]: 'Has probado y evaluado diferentes modelos.\nHas elegido el mejor para detectar el ataque del lobo. \nEstán listos para dar la buena noticia a Shannon',
+    [GREEN]: 'Has desarrollado una útil aplicación móvil que alerta a Shannon cuando el lobo está a punto de atacar a sus ovejas.\nLe has explicado el modelo y la aplicación a Shannon y está muy contenta porque lo domina',
   },
 };
 
@@ -67,6 +67,50 @@ const failModal = {
   systemCompromised: 'El sistema se vio comprometido',
 };
 
+const cards = {
+  types: {
+    math: 'Matematicas',
+    compSci: 'Informática',
+    domain: 'Campo',
+  },
+  subTypes: {
+    fastModel: 'Modelo rápido',
+    simpModel: 'Modelo simple',
+    rightModel: 'Modelo correcto',
+    newTech: 'Nueva tecnología',
+    antivirus: 'Antivirus',
+    openSource: 'Open source',
+    dataBase: 'Base de datos',
+    protData: 'Datos protejidos',
+    teamSpirit: 'Espiritu de equipo',
+  },
+};
+
+const risks = {
+  types: {
+    cmplxModel: 'Modelo Complejo',
+    dngData: 'Datos en Peligro',
+    noData: 'Sin datos',
+    oldSW: 'Software antiguo',
+    oldTech: 'Tecnologia antigua',
+    slowModel: 'Modelo lento',
+    virus: 'Virus',
+    workingAlone: 'Trabajo solitario',
+    wrongModel: 'Modelo incorrecto',
+  },
+  descriptions: {
+    cmplxModel: `Usa ${cards.subTypes.simpModel} para arreglar el riesgo`,
+    dngData: `Usa ${cards.subTypes.protData} para arreglar el riesgo`,
+    noData: `Usa ${cards.subTypes.dataBase} para arreglar el riesgo`,
+    oldSW: `Usa ${cards.subTypes.openSource} para arreglar el riesgo`,
+    oldTech: `Usa ${cards.subTypes.newTech} para arreglar el riesgo`,
+    slowModel: `Usa ${cards.subTypes.fastModel} para arreglar el riesgo`,
+    virus: `Usa ${cards.subTypes.antivirus} para arreglar el riesgo`,
+    workingAlone: `Usa ${cards.subTypes.teamSpirit} para arreglar el riesgo`,
+    wrongModel: `Usa ${cards.subTypes.rightModel} para arreglar el riesgo`,
+  },
+};
+
 export default {
   homePage,
   tradeModal,
@@ -76,5 +120,7 @@ export default {
   successModal,
   nextPlayerModal,
   failModal,
+  cards,
+  risks,
   utils,
 };

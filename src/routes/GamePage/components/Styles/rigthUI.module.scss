@@ -6,6 +6,7 @@
   border-top: none;
   background-color: #9eef65;
   height: var(--maxHeigth);
+  width: calc(var(--slabSize) * 5);
 
   .cableContainer {
     width: calc(var(--slabSize) / 2);
