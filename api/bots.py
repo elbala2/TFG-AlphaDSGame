@@ -130,7 +130,7 @@ class Bot:
           cardIds += [card.id]
       else:
         for i in range(len(cardTypes)):
-          if card.type[0] == cardTypes[i]:
+          if card.type == cardTypes[i]:
             if types[i] > 0:
               cardIds += [card.id]
             else:

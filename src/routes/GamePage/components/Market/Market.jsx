@@ -4,11 +4,11 @@ import { useState } from 'react';
 
 import RiskContainer from './RiskContainer';
 import MarketContainer from './MarketContainer';
-import SpecialContainer from './SpecialContainer';
 
-import styles from './Styles/Market.module.scss';
 import icon from '../../../../resources/Icon.png';
 import Modal from '../../../../components/UI/Modal';
+
+import './Styles/styles.scss'
 
 const Market = ({
   normalMarket,
@@ -21,43 +21,36 @@ const Market = ({
   const hasRisk = !!specialMarket.find(f => f.isRisk);
 
   return (
-    <div className={styles.market}>
-      <div align='center'>
-        <img src={icon} alt='icono' style={{ userSelect: 'none' }}/>
-      </div>
-      <div className={styles.marketContainer}>
-        <div className={`d-flex ${styles.normalMarketContainer}`}>
+    <>
+      <div className='market'>
+        <div className='text-center'>
+          <img src={icon} alt='icono' style={{ userSelect: 'none' }}/>
+        </div>
+        <div className='slabListContainer'>
           {normalMarket?.map((slab, i) => {
             return (
-              <div key={i}>
-                <MarketContainer disabled={hasRisk} index={i} slab={slab}/>
-              </div>
+              <MarketContainer key={i} disabled={hasRisk} index={i} slab={slab}/>
             );
           })}
-        </div>
-        <div className='d-flex'>
           {specialMarket.map((slab, i) => {
             return (
-              <div key={i + 4}>
-                {slab.isRisk 
-                  ? <RiskContainer index={i + 4} slab={slab}/>
-                  : <SpecialContainer disabled={hasRisk} index={i + 4} slab={slab}/>
-                }
-              </div>
+              slab.isRisk 
+                ? <RiskContainer key={i + 4} index={i + 4} slab={slab}/>
+                : <MarketContainer key={i + 4} disabled={hasRisk} index={i + 4} slab={slab}/>
             );
           })}
-          <Modal
-            isOpen={open && specialMarket.find(f => f.isRisk) !== undefined}
-            onClose={() => setOpen(false)}
-            title='Informacion importante'
-          >
-            <div className={styles.modal}>
-              <p className={styles.text}>{dictionary.riskMsg}</p>
-            </div>
-          </Modal>
         </div>
       </div>
-    </div>
+      <Modal
+        isOpen={open && specialMarket.find(f => f.isRisk) !== undefined}
+        onClose={() => setOpen(false)}
+        title='Informacion importante'
+      >
+        <div className='riskModal'>
+          <p className='text'>{dictionary.riskMsg}</p>
+        </div>
+      </Modal>
+    </>
   );
 };
 

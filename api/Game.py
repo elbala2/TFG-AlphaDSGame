@@ -10,15 +10,15 @@ from bots import Bot
 def genCards():
   res = []
   for i in range(4):
-    res += [Card(1 + (9 * i), False, ['math', 'fastModel']),
-            Card(2 + (9 * i), False, ['math', 'simpModel']),
-            Card(3 + (9 * i), False, ['math', 'rightModel']),
-            Card(4 + (9 * i), False, ['compSci', 'newTech']),
-            Card(5 + (9 * i), False, ['compSci', 'antivirus']),
-            Card(6 + (9 * i), False, ['compSci', 'openSource']),
-            Card(7 + (9 * i), False, ['domain', 'dataBase']),
-            Card(8 + (9 * i), False, ['domain', 'protData']),
-            Card(9 + (9 * i), False, ['domain', 'teamSpirit'])]
+    res += [Card(1 + (9 * i), False, 'math', 'fastModel'),
+            Card(2 + (9 * i), False, 'math', 'simpModel'),
+            Card(3 + (9 * i), False, 'math', 'rightModel'),
+            Card(4 + (9 * i), False, 'compSci', 'newTech'),
+            Card(5 + (9 * i), False, 'compSci', 'antivirus'),
+            Card(6 + (9 * i), False, 'compSci', 'openSource'),
+            Card(7 + (9 * i), False, 'domain', 'dataBase'),
+            Card(8 + (9 * i), False, 'domain', 'protData'),
+            Card(9 + (9 * i), False, 'domain', 'teamSpirit')]
   random.shuffle(res);
   return res
 
@@ -227,11 +227,11 @@ class Game():
     costs = slab.costs.copy()
     for player in self.players:
       for card in player.cards:
-        if costs[0] != 0 and card.type[0] == 'domain':
+        if costs[0] != 0 and card.type == 'domain':
           costs[0] -= 1
-        elif costs[1] != 0 and  card.type[0] == 'compSci':
+        elif costs[1] != 0 and  card.type == 'compSci':
           costs[1] -= 1
-        elif costs[2] != 0 and  card.type[0] == 'math':
+        elif costs[2] != 0 and  card.type == 'math':
           costs[2] -= 1
         if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
           return True

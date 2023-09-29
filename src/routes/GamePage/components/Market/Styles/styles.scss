@@ -1,0 +1,82 @@
+
+.market{
+  background-color: var(--marketBGColor);
+  border: 6px solid black;
+  width: calc(calc(var(--marketSlabSize) + 2rem) * 4 + 4rem);
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.marketContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 13rem;
+  width: calc(var(--marketSlabSize) + 2rem);
+}
+
+.slabListContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-between;
+}
+
+.slabContainer {
+  position: relative;
+  width: var(--marketSlabSize);
+  height: var(--marketSlabSize);
+  background: var(--marketBGColor);
+  border: 1px solid var(--darkerMarketBGColor);
+  border-radius: 5px;
+
+  &[canbebougth='false'] {
+    box-shadow: rgba(163, 0, 0, 0.4) 0px 0px 0px 2px, rgba(163, 0, 0, 0.65) 0px 4px 6px -1px, rgba(163, 0, 0, 0.08) 0px 1px 0px inset;
+  }
+}
+
+.marketCostsContainer {
+  display: inline-flex;
+  width: 100%;
+  padding: 0rem 1.8rem;
+  align-items: center;
+  justify-content: space-around;
+
+  .marketCosts {
+    width: 1.7rem;
+    height: 1.7rem;
+    text-align: center;
+    font-size: large;
+    font-weight: 700;
+
+    &[type='0'] {
+      background-color: rgb(153, 153, 255);
+    }
+    &[type='1'] {
+      background-color: rgb(255, 153, 153);
+    }
+    &[type='2']  {
+      background-color: rgb(153, 255, 153);
+    }
+  }
+}
+
+.riskModal {
+  width: 500px;
+  padding: 20px;
+  text-align: center;
+  
+  h1 {
+    color: rgb(177, 0, 0);
+  }
+
+  .text { 
+    font-size: 1rem;
+    margin-top: 2rem;
+  }
+}

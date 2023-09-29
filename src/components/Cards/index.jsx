@@ -38,7 +38,7 @@ const Cards = ({
           <div
             key={card.id}
             id={card.id}
-            type={card.type[0]}
+            type={card.type}
             className={`
               ${styles.card}
               ${card.selected ? styles.selected : ''}
@@ -64,14 +64,14 @@ const Cards = ({
                 </svg>
               </Button>
             )}
-            <p className={styles.title} style={titleStyles}>{dictionary.cards.types[card.type[0]]}</p>
+            <p className={styles.title} style={titleStyles}>{dictionary.cards.types[card.type]}</p>
             <img
               alt='card'
               draggable={false}
               className={styles.imagen}
-              src={getCardIMG(card.type)}
+              src={getCardIMG(card.subType)}
             />
-            <p className={styles.title} style={titleStyles}>{dictionary.cards.subTypes[card.type[1]]}</p>
+            <p className={styles.title} style={titleStyles}>{dictionary.cards.subTypes[card.subType]}</p>
           </div>
         );
       })}

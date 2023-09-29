@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -21,14 +22,22 @@ const RiskContainer = ({
 }) => {
   const { id } = useParams();
 
+  const costsRef = useRef();
+
   const { costs, type, needed } = slab;
-  const canbuy = cards.filter(f => f.type[1] === needed && f.selected).length >= costs;
+  const canbuy = cards.filter(f => f.subType === needed && f.selected).length >= costs;
   return (
     <div className={`${styles.marketContainer}`} key={index}>
       <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`}>
         <h1 className={styles.title}>{dictionary.risks.types[type]}</h1>
-        <Tooltip title={<p className={styles.descriptionTooltip}>{dictionary.risks.descriptions[type]}</p>}>
-          <p className={styles.cost}>{costs}</p>
+          <p
+            className={styles.cost}
+            ref={costsRef}
+          >
+            {costs}
+          </p>
+        <Tooltip parentRef={costsRef}>
+          <p className={styles.descriptionTooltip}>{dictionary.risks.descriptions[type]}</p>
         </Tooltip>
         <input
           alt={`img`}

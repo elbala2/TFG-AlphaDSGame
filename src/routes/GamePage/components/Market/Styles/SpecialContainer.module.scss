@@ -77,33 +77,6 @@
       box-shadow: rgba(163, 0, 0, 0.4) 0px 0px 0px 2px, rgba(163, 0, 0, 0.65) 0px 4px 6px -1px, rgba(163, 0, 0, 0.08) 0px 1px 0px inset;
     }
   }
-  
-  .MarketCostsContainer {
-    display: inline;
-    margin-top: 1.5rem;
-    margin-left: 1rem;
-  
-    .MarketCosts {
-      width: 1.7rem;
-      height: 1.7rem;
-      margin-left: 1px;
-      margin-right: 1px;
-      text-align: center;
-      font-size: large;
-      font-weight: 700;
-
-      &[type='0'] {
-        background-color: rgb(153, 153, 255);
-      }
-      &[type='1'] {
-        background-color: rgb(255, 153, 153);
-      }
-      &[type='2']  {
-        background-color: rgb(153, 255, 153);
-      }
-    }
-  }
-
 }
 
 .descriptionTooltip{

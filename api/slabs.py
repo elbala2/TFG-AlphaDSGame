@@ -69,7 +69,7 @@ class Risk:
     self.isSpecial = True
 
   def isCardNeeded(self, card):
-    return card.type[1] == self.needed
+    return card.subType == self.needed
 
 class Slab:
   id = 0
@@ -104,7 +104,7 @@ class Slab:
 
   def isCardNeeded(self, card):
     for c in range(len(self.costs)):
-      if card.type[0] == cardTypes[c] and self.costs[c]:
+      if card.type == cardTypes[c] and self.costs[c]:
         return True
     return False
 

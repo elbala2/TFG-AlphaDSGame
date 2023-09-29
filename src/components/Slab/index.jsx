@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { isEmpty } from 'lodash'
@@ -13,6 +13,8 @@ function Slab({
   slab,
   isWayPart,
 }) {
+  const descriptionRef = useRef();
+
   if (isEmpty(slab)) return '';
 
   const cableProps = {};
@@ -21,7 +23,7 @@ function Slab({
   for(let i = 0; i < slab.rotation; i += 1) {
     cableProps.links.splice(0, 0, cableProps.links.splice(-1, 1)[0]);
   }
-  if (['GOLDEN', 'SILVER'].includes(slab.type)) cableProps.rect = slab.type;
+  if (['GOLDEN', 'SILVER'].includes(slab.type)) cableProps.rect = { color: slab.type };
   if (isWayPart) cableProps.lineColor = '#f5e83b'
 
 
@@ -46,15 +48,17 @@ function Slab({
     </>
   ) : (
     <>
-      <h1 className={styles.title}>{slab.title}</h1>
-      <Tooltip
-        title={(
-          <p className={styles.descriptionTooltip}>
-            {slab.description}
-          </p>
-        )}
+      <h1 className={styles.title}>{slab.title}1</h1>
+      <p
+        className={styles.description}
+        ref={descriptionRef}
       >
-        <p className={styles.description}>{slab.description}</p>
+        {slab.description}
+      </p>
+      <Tooltip parentRef={descriptionRef}>
+        <p className={styles.descriptionTooltip}>
+          {slab.description}
+        </p>
       </Tooltip>
       <img
         className={styles.slab}

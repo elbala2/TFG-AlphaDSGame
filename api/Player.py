@@ -198,9 +198,9 @@ class Player:
   def canBuySlab(self, cards, costs):
     if cards == None:
       cards = self.cards
-    domainList = list(filter(lambda f: f.type[0] == 'domain', cards))
-    computerScienceList = list(filter(lambda f: f.type[0] == 'compSci', cards))
-    mathematicsList = list(filter(lambda f: f.type[0] == 'math', cards))
+    domainList = list(filter(lambda f: f.type == 'domain', cards))
+    computerScienceList = list(filter(lambda f: f.type == 'compSci', cards))
+    mathematicsList = list(filter(lambda f: f.type == 'math', cards))
     return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
 
   def canSolveRisk(self, risk):
@@ -254,13 +254,13 @@ class Player:
     res = []
     costs = slab.costs.copy()
     for card in self.cards:
-      if costs[0] >= 1 and card.type[0] == 'domain':
+      if costs[0] >= 1 and card.type == 'domain':
         res += [card]
         costs[0] -= 1
-      if costs[1] >= 1 and card.type[0] == 'compSci':
+      if costs[1] >= 1 and card.type == 'compSci':
         res += [card]
         costs[1] -= 1
-      if costs[2] >= 1 and card.type[0] == 'Mathematics':
+      if costs[2] >= 1 and card.type == 'Mathematics':
         res += [card]
         costs[2] -= 1
     return res
@@ -269,7 +269,7 @@ class Player:
     res = []
     costs = risk.costs
     for card in self.cards:
-      if costs >= 1 and len(res) < risk.costs and card.type[1] == risk.needed:
+      if costs >= 1 and len(res) < risk.costs and card.subType == risk.needed:
         res += [card]
         costs -= 1
     return res

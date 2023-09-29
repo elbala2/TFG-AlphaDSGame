@@ -117,31 +117,32 @@ export const getSlabImg = (slab) => {
     case 'greenStart':
     case 'Start_1':
       return green_start;
-    case 'Complex Model':
+
+    case 'cmplxModel':
       return ComplexModel;
-    case 'Danger Data':
+    case 'dngData':
       return DangerData;
-    case 'No Data':
+    case 'noData':
       return NoData;
-    case 'Old Software':
+    case 'oldSW':
       return OldSW;
-    case 'Old Technology':
+    case 'oldTech':
       return OldTech;
-    case 'Slow Model':
+    case 'slowModel':
       return SlowModel;
-    case 'Virus':
+    case 'virus':
       return Virus;
-    case 'Working Alone':
+    case 'workingAlone':
       return WorkingAlone;
-    case 'Wrong Model':
+    case 'wrongModel':
       return WrongModel;
     default:
       return'';
   }
 };
 
-export const getCardIMG = (type) => {
-  switch (type[1]) {
+export const getCardIMG = (subType) => {
+  switch (subType) {
     case 'fastModel': //Green
       return FastModel;
 

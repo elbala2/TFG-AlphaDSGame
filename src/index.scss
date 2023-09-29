@@ -23,9 +23,17 @@ code {
   --dangerAccentColor: #cb8b02;
   --accentColor: #fcfcfc;
 
-  --slabSize: 160px;
+  --slabSize: 10rem;
+  --marketSlabSize: 8rem;
+  --marketBGColor: #016a25;
+  --darkerMarketBGColor: #004016;
 
   --maxHeigth: 90vh;
+}
+
+#modal {
+  position: fixed;
+  top: 0px;
 }
 
 .text-balance {
