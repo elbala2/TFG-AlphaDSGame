@@ -111,6 +111,43 @@ const risks = {
   },
 };
 
+const specialSlabs = {
+  titles: {
+    bigData: 'Big Data',
+    goalsDef: 'Goals definition',
+    dataUnderstanding: 'Data understanding',
+
+    patternRecognition: 'Pattern Recognition',
+    outlierDetection: 'Outlier Detection',
+    modelEvaluation: 'Model Evaluation',
+    
+    graficalExploring: 'Graphical exploring',
+    numericalExploring: 'Numerical Exploring',
+    dataCleaning: 'Data Cleaning',
+
+    mobileApplication: 'Mobile Application',
+    storytelling: 'Storytelling',
+    deployment: 'Deployment',
+  },
+  subTitles: {
+    lotOfData: 'A lot of data',
+    questionAnswer: 'What questions do you want to answer?',
+    dataOkey: 'Are your data ok?',
+
+    patternsInData: 'Looking for patterns in your data',
+    strangeData: 'Looking for strange data in your data',
+    modelGood: 'How good is the model?',
+
+    graphicalTools: 'Using graphical tools to view your data',
+    mathematicalTools: 'Using mathematical tools to view your data',
+    dataAnalysis: 'Preparing your data for analysis',
+
+    phoneApp: 'An app for your mobile phone',
+    usersResults: 'To present the results to the users',
+    finalProduct: 'To develop the final product',
+  },
+};
+
 export default {
   homePage,
   tradeModal,
@@ -122,5 +159,6 @@ export default {
   failModal,
   cards,
   risks,
+  specialSlabs,
   utils,
 };

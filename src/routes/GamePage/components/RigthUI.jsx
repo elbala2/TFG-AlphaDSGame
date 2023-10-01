@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import mainStyles from '../Main.module.scss';
 import styles from './Styles/rigthUI.module.scss';
 import Board from '../../../components/Board';
-import Cable from '../../../components/Cable';
+import { Cable } from '../../../components/Slab';
 
 function RigthUI({
   playerIndex,

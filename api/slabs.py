@@ -114,60 +114,53 @@ class Slab:
 
 class NormalSlab(Slab):
   def __init__(self, linkers):
-    super().__init__(linkers)
-    self.type = 'NORMAL'
+    super().__init__(linkers, 'NORMAL')
 
 class SilverSlab(Slab):
   def __init__(self, linkers):
-    super().__init__(linkers)
-    self.type = 'SILVER'
+    super().__init__(linkers, 'SILVER')
 
 class GoldSlab(Slab):
   def __init__(self, linkers):
-    super().__init__(linkers)
-    self.type = 'GOLD'
+    super().__init__(linkers, 'GOLD')
 
 class SpecialSlab(Slab):
-  def __init__(self, title, description, costs):
-    super().__init__([1, 1, 1, 1])
-    self.description = description
+  def __init__(self, type, title, descriptionKey, costs):
+    super().__init__([1, 1, 1, 1], type)
+    self.descriptionKey = descriptionKey
     self.costs = costs
     self.title = title
     self.isRisk = False
     self.isSpecial = True
 
-blueTitle = ['Graphical exploring', 'Numerical Exploring','Data Cleaning']
-blueDescription = ['Using graphical tools to view your data', 'Using mathematical tools to view your data', 'Preparing your data for analysis']
+blueTitle = ['bigData', 'goalsDef','dataUnderstanding']
+blueDescription = ['lotOfData', 'questionAnswer', 'dataOkey']
 blueCosts = [[2, 1, 0], [1, 0, 1], [2, 0, 2]]
 
 class SpecialBlue(SpecialSlab):
   def __init__(self, type):
-    super().__init__(blueTitle[type], blueDescription[type], blueCosts[type])
-    self.type = 'BLUE'
+    super().__init__('BLUE', blueTitle[type], blueDescription[type], blueCosts[type])
 
-redTitle = ['Pattern Recognition', 'Outlier Detection', 'Model Evaluation']
-redDescription = ['Looking for patterns in your data', 'Looking for strange data in your data', 'How good is the model?']
+redTitle = ['patternRecognition', 'outlierDetection', 'modelEvaluation']
+redDescription = ['patternsInData', 'strangeData', 'modelGood']
 redCosts = [[0, 1, 2], [1, 0, 1], [2, 1, 1]]
 
 class SpecialRed(SpecialSlab):
   def __init__(self, type):
-    super().__init__(redTitle[type], redDescription[type], redCosts[type])
-    self.type = 'RED'
+    super().__init__('RED' ,redTitle[type], redDescription[type], redCosts[type])
 
-yellowTitle = ['Graphical exploring', 'Numerical Exploring', 'Data Cleaning']
-yellowDescription = ['Using graphical tools to view your data', 'Using mathematical tools to view your data', 'Preparing your data for analysis']
+yellowTitle = ['graficalExploring', 'numericalExploring','dataCleaning']
+yellowDescription = ['graphicalTools', 'mathematicalTools', 'dataAnalysis']
 yellowCosts = [[0, 1, 1], [0, 1, 2], [1, 2, 1]]
 
 class SpecialYellow(SpecialSlab):
   def __init__(self, type):
-    super().__init__(yellowTitle[type], yellowDescription[type], yellowCosts[type])
-    self.type = 'YELLOW'
+    super().__init__('YELLOW', yellowTitle[type], yellowDescription[type], yellowCosts[type])
 
-greenTitle = ['Mobile Application', 'Storytelling', 'Deployment']
-greenDescription = ['An app for your mobile phone', 'To present the results to the users', 'To develop the final product']
+greenTitle = ['mobileApplication', 'storytelling', 'deployment']
+greenDescription = ['phoneApp', 'userResults', 'finalProduct']
 greenCosts = [[1, 2, 0], [2, 1, 1], [0, 1, 1]]
 
 class SpecialGreen(SpecialSlab):
   def __init__(self, type):
-    super().__init__(greenTitle[type], greenDescription[type], greenCosts[type])
-    self.type = 'GREEN'
+    super().__init__('GREEN', greenTitle[type], greenDescription[type], greenCosts[type])

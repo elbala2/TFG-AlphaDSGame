@@ -111,6 +111,43 @@ const risks = {
   },
 };
 
+const specialSlabs = {
+  titles: {
+    bigData: 'Big Data',
+    goalsDef: 'Definición de objetivos',
+    dataUnderstanding: 'Comprensión de datos',
+
+    patternRecognition: 'Reconocimiento de patrones',
+    outlierDetection: 'Detección de valores atípicos',
+    modelEvaluation: 'Evaluación de modelos',
+    
+    graficalExploring: 'Exploración gráfica',
+    numericalExploring: 'Exploración numérica',
+    dataCleaning: 'Limpieza de datos',
+
+    mobileApplication: 'Aplicación móvil',
+    storytelling: 'Narración',
+    deployment: 'Despliegue',
+  },
+  subTitles: {
+    lotOfData: 'Muchos datos',
+    questionAnswer: '¿Qué preguntas quieres responder?',
+    dataOkey: '¿Están bien sus datos?',
+
+    patternsInData: 'Buscando patrones en tus datos',
+    strangeData: 'Buscando datos extraños en sus datos',
+    modelGood: '¿Cómo de bueno es el modelo?',
+
+    graphicalTools: 'Utilizando herramientas gráficas para ver sus datos',
+    mathematicalTools: 'Usando herramientas matemáticas para ver tus datos',
+    dataAnalysis: 'Preparar tus datos para el análisis',
+
+    phoneApp: 'Una aplicación para tu teléfono móvil',
+    usersResults: 'Presentar los resultados a los usuarios',
+    finalProduct: 'Para desarrollar el producto final',
+  },
+};
+
 export default {
   homePage,
   tradeModal,
@@ -122,5 +159,6 @@ export default {
   failModal,
   cards,
   risks,
+  specialSlabs,
   utils,
 };

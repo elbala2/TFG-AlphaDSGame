@@ -1,24 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 import styles from './board.module.scss';
 import { Droppable } from 'react-beautiful-dnd';
 import Slab from '../Slab';
-import { setTarget } from '../../stores/gameStore/actions';
 
 function Board({
-  playerIndex,
+  board,
+  way,
 }) {
-  const {  start, board, way } = useSelector(state => ({
-    start: state.game.start,
-    pos: state.game.pos,
-    board: state.game.players[playerIndex].board,
-    way: state.game.players[playerIndex].way,
-  }))
-
-  const dispatch = useDispatch();
 
   function isWayPart(x, y) {
     const xcoord = 0;
@@ -62,14 +54,6 @@ function Board({
                 <div
                   key={`fila${j}`}
                   className={`${styles.slabChessContainer}`}
-                  onDragOver={(event) => {
-                    if (!casilla)
-                      event.preventDefault();
-                  }}
-                  onDrop={() => {
-                    if (!casilla)
-                      dispatch(setTarget([ i, j ]));
-                  }}
                 >
                   {renderSlab(casilla, j, i)}
                 </div>
@@ -83,4 +67,16 @@ function Board({
 }
 Board.propTypes = {}
 
-export default Board
+function stateToProps(state, { playerIndex }) {
+  return {
+    board: state.game.players[playerIndex].board,
+    way: state.game.players[playerIndex].way,
+  };
+}
+
+function dispatchToProps(dispatch) {
+  return {
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(Board);

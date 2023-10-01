@@ -21,10 +21,11 @@ export default function gameReducer(state = initialState, action) {
 
   const {
     normalMarket,
-    specialMarket, 
     actualPlayer,
     players,
   } = state;
+
+  console.log(action)
 
   switch (action.type) {
     case RESET: 

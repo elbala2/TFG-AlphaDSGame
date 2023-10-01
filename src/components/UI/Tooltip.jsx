@@ -29,12 +29,13 @@ function Tooltip({
   return ReactDOM.createPortal(
     <div
       {...other}
-      className={`bg-white rounded ${other.className ?? ''}`}
+      className={`bg-white w-max rounded ${other.className ?? ''}`}
       style={{
         top: top + height,
         left: left + (width / 2),
         translate: '-50% 0%',
         position: 'absolute',
+        minWidth: width,
       }}
     >
       {children}

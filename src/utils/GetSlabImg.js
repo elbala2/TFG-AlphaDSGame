@@ -1,23 +1,3 @@
-import normal_0101 from '../resources/slabs/normal/slab_0_1_0_1.png';
-import normal_1011 from '../resources/slabs/normal/slab_1_0_1_1.png';
-import normal_0110 from '../resources/slabs/normal/slab_0_1_1_0.png';
-import normal_1111 from '../resources/slabs/normal/slab_1_1_1_1.png';
-
-import gold_0101 from '../resources/slabs/gold/slab-gold_0_1_0_1.png';
-import gold_1011 from '../resources/slabs/gold/slab-gold_1_0_1_1.png';
-import gold_0110 from '../resources/slabs/gold/slab-gold_0_1_1_0.png';
-import gold_1111 from '../resources/slabs/gold/slab-gold_1_1_1_1.png';
-
-import silver_0101 from '../resources/slabs/silver/slab-silver_0_1_0_1.png';
-import silver_1011 from '../resources/slabs/silver/slab-silver_1_0_1_1.png';
-import silver_0110 from '../resources/slabs/silver/slab-silver_0_1_1_0.png';
-import silver_1111 from '../resources/slabs/silver/slab-silver_1_1_1_1.png';
-
-import red_mision from '../resources/slabs/mision/red/red-box.png';
-import blue_mision from '../resources/slabs/mision/blue/blue-box.png';
-import yellow_mision from '../resources/slabs/mision/yellow/yellow-box.png';
-import green_mision from '../resources/slabs/mision/green/green-box.png';
-
 import red_start from '../resources/slabs/red-start.png';
 import green_start from '../resources/slabs/green-start.png';
 import yellow_start from '../resources/slabs/yellow-start.png';
@@ -55,67 +35,17 @@ import WrongModel from '../resources/Risks/Wrong Model.png';
 
 export const getSlabImg = (slab) => {
   switch (slab.type) {
-    case 'NORMAL':
-      switch (JSON.stringify(slab.links)) {
-        case JSON.stringify([0,1,0,1]):
-          return normal_0101;
-        case JSON.stringify([1,0,1,1]):
-          return normal_1011;
-        case JSON.stringify([0,1,1,0]):
-          return normal_0110;
-        case JSON.stringify([1,1,1,1]):
-          return normal_1111;
-        default:
-          break;
-      }
-      break;
-    case 'GOLD':
-      switch (JSON.stringify(slab.links)) {
-        case JSON.stringify([0,1,0,1]):
-          return gold_0101;
-        case JSON.stringify([1,0,1,1]):
-          return gold_1011;
-        case JSON.stringify([0,1,1,0]):
-          return gold_0110;
-        case JSON.stringify([1,1,1,1]):
-          return gold_1111;
-        default:
-          break;
-      }
-      break;
-    case 'SILVER':
-      switch (JSON.stringify(slab.links)) {
-        case JSON.stringify([0,1,0,1]):
-          return silver_0101;
-        case JSON.stringify([1,0,1,1]):
-          return silver_1011;
-        case JSON.stringify([0,1,1,0]):
-          return silver_0110;
-        case JSON.stringify([1,1,1,1]):
-          return silver_1111;
-        default:
-          break;
-      }
-      break;
-    case 'RED':
-      return red_mision; 
     case 'redStart':
-    case 'Start_0':
+    case 'Start_RED':
       return red_start;
-    case 'BLUE':
-      return blue_mision;
     case 'blueStart':
-    case 'Start_2':
+    case 'Start_BLUE':
       return blue_start;
-    case 'YELLOW':
-      return yellow_mision;
     case 'yellowStart':
-    case 'Start_3':
+    case 'Start_YELLOW':
       return yellow_start;
-    case 'GREEN':
-      return green_mision;
     case 'greenStart':
-    case 'Start_1':
+    case 'Start_GREEN':
       return green_start;
 
     case 'cmplxModel':

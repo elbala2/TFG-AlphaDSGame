@@ -14,7 +14,7 @@ const canbebougth = (cards, costs, type, actualplayer) => {
   const canbebougth =
     cards.filter((f) => f.type === 'domain').length >= costs[0] &&
     cards.filter((f) => f.type === 'compSci').length >= costs[1] &&
-    cards.filter((f) => f.type === 'Mathematics').length >= costs[2];
+    cards.filter((f) => f.type === 'math').length >= costs[2];
 
     switch (type) {
       case RED:
@@ -32,7 +32,6 @@ const canbebougth = (cards, costs, type, actualplayer) => {
       default:
         return canbebougth;
     }
-  return canbebougth; 
 };
 
 const MarketContainer = ({
@@ -48,7 +47,7 @@ const MarketContainer = ({
   const canbuy = !hasBougth && canbebougth(cards, costs, type, actualPlayer) && !disabled;
   const canbuyWithSelected = useCallback(() => {
     return !hasBougth && canbebougth(cards.filter(c => c.selected), costs, type, actualPlayer) && !disabled;
-  }, [hasBougth, cards, costs, disabled ]) 
+  }, [hasBougth, cards, costs, disabled, type, actualPlayer]) 
   return (
     <div className='marketContainer' key={index}>
       {/* <Button
@@ -81,9 +80,11 @@ const MarketContainer = ({
                   disabled={!canbuy}
                 >
                   <Slab slab={slab} />
+                  {provided.placeholder}
                 </div>
               )}
             </Draggable>
+            {provided.placeholder}
           </div>
         )}
       </Droppable>
