@@ -4,9 +4,10 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 
 import mainStyles from '../Main.module.scss';
-import styles from './Styles/rigthUI.module.scss';
 import Board from '../../../components/Board';
 import { Cable } from '../../../components/Slab';
+
+import styles from './Styles/rigthUI.module.scss';
 
 function RigthUI({
   playerIndex,
@@ -28,12 +29,13 @@ function RigthUI({
             <div className='p-5 d-flex'>
               <div className=''>
                 <h3><b>{dictionary.misionTitles[color]}</b></h3>
-                <h6 className={`${styles.misionDescription}`}>
-                  {board[0][2]
-                    ? dictionary.misionCompletedDescription[color]
-                    : dictionary.misionDescription[color]
-                  }
-                </h6>
+                {(board[0][2]
+                  ? dictionary.misionCompletedDescription[color]
+                  : dictionary.misionDescription[color]
+                  )?.split('\n').map(txt => (
+                    <h6 key={txt} className={`${styles.misionDescription}`}>{txt}</h6>
+                  ))
+                }
               </div>              
               <div className={`${styles.missionLogoContainer}`}>
                 WIP

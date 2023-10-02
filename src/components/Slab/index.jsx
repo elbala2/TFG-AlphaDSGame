@@ -76,7 +76,7 @@ function Links({
           <line
             x1={0}
             y1={height - (step + lineHPadding)}
-            x2={width - lineWPadding}
+            x2={width - lineWPadding + (lineWidth / 2)}
             y2={height - (step + lineHPadding)}
             style={{
               stroke: lineColor,

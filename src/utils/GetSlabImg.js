@@ -13,16 +13,6 @@ import RightModel from '../resources/Cards/Right Model.png';
 import SimpleModel from '../resources/Cards/Simple Model.png';
 import FastModel from '../resources/Cards/Fast Model.png';
 
-import Mision_Blue from '../resources/Misiones/Mision_4.png';
-import Mision_Blue_Completed from '../resources/Misiones/Mision_4_Completada.png';
-import Mision_Yellow from '../resources/Misiones/Mision_3.png';
-import Mision_Yellow_Completed from '../resources/Misiones/Mision_3_Completada.png';
-import Mision_Red from '../resources/Misiones/Mision_2.png';
-import Mision_Red_Completed from '../resources/Misiones/Mision_2_Completada.png';
-import Mision_Green from '../resources/Misiones/Mision_1.png';
-import Mision_Green_Completed from '../resources/Misiones/Mision_1_Completada.png';
-
-
 import ComplexModel from '../resources/Risks/Complex Model.png';
 import DangerData from '../resources/Risks/Danger Data.png';
 import NoData from '../resources/Risks/No Data.png';
@@ -103,17 +93,3 @@ export const getCardIMG = (subType) => {
     default:
   }
 };
-
-export const getMision = (type, completed) => {
-  switch(type) {
-    case 0:
-      return !completed ? Mision_Red : Mision_Red_Completed;
-    case 1:
-      return !completed ? Mision_Green : Mision_Green_Completed;
-    case 2:
-      return !completed ? Mision_Blue : Mision_Blue_Completed;
-    case 3:
-      return !completed ? Mision_Yellow : Mision_Yellow_Completed;
-    default:
-  }
-}

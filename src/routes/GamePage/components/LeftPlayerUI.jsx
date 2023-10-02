@@ -8,9 +8,10 @@ import { getBotAction } from '../../../utils/ApiConf';
 import Button from '../../../components/UI/Button';
 import Market from './Market/Market';
 
-import styles from '../Main.module.scss';
 import Cards from '../../../components/Cards';
 import { bindActionCreators } from 'redux';
+
+import styles from '../Main.module.scss';
 
 function LeftPlayerUI({
   playerIndex,

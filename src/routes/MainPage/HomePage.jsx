@@ -10,6 +10,7 @@ import PlayerInput from './PlayerInput';
 
 import styles from './styles/HomePage.module.scss';
 import { connect } from 'react-redux';
+import { playerColors } from '../../constants';
 
 const HomePage = ({
   dictionary,
@@ -37,8 +38,8 @@ const HomePage = ({
           <div className={styles.playerButtonsContainer}>
             {players.map((player, index) => (
               <PlayerInput
-                key={index}
-                id={index}
+                key={player.name}
+                color={playerColors[index]}
                 player={player}
                 setPlayer={(p) => handleChangePlayer(p, index)}
               />

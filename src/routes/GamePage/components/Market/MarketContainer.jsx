@@ -7,31 +7,17 @@ import Button from '../../../../components/UI/Button';
 import { bindActionCreators } from 'redux';
 import { useCallback } from 'react';
 import Slab from '../../../../components/Slab';
-import { BLUE, GREEN, RED, YELLOW } from '../../../../constants';
+import { BLUE, GREEN, RED, YELLOW, playerColors } from '../../../../constants';
 
 
-const canbebougth = (cards, costs, type, actualplayer) => {
+const canbebougth = (cards, costs, type, playerColor) => {
   const canbebougth =
     cards.filter((f) => f.type === 'domain').length >= costs[0] &&
     cards.filter((f) => f.type === 'compSci').length >= costs[1] &&
     cards.filter((f) => f.type === 'math').length >= costs[2];
 
-    switch (type) {
-      case RED:
-        if (actualplayer !== 0) return false;
-        else return canbebougth;
-      case GREEN:
-        if (actualplayer !== 1) return false;
-        else return canbebougth;
-      case BLUE:
-        if (actualplayer !== 2) return false;
-        else return canbebougth;
-      case YELLOW:
-        if (actualplayer !== 3) return false;
-        else return canbebougth;
-      default:
-        return canbebougth;
-    }
+    if (playerColors.includes(type)) return playerColor === type;
+    return canbebougth;
 };
 
 const MarketContainer = ({
@@ -40,32 +26,17 @@ const MarketContainer = ({
   disabled,
   cards,
   hasBougth,
-  actualPlayer,
+  player,
   rotar,
 }) => {
-  const { costs, type } = slab;
-  const canbuy = !hasBougth && canbebougth(cards, costs, type, actualPlayer) && !disabled;
+  const { costs, type, isSpecial } = slab;
+  console.log(isSpecial)
+  const canbuy = !hasBougth && canbebougth(cards, costs, type, player.color) && !disabled;
   const canbuyWithSelected = useCallback(() => {
-    return !hasBougth && canbebougth(cards.filter(c => c.selected), costs, type, actualPlayer) && !disabled;
-  }, [hasBougth, cards, costs, disabled, type, actualPlayer]) 
+    return !hasBougth && canbebougth(cards.filter(c => c.selected), costs, type, player.color) && !disabled;
+  }, [hasBougth, cards, costs, disabled, type, player]) 
   return (
     <div className='marketContainer' key={index}>
-      {/* <Button
-        className={`${styles.bubble} ${styles.left}`}
-        onClick={() => rotar(index, 3)}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l-6 6m0 0l-6-6m6 6V9a6 6 0 0112 0v3" />
-        </svg>
-      </Button>
-      <Button
-        className={`${styles.bubble} ${styles.right}`}
-        onClick={() => rotar(index, 1)}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" />
-        </svg>
-      </Button> */}
       <Droppable droppableId={`marketDrop_${index}`} isDropDisabled>
         {provided => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -79,6 +50,28 @@ const MarketContainer = ({
                   canbebougth={`${canbuy}`}
                   disabled={!canbuy}
                 >
+                  {!isSpecial && (
+                    <>
+                      <Button
+                        className='bubble left'
+                        variants='outlined'
+                        onClick={() => rotar(index, 3)}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l-6 6m0 0l-6-6m6 6V9a6 6 0 0112 0v3" />
+                        </svg>
+                      </Button>
+                      <Button
+                        className='bubble right'
+                        variants='outlined'
+                        onClick={() => rotar(index, 1)}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" />
+                        </svg>
+                      </Button>
+                    </>
+                  )}
                   <Slab slab={slab} />
                   {provided.placeholder}
                 </div>
@@ -107,7 +100,7 @@ function stateToProps(state, { playerIndex }) {
   return {
     cards: player.cards,
     hasBougth: player.hasBougth,
-    actualPlayer: state.game.actualPlayer,
+    player,
   };
 }
 

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import './Styles/Button.scss'
 import Loader from './Loader'
 
-const commonClasses = 'rounded-1 btn-normal'
+const commonClasses = 'btn-normal'
 
 const classes = {
   primary: 'primary',

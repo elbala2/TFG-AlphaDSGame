@@ -15,7 +15,7 @@
 
   .longCableContainer {
     height: calc(var(--slabSize) / 2);
-    width: var(--slabSize);
+    width: calc(var(--slabSize) + 0.3px);
   }
 
   .bordecontainerZone {
@@ -52,7 +52,7 @@
       min-width: calc(var(--slabSize) / 2);
 
       .space {
-        height: calc(var(--slabSize) + 2px);
+        height: calc(var(--slabSize) + 1.3px);
       }
   
       .conexion {

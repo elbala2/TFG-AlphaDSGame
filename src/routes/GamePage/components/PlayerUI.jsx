@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 import { mover } from '../../../stores/gameStore/actions';
@@ -12,12 +13,11 @@ import LeftPlayerUI from './LeftPlayerUI';
 
 import styles from '../Main.module.scss';
 import RigthUI from './RigthUI';
-import { bindActionCreators } from 'redux';
 
 const PlayerUI = ({
   playerIndex,
   handleNextPlayer,
-  players,
+  player,
   normalMarket,
   specialMarket,
   mover,
@@ -31,7 +31,7 @@ const PlayerUI = ({
         const slabIndex = parseInt(draggableId);
         const target = droppableId.replace('boardDrop_', '').split('-').map(n => parseInt(n));
         const rotation = (slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4]).rotation;
-        const cards = players[playerIndex].cards.filter(c => c.selected);
+        const cards = player.cards.filter(c => c.selected);
         MoveSlab(
           id,
           slabIndex,
@@ -43,7 +43,7 @@ const PlayerUI = ({
         });
       }}
     >
-      <div className={styles.mainCard} type={playerIndex}>
+      <div className={styles.mainCard} type={player.color}>
         <LeftPlayerUI
           playerIndex={playerIndex}
           handleNextPlayer={handleNextPlayer}
@@ -63,7 +63,7 @@ const PlayerUI = ({
 
 function stateToProps(state, { playerIndex }) {
   return {
-    players: state.game.players,
+    player: state.game.players[playerIndex],
     normalMarket: state.game.normalMarket,
     specialMarket: state.game.specialMarket,
   };

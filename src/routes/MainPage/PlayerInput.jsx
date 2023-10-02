@@ -5,9 +5,9 @@ import Button from '../../components/UI/Button';
 
 import styles from './styles/PlayerInput.module.scss';
 
-export default function PlayerInput({ player, setPlayer, id }) {
+export default function PlayerInput({ player, setPlayer, color }) {
   return (
-    <div className={styles.playerButton} type={id}>
+    <div className={styles.playerButton} type={color}>
       <input
         type='text'
         className='bg-transparent text-center'

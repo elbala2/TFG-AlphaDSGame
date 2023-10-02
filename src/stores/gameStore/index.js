@@ -25,7 +25,7 @@ export default function gameReducer(state = initialState, action) {
     players,
   } = state;
 
-  console.log(action)
+  console.log(action, _.cloneDeep(state))
 
   switch (action.type) {
     case RESET: 

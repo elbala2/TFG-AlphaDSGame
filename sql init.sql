@@ -1,4 +1,3 @@
--- Active: 1692091912047@@127.0.0.1@3306@tfg
 drop database tfg;
 
 create database tfg;

@@ -59,7 +59,7 @@ def genSlabs():
   random.shuffle(res)
   return res
 
-colors = ['RED', 'GREEN', 'BLUE', 'YELLOW']
+colors = ['BLUE', 'YELLOW', 'RED', 'GREEN']
 
 class Game():
   def __init__(self, start = 1):
