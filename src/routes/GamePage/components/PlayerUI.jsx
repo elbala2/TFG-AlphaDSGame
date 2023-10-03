@@ -20,6 +20,7 @@ const PlayerUI = ({
   player,
   normalMarket,
   specialMarket,
+  whereIsPilar,
   mover,
 }) => {
   const { id } = useParams();
@@ -28,6 +29,7 @@ const PlayerUI = ({
   return (
     <DragDropContext
       onDragEnd={({ draggableId, destination: { droppableId } }) => {
+        if (whereIsPilar === playerIndex) return;
         const slabIndex = parseInt(draggableId);
         const target = droppableId.replace('boardDrop_', '').split('-').map(n => parseInt(n));
         const rotation = (slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4]).rotation;
@@ -65,6 +67,7 @@ function stateToProps(state, { playerIndex }) {
   return {
     player: state.game.players[playerIndex],
     normalMarket: state.game.normalMarket,
+    whereIsPilar: state.game.whereIsPilar,
     specialMarket: state.game.specialMarket,
   };
 }

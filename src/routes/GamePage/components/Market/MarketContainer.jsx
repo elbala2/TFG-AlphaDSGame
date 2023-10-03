@@ -16,7 +16,7 @@ const canbebougth = (cards, costs, type, playerColor) => {
     cards.filter((f) => f.type === 'compSci').length >= costs[1] &&
     cards.filter((f) => f.type === 'math').length >= costs[2];
 
-    if (playerColors.includes(type)) return playerColor === type;
+    if (playerColors.includes(type)) return playerColor === type && canbebougth;
     return canbebougth;
 };
 
@@ -30,7 +30,6 @@ const MarketContainer = ({
   rotar,
 }) => {
   const { costs, type, isSpecial } = slab;
-  console.log(isSpecial)
   const canbuy = !hasBougth && canbebougth(cards, costs, type, player.color) && !disabled;
   const canbuyWithSelected = useCallback(() => {
     return !hasBougth && canbebougth(cards.filter(c => c.selected), costs, type, player.color) && !disabled;
