@@ -58,7 +58,10 @@ export default function gameReducer(state = initialState, action) {
       };
 
     case MOVER_ACTION:
+      console.log(action.player)
+      console.log(players, actualPlayer)
       players[actualPlayer] = action.player;
+      console.log(_.cloneDeep(players))
       return {
         ...state,
         players: _.cloneDeep(players),

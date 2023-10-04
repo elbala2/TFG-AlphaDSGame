@@ -29,6 +29,7 @@ class Player:
     costs = slab.costs
 
     if not self.canBuySlab(cards, costs, slab.type):
+      print('here 1')
       return []
 
     i = len(cards) - 1
@@ -38,13 +39,13 @@ class Player:
       if index == -1:
         raise Exception('Card not found')
       cardType = self.cards[index].type
-      if (costs[0] > 0 and cardType[0] == 'domain'):
+      if (costs[0] > 0 and cardType == 'domain'):
         deletedCards += [self.cards.pop(index)]
         costs[0] -= 1
-      if (costs[1] > 0 and cardType[0] == 'compSci'):
+      if (costs[1] > 0 and cardType == 'compSci'):
         deletedCards += [self.cards.pop(index)]
         costs[1] -= 1
-      if (costs[2] > 0 and cardType[0] == 'math'):
+      if (costs[2] > 0 and cardType == 'math'):
         deletedCards += [self.cards.pop(index)]
         costs[2] -= 1
       i -= 1
@@ -195,8 +196,8 @@ class Player:
     self.hasBougth = True
     return True
 
-  def canBuySlab(self, cards, costs, slabColor):
-    if slabColor != self.color: return False
+  def canBuySlab(self, cards, costs, slabColor = ''):
+    if ['BLUE', 'YELLOW', 'RED', 'GREEN'].__contains__(slabColor) and slabColor != self.color: return False
     if cards == None:
       cards = self.cards
     domainList = list(filter(lambda f: f.type == 'domain', cards))
