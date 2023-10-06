@@ -72,7 +72,7 @@
   border: 1px solid var(--darkerMarketBGColor);
   border-radius: 5px;
 
-  &[canbebougth='false'] {
+  &[disabled] {
     box-shadow: rgba(163, 0, 0, 0.4) 0px 0px 0px 2px, rgba(163, 0, 0, 0.65) 0px 4px 6px -1px, rgba(163, 0, 0, 0.08) 0px 1px 0px inset;
   }
 }

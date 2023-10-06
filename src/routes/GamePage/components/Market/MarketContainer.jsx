@@ -5,18 +5,17 @@ import { rotar } from '../../../../stores/gameStore/actions';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Button from '../../../../components/UI/Button';
 import { bindActionCreators } from 'redux';
-import { useCallback } from 'react';
 import Slab from '../../../../components/Slab';
-import { BLUE, GREEN, RED, YELLOW, playerColors } from '../../../../constants';
+import { playerColors } from '../../../../constants';
 
 
-const canbebougth = (cards, costs, type, playerColor) => {
-  const canbebougth =
-    cards.filter((f) => f.type === 'domain').length >= costs[0] &&
-    cards.filter((f) => f.type === 'compSci').length >= costs[1] &&
-    cards.filter((f) => f.type === 'math').length >= costs[2];
+const canbebougth = (player, slab, needSelected = false) => {
+  const canbebougth = !player.hasBougth &&
+    player.cards.filter((f) => f.type === 'domain'  && (!needSelected || f.selected)).length >= slab.costs[0] &&
+    player.cards.filter((f) => f.type === 'compSci' && (!needSelected || f.selected)).length >= slab.costs[1] &&
+    player.cards.filter((f) => f.type === 'math'    && (!needSelected || f.selected)).length >= slab.costs[2];
 
-    if (playerColors.includes(type)) return playerColor === type && canbebougth;
+    if (playerColors.includes(slab.type)) return player.color === slab.type && canbebougth;
     return canbebougth;
 };
 
@@ -24,32 +23,27 @@ const MarketContainer = ({
   index,
   slab,
   disabled,
-  cards,
-  hasBougth,
   player,
   rotar,
 }) => {
-  const { costs, type, isSpecial } = slab;
-  const canbuy = !hasBougth && canbebougth(cards, costs, type, player.color) && !disabled;
-  const canbuyWithSelected = useCallback(() => {
-    return !hasBougth && canbebougth(cards.filter(c => c.selected), costs, type, player.color) && !disabled;
-  }, [hasBougth, cards, costs, disabled, type, player]) 
+  const canbuy = canbebougth(player, slab) && !disabled;
+  const canbuyWithSelected = canbebougth(player, slab, true) && !disabled;
+
   return (
     <div className='marketContainer' key={index}>
       <Droppable droppableId={`marketDrop_${index}`} isDropDisabled>
         {provided => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
-            <Draggable draggableId={String(index)} index={0} isDragDisabled={!canbuyWithSelected()}>
+            <Draggable draggableId={String(index)} index={0} isDragDisabled={!canbuyWithSelected}>
               {provided => (
                 <div
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                   className='slabContainer'
-                  canbebougth={`${canbuy}`}
                   disabled={!canbuy}
                 >
-                  {!isSpecial && (
+                  {!slab.isSpecial && (
                     <>
                       <Button
                         className='bubble left'
@@ -81,7 +75,7 @@ const MarketContainer = ({
         )}
       </Droppable>
       <div className='marketCostsContainer'>
-        {costs.map((cost, type) => {
+        {slab.costs.map((cost, type) => {
           // type 0 => blue, 1 => red, 2 => green
           return (
             <span key={`c${type}`} type={type} className='marketCosts'>
@@ -97,8 +91,6 @@ const MarketContainer = ({
 function stateToProps(state, { playerIndex }) {
   const player = state.game.players[state.game.actualPlayer];
   return {
-    cards: player.cards,
-    hasBougth: player.hasBougth,
     player,
   };
 }

@@ -143,7 +143,7 @@ const specialSlabs = {
     dataAnalysis: 'Preparing your data for analysis',
 
     phoneApp: 'An app for your mobile phone',
-    usersResults: 'To present the results to the users',
+    userResults: 'To present the results to the users',
     finalProduct: 'To develop the final product',
   },
 };

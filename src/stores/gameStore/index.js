@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {
   ACEPTTRADE,
   CARDSELECTED_ACTION,
@@ -24,7 +23,6 @@ export default function gameReducer(state = initialState, action) {
     actualPlayer,
     players,
   } = state;
-
   
   switch (action.type) {
     case RESET: 
@@ -46,25 +44,24 @@ export default function gameReducer(state = initialState, action) {
       players.forEach(player => player.cards.forEach(card => card.selected = false))
       return {
         ...state,
-        players: _.cloneDeep(players),
+        players: [...players],
       };
 
     case CARDSELECTED_ACTION:
       const playerid = typeof action.playerId !== 'undefined' ? action.playerId : actualPlayer;
       players[playerid].cards[action.cardId].selected = !players[playerid].cards[action.cardId].selected;
+      players[playerid] = { ...players[playerid] };
       return {
         ...state,
-        players: _.cloneDeep(players),
+        players: [...players],
       };
 
     case MOVER_ACTION:
-      console.log(action.player)
-      console.log(players, actualPlayer)
-      players[actualPlayer] = action.player;
-      console.log(_.cloneDeep(players))
+      players.splice(actualPlayer, 1, action.player)
+      console.log('🚀 ~ file: index.js:62 ~ gameReducer ~ players:', players);
       return {
         ...state,
-        players: _.cloneDeep(players),
+        players: [...players],
         normalMarket: action.normalMarket,
         specialMarket: action.specialMarket,
       };
@@ -74,7 +71,7 @@ export default function gameReducer(state = initialState, action) {
       normalMarket[id].rotation = (normalMarket[id].rotation + action.dir) % 4;
       return {
         ...state,
-        normalMarket: _.cloneDeep(normalMarket),
+        normalMarket: [...normalMarket],
       };
 
     case ACEPTTRADE:
@@ -118,5 +115,5 @@ export default function gameReducer(state = initialState, action) {
       break;
   }
 
-  return _.cloneDeep(state);
+  return state;
 };

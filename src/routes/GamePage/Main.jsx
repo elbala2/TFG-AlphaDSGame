@@ -26,7 +26,6 @@ const GamePage = ({
   useEffect(() => {
     if (id){
       GetGame(id).then((res) => {
-        console.log(res)
         setState(res);
       });
     } else {
@@ -51,7 +50,6 @@ const GamePage = ({
 };
 
 function stateToProps(state) {
-  console.log(state.game)
   return {
     actualPlayer: state.game.actualPlayer,
   };
