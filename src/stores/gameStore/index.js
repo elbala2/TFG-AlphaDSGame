@@ -23,6 +23,8 @@ export default function gameReducer(state = initialState, action) {
     actualPlayer,
     players,
   } = state;
+
+  console.log('🚀 ~ file: index.js:62 ~ gameReducer ~ action:', action);
   
   switch (action.type) {
     case RESET: 
@@ -58,7 +60,6 @@ export default function gameReducer(state = initialState, action) {
 
     case MOVER_ACTION:
       players.splice(actualPlayer, 1, action.player)
-      console.log('🚀 ~ file: index.js:62 ~ gameReducer ~ players:', players);
       return {
         ...state,
         players: [...players],

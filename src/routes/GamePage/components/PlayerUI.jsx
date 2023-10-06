@@ -64,7 +64,6 @@ const PlayerUI = ({
 };
 
 function stateToProps(state, { playerIndex }) {
-  console.log('🚀 ~ file: PlayerUI.jsx:69 ~ stateToProps ~ state.game.players[playerIndex]:', state.game, state.game.players, state.game.players[playerIndex], playerIndex);
   return {
     player: state.game.players[playerIndex],
     normalMarket: state.game.normalMarket,

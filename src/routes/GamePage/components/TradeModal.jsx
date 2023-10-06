@@ -44,7 +44,7 @@ const TradeModal = ({
         <div className={styles.playersContainer}>
           {players.map((player, index) => {
             return (
-              <div className={styles.playerContainer} id={index} key={player.id} type={index}>
+              <div className={styles.playerContainer} id={index} key={player.id} type={player.color}>
                 <h3 className={styles.title}>{player.name}</h3>
                 <div className={styles.playerCardsContainer}>
                   <Cards actualPlayer={index} titleStyles={{ fontSize: 'smaller' }}/>
