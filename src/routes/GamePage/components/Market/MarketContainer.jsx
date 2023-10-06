@@ -88,7 +88,7 @@ const MarketContainer = ({
   );
 };
 
-function stateToProps(state, { playerIndex }) {
+function stateToProps(state) {
   const player = state.game.players[state.game.actualPlayer];
   return {
     player,

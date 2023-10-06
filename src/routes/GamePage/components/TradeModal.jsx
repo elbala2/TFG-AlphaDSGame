@@ -47,7 +47,7 @@ const TradeModal = ({
               <div className={styles.playerContainer} id={index} key={player.id} type={player.color}>
                 <h3 className={styles.title}>{player.name}</h3>
                 <div className={styles.playerCardsContainer}>
-                  <Cards actualPlayer={index} titleStyles={{ fontSize: 'smaller' }}/>
+                  <Cards playerIndex={player.id} titleStyles={{ fontSize: 'smaller' }}/>
                 </div>
               </div>
             );

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 
 import { aceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../stores/gameStore/actions';
 
@@ -58,7 +58,7 @@ const TradeBotModal = ({
                 <h3 className={styles.title}>{player.name}</h3>
                 <div className={styles.playerCardsContainer}>
                   <Cards
-                    actualPlayer={player.id}
+                    playerIndex={player.id}
                     titleStyles={{ fontSize: 'smaller' }}
                     blocked={actualPlayer === player.id ? cardConfig[0]?.blocked : []}
                     selected={selected}

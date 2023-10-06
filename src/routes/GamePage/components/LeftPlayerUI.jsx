@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -69,7 +68,7 @@ function LeftPlayerUI({
       <hr />
       <Market />
       <div className={styles.cartsContainer}>
-        <Cards actualPlayer={playerIndex} titleStyles={{ fontSize: 'medium' }} descartable/>
+        <Cards playerIndex={playerIndex} titleStyles={{ fontSize: 'medium' }} descartable/>
       </div>
     </div>
   )

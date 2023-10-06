@@ -32,7 +32,7 @@ const HeaderAndFooter = ({
           onChange={e => setLanguage(e.target.value)}
         >
           {ALLOWED_LANGS.map(l => (
-            <option value={l}>{dictionary[l] ?? l}</option>
+            <option key={l} value={l}>{dictionary[l] ?? l}</option>
           ))}
         </select>  
       </Navbar>

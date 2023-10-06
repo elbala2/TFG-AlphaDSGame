@@ -8,7 +8,6 @@ import { fixRisk } from '../../../../utils/ApiConf';
 import Button from '../../../../components/UI/Button';
 import Tooltip from '../../../../components/UI/Tooltip';
 
-import styles from './Styles/RiskContainer.module.scss';
 import { getSlabImg } from '../../../../utils/GetSlabImg';
 import { bindActionCreators } from 'redux';
 
@@ -27,29 +26,30 @@ const RiskContainer = ({
   const { costs, type, needed } = slab;
   const canbuy = cards.filter(f => f.subType === needed && f.selected).length >= costs;
   return (
-    <div className={`${styles.marketContainer}`} key={index}>
-      <div className={`${styles.slabContainer}`} canbebougth={`${canbuy}`}>
-        <h1 className={styles.title}>{dictionary.risks.types[type]}</h1>
+    <div className='marketContainer' key={index}>
+      <div className='riskContainer' disabled={!canbuy}>
+        <h6 className='title'>{dictionary.risks.types[type]}</h6>
           <p
-            className={styles.cost}
+            className='cost'
             ref={costsRef}
           >
             {costs}
           </p>
         <Tooltip parentRef={costsRef}>
-          <p className={styles.descriptionTooltip}>{dictionary.risks.descriptions[type]}</p>
+          <p className=''>{dictionary.risks.descriptions[type]}</p>
         </Tooltip>
         <input
           alt={`img`}
           type='image'
-          className={styles.slab}
+          className='riskImg'
           src={getSlabImg(slab)}
           draggable={false}
         />
       </div>
       <Button
         disabled={!canbuy}
-        className={styles.button}
+        className=''
+        variants='primary outlined'
         onClick={() => fixRisk(id, index - 4, cards.filter(f => f.selected)).then((calbackRes) => fix(calbackRes))}
       >
         {dictionary.fix}

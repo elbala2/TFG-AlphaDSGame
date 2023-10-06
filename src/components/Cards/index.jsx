@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { descartar, setCardSelected } from '../../stores/gameStore/actions';
@@ -10,30 +10,31 @@ import Button from '../UI/Button';
 
 import styles from './Cards.module.scss';
 import { getCardIMG } from '../../utils/GetSlabImg';
+import { bindActionCreators } from 'redux';
 
 
 const Cards = ({
-  actualPlayer = 0,
+  player,
   titleStyles,
   descartable = false,
   blocked = [],
   selected = [],
   dictionary,
+
+  setCardSelected,
+  descartar,
 }) => {
   const { id } = useParams();
 
-  const dispatch = useDispatch();
-  const { cards, hasBougth } = useSelector((state) => ({ cards: state.game.players[actualPlayer].cards, hasBougth: state.game.players[actualPlayer].hasBougth }));
-
   useEffect(() => {
-    cards.forEach((card, index) => {
-      if (selected.includes(card.id) && !card.selected) dispatch(setCardSelected(actualPlayer, index));
+    player.cards.forEach((card, index) => {
+      if (selected.includes(card.id) && !card.selected) setCardSelected(player.id, index);
     })
-  }, [actualPlayer, cards, dispatch, selected])
+  }, [player, selected, setCardSelected])
 
   return (
     <div className={styles.cardscontainer}>
-      {cards.map((card, index) => {
+      {player.cards.map((card, index) => {
         return (
           <div
             key={card.id}
@@ -46,16 +47,16 @@ const Cards = ({
             `}
             select={`${card.selected}`}
             onClick={() => {
-              if (!blocked.includes(card.id) && !selected.includes(card.id)) dispatch(setCardSelected(actualPlayer, index));
+              if (!blocked.includes(card.id) && !selected.includes(card.id)) setCardSelected(player.id, index);
             }}
           >
-            {descartable && !hasBougth && (
+            {descartable && !player.hasBougth && (
               <Button
                 variants='outlined secondary'
                 className={styles.closebutton}
                 onClick={() => {
                   Discard(id, card).then((res) => {
-                    dispatch(descartar(res))
+                    descartar(res)
                   })
                 }}
               >
@@ -88,11 +89,15 @@ function stateToProps(state, { playerIndex }) {
       cards: state.lang.dictionary.cards,
       ...state.lang.dictionary.utils
     },
+
+    player: state.game.players[playerIndex],
   };
 }
 
 function dispatchToProps(dispatch) {
   return {
+    setCardSelected: bindActionCreators(setCardSelected, dispatch),
+    descartar: bindActionCreators(descartar, dispatch),
   };
 }
 

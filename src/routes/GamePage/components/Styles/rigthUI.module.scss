@@ -39,6 +39,11 @@
 
     .missionLogoContainer {
       min-width: var(--slabSize);
+      text-align: center;
+
+      .misionCompletedImg {
+        height: calc(var(--slabSize) * 2);
+      }
     }
   }
 

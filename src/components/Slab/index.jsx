@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
 
 import { isEmpty } from 'lodash'
 
@@ -56,8 +55,8 @@ function Links({
               stroke: lineColor,
               strokeWidth: lineWidth,
             }}
-          />
-        )}
+            />
+            )}
 
         {!!links[2] && (
           <line
@@ -69,8 +68,8 @@ function Links({
               stroke: lineColor,
               strokeWidth: lineWidth,
             }}
-          />
-        )}
+            />
+            )}
 
         {!!links[3] && (
           <line
@@ -108,37 +107,39 @@ function Links({
     
     const rectSize = min([width - ((rectPaddingW + rectBorderSize) * 2), height - ((rectPaddingH + rectBorderSize) * 2)]) 
 
-    rectangle = (
-      <>
-        <rect
-          width={rectSize + (rectBorderSize * 2)}
-          height={rectSize + (rectBorderSize * 2)}
-          rx={lineWidth}
-
-          x={rectPaddingW}
-          y={rectPaddingH}
-        />
-        <rect
-          width={rectSize}
-          height={rectSize}
-          rx={lineWidth}
-          fill={rect.color}
-
-          x={rectPaddingW + rectBorderSize}
-          y={rectPaddingH + rectBorderSize}
-          z={2}
-        />
-        {rect.image && (
-          <image
-            href={rect.image}
+    if (rectSize > 0) {
+      rectangle = (
+        <>
+          <rect
+            width={rectSize + (rectBorderSize * 2)}
+            height={rectSize + (rectBorderSize * 2)}
+            rx={lineWidth}
+            
+            x={rectPaddingW}
+            y={rectPaddingH}
+            />
+          <rect
             width={rectSize}
             height={rectSize}
+            rx={lineWidth}
+            fill={rect.color}
+  
             x={rectPaddingW + rectBorderSize}
             y={rectPaddingH + rectBorderSize}
+            z={2}
           />
-        )}
-      </>
-    );
+          {rect.image && (
+            <image
+              href={rect.image}
+              width={rectSize}
+              height={rectSize}
+              x={rectPaddingW + rectBorderSize}
+              y={rectPaddingH + rectBorderSize}
+            />
+          )}
+        </>
+      );
+    }
   }
 
   return (
@@ -151,6 +152,7 @@ function Links({
 
 export function Cable(props) {
   const [, setValue] = useState(0);
+
   const cableRef = useRef();
   
   const forceUpdate = () => {
@@ -199,7 +201,7 @@ function Slab({
   for(let i = 0; i < slab.rotation; i += 1) {
     cableProps.links.splice(0, 0, cableProps.links.splice(-1, 1)[0]);
   }
-  if (['GOLDEN', 'SILVER'].includes(slab.type)) cableProps.rect = { color: slab.type };
+  if (['GOLD', 'SILVER'].includes(slab.type)) cableProps.rect = { color: slab.type };
   if (playerColors.includes(slab.type.replace('Start_', ''))) {
     cableProps.rect = {
       isBig: true,

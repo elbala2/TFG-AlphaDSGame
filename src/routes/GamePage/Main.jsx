@@ -50,7 +50,6 @@ const GamePage = ({
 };
 
 function stateToProps(state) {
-  console.log('🚀 ~ file: Main.jsx:53 ~ stateToProps ~ state:', state.game);
   return {
     actualPlayer: state.game.actualPlayer,
   };

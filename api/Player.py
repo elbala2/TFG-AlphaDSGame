@@ -26,7 +26,7 @@ class Player:
     self.way = [[0, 1]]
 
   def buy(self, slab, cards):
-    costs = slab.costs
+    costs = slab.costs.copy()
 
     if not self.canBuySlab(cards, costs, slab.type):
       print('here 1')

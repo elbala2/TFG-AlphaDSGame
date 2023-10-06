@@ -156,11 +156,14 @@ class Game():
     newslab = copy.deepcopy(slab)
     newslab.reCalculeId()
     player = self.getActualPlayer()
-    self.cards += player.buy(slab, cards)
+    playerCards = player.buy(slab, cards)
     if player.putSlab(slab, destiny, rotation):
+      self.cards += playerCards
       market.pop(realOrigin)
       if not newslab.isSpecial:
         self.slabs.append(newslab)
+    else:
+      player.cards += playerCards
     
   def tradeCards(self, player1ID, cards1, player2ID, cards2):
     if (len(cards1) != len(cards2)):

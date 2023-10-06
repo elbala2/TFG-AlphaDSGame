@@ -58,5 +58,6 @@
   &:not(:disabled):hover {
     background-color: var(--color);
     color: var(--accent);
+    border-color: var(--accent);
   }
 }

@@ -45,7 +45,7 @@ const SuccessModal = ({
 
 function stateToProps(state) {
   return {
-    players: state.game.players,
+    players: [...state.game.players],
     finished: state.game.finished,
     dictionary: {
       ...state.lang.dictionary.successModal,

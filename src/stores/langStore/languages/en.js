@@ -148,7 +148,7 @@ const specialSlabs = {
   },
 };
 
-export default {
+const en = {
   homePage,
   tradeModal,
   rigthUI,
@@ -162,3 +162,5 @@ export default {
   specialSlabs,
   utils,
 };
+
+export default en;

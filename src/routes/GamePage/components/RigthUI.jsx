@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import { connect } from 'react-redux';
 
@@ -26,9 +25,9 @@ function RigthUI({
                 links={[1, 0, 1, 0]}
               />
             </div>
-            <div className='p-5 d-flex'>
+            <div className='d-flex flex-fill justify-content-around align-items-center px-4'>
               <div className=''>
-                <h3><b>{dictionary.misionTitles[color]}</b></h3>
+                <h3 className='mb-3'><b>{dictionary.misionTitles[color]}</b></h3>
                 {(board[0][2]
                   ? dictionary.misionCompletedDescription[color]
                   : dictionary.misionDescription[color]
@@ -36,10 +35,16 @@ function RigthUI({
                     <h6 key={txt} className={`${styles.misionDescription}`}>{txt}</h6>
                   ))
                 }
-              </div>              
-              <div className={`${styles.missionLogoContainer}`}>
-                WIP
-              </div>
+              </div> 
+              {board[0][2] && (
+                <div className={`${styles.missionLogoContainer}`}>
+                  <img
+                    className={styles.misionCompletedImg}
+                    src={require(`../../../resources/Misiones/${color}.png`)}
+                    alt=''
+                  />
+                </div>
+              )}             
             </div>
           </div>
           <div className='d-flex'>
@@ -79,7 +84,7 @@ function RigthUI({
                     </div>
                   )}
                   {start + 1 === i && (
-                    <div className={`${styles.conexion}`}>
+                    <div key={`borde${i}`} className={`${styles.conexion}`}>
                       <Cable
                         links={[1, 0, 1, 0]}
                         key={`borde${i} `}
