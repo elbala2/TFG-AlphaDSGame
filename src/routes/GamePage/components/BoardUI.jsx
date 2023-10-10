@@ -2,13 +2,13 @@ import React from 'react'
 
 import { connect } from 'react-redux';
 
-import mainStyles from '../Main.module.scss';
 import Board from '../../../components/Board';
 import { Cable } from '../../../components/Slab';
 
+import mainStyles from '../Main.module.scss';
 import styles from './Styles/rigthUI.module.scss';
 
-function RigthUI({
+function BoardUI({
   playerIndex,
   start,
   board,
@@ -105,7 +105,7 @@ function RigthUI({
   )
 }
 
-RigthUI.propTypes = {}
+BoardUI.propTypes = {}
 
 function stateToProps(state, { playerIndex }) {
   return {
@@ -126,4 +126,4 @@ function dispatchToProps(dispatch) {
   };
 }
 
-export default connect(stateToProps, dispatchToProps)(RigthUI);
+export default connect(stateToProps, dispatchToProps)(BoardUI);

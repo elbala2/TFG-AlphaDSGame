@@ -1,21 +1,6 @@
 .mainCard {
   height: var(--maxHeigth);
   display: flex;
-  border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
-  &[type='RED'] {
-    background-color: var(--playerRed);
-  }
-  &[type='GREEN']  {
-    background-color: var(--playerGreen);
-  }
-  &[type='BLUE'] {
-    background-color: var(--playerBlue);
-  }
-  &[type='YELLOW']  {
-    background-color: var(--playerYellow);
-  }
 
   .halfCard {
     width: 50%;
@@ -41,5 +26,20 @@
       height: 310px;
       width: 100%;
     }
+  }
+}
+
+.playerBox {
+  &[type='RED'] {
+    background-color: var(--playerRed);
+  }
+  &[type='GREEN']  {
+    background-color: var(--playerGreen);
+  }
+  &[type='BLUE'] {
+    background-color: var(--playerBlue);
+  }
+  &[type='YELLOW']  {
+    background-color: var(--playerYellow);
   }
 }

@@ -78,3 +78,22 @@
     display: flex;
   }
 }
+
+.tradePlayerBoxContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-grow: 1;
+  
+  .tradePlayerBox {
+    display: flex;
+    flex-direction: column;
+    width: 35rem;
+
+    &.tradePlayerBoxSelected {
+      width: 40rem;
+      height: 20rem;
+    }
+  }
+}

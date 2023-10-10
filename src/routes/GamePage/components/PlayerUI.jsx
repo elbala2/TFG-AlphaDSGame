@@ -12,7 +12,8 @@ import TradeModal from './TradeModal';
 import LeftPlayerUI from './LeftPlayerUI';
 
 import styles from '../Main.module.scss';
-import RigthUI from './RigthUI';
+import BoardUI from './BoardUI';
+import TradeUI from './TradeUI';
 
 const PlayerUI = ({
   playerIndex,
@@ -25,6 +26,7 @@ const PlayerUI = ({
 }) => {
   const { id } = useParams();
   const [tradeModalOpen, setTradeModalOpen] = useState(false);
+  const [tradeOpen, setTradeOpen] = useState(false);
 
   return (
     <DragDropContext
@@ -45,15 +47,22 @@ const PlayerUI = ({
         });
       }}
     >
-      <div className={styles.mainCard} type={player.color}>
+      <div className={`${styles.playerBox} ${styles.mainCard}`} type={player.color}>
         <LeftPlayerUI
           playerIndex={playerIndex}
           handleNextPlayer={handleNextPlayer}
-          handleTrade={() => setTradeModalOpen(prevstate => !prevstate)}
+          handleTrade={() => setTradeOpen(prevstate => !prevstate)}
         />
-        <RigthUI
-          playerIndex={playerIndex}
-        />
+        {tradeOpen ? (
+          <TradeUI
+            playerIndex={playerIndex}
+            onCancel={() => setTradeOpen(false)}
+          />
+        ) : (
+          <BoardUI
+            playerIndex={playerIndex}
+          />
+        )}
       </div>
       <TradeModal
         isOpen={tradeModalOpen}
