@@ -44,9 +44,10 @@ export const setCardSelected = (playerId, id) => {
   }
 }
 
-export const clearSelected = () => {
+export const clearSelected = (playerId) => {
   return {
     type: CLEAR_CARDS_ACTION,
+    playerId,
   }
 }
 

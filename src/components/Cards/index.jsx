@@ -1,25 +1,23 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 
 import { descartar, setCardSelected } from '../../stores/gameStore/actions';
 
 import { Discard } from '../../utils/ApiConf';
 
-import Button from '../UI/Button';
+import Card from './Card';
 
 import styles from './Cards.module.scss';
-import { getCardIMG } from '../../utils/GetSlabImg';
-import { bindActionCreators } from 'redux';
 
 
 const Cards = ({
   player,
-  titleStyles,
   descartable = false,
   blocked = [],
   selected = [],
-  dictionary,
+  disabled,
 
   setCardSelected,
   descartar,
@@ -36,44 +34,19 @@ const Cards = ({
     <div className={styles.cardscontainer}>
       {player.cards.map((card, index) => {
         return (
-          <div
+          <Card
             key={card.id}
-            id={card.id}
-            type={card.type}
-            className={`
-              ${styles.card}
-              ${card.selected ? styles.selected : ''}
-              ${blocked.includes(card.id) ? styles.blocked : ''}
-            `}
-            select={`${card.selected}`}
+            card={card}
+            disabled={blocked.includes(card.id)}
             onClick={() => {
-              if (!blocked.includes(card.id) && !selected.includes(card.id)) setCardSelected(player.id, index);
+              if (!disabled && !blocked.includes(card.id) && !selected.includes(card.id)) setCardSelected(player.id, index);
             }}
-          >
-            {descartable && !player.hasBougth && (
-              <Button
-                variants='outlined secondary'
-                className={styles.closebutton}
-                onClick={() => {
-                  Discard(id, card).then((res) => {
-                    descartar(res)
-                  })
-                }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </Button>
-            )}
-            <p className={styles.title} style={titleStyles}>{dictionary.cards.types[card.type]}</p>
-            <img
-              alt='card'
-              draggable={false}
-              className={styles.imagen}
-              src={getCardIMG(card.subType)}
-            />
-            <p className={styles.title} style={titleStyles}>{dictionary.cards.subTypes[card.subType]}</p>
-          </div>
+            onDiscard={descartable ? () => {
+              Discard(id, card).then((res) => {
+                descartar(res)
+              })
+            } : undefined}
+          />
         );
       })}
     </div>

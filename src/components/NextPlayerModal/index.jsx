@@ -30,7 +30,8 @@ function NexPlayerModal({
       title={dictionary.title}
       onClose={onClose}
     >
-      <div className='m-5'>
+      <div className='d-flex'>
+        <div className='flex-fill' />
         <Button
           className='mx-2'
           variants='secondary outlined'

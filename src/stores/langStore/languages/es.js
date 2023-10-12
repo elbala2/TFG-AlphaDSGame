@@ -8,6 +8,7 @@ const utils = {
     cancel: 'Cancelar',
     accept: 'Aceptar',
     trade: 'Negociar',
+    offer: 'Ofrecer',
     endTurn: 'Terminar el turno',
     nextAction: 'Siguiente acción',
     fix: 'Solucionar',

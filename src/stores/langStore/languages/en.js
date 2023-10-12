@@ -8,6 +8,7 @@ const utils = {
     cancel: 'Cancel',
     accept: 'Accept',
     trade: 'Trade',
+    offer: 'Offer',
     endTurn: 'Finish turn',
     nextAction: 'Next action',
     fix: 'Fix',

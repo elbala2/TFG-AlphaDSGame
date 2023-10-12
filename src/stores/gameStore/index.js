@@ -41,7 +41,11 @@ export default function gameReducer(state = initialState, action) {
       };
 
     case CLEAR_CARDS_ACTION:
-      players.forEach(player => player.cards.forEach(card => card.selected = false))
+      if (action.playerId) {
+        players[action.playerId].cards.forEach(card => card.selected = false)
+      } else {
+        players.forEach(player => player.cards.forEach(card => card.selected = false))
+      }
       return {
         ...state,
         players: [...players],
