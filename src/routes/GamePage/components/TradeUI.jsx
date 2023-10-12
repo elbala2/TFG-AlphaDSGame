@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { connect } from 'react-redux'
 
@@ -11,16 +11,24 @@ import tradeStyles from './Styles/tradeModal.module.scss';
 import styles from './Styles/rigthUI.module.scss';
 import Modal from '../../../components/UI/Modal';
 import { bindActionCreators } from 'redux';
-import { clearSelected } from '../../../stores/gameStore/actions';
+import { aceptTrade, clearSelected } from '../../../stores/gameStore/actions';
 import Card from '../../../components/Cards/Card';
+import { TradeCards } from '../../../utils/ApiConf';
+import { useParams } from 'react-router-dom';
 
 function TradeUI({
   onCancel,
   tradePlayers,
   player,
   dictionary,
+
+  aceptTrade,
   clearSelected,
 }) {
+  const { id } = useParams();
+  useEffect(() => {
+    clearSelected();
+  }, []);
   const [selectedPlayer, setSelectedPlayer] = useState();
   const [onTrade, setOnTrade] = useState(false);
 
@@ -36,15 +44,14 @@ function TradeUI({
           {tradePlayers.map((player) => {
             return (
               <div
-                className={`p-3 rounded-4 shadow
+                className={`p-3 rounded-4 shadow bgColor
                   ${tradeStyles.tradePlayerBox}
-                  ${mainStyles.playerBox}
                   ${selectedPlayer?.id === player.id ? tradeStyles.tradePlayerBoxSelected : ''}
                 `}
                 type={player.color}
                 onClick={(e) => {
                   if (selectedPlayer?.id === player.id) return;
-                  if (selectedPlayer && selectedPlayer.id !== player.id) clearSelected(selectedPlayer.id);
+                  clearSelected();
                   setSelectedPlayer(player);
                   e.stopPropagation();
                 }}
@@ -83,15 +90,15 @@ function TradeUI({
         onClose={() => setOnTrade(false)}
         title={dictionary.trade}
       >
-        <div className='d-flex justify-content-around align-items-center w-100'>
-          <div className='d-flex flex-fill justify-content-center'>
+        <div className={`${tradeStyles.tradeCardsContainer}`}>
+          <div className={`${tradeStyles.tradeCards} bgColor rounded-3`} type={player.color}>
             {player.cards.filter(c => c.selected).map(c => (
               <Card
                 card={{
                   ...c,
                   selected: false,
                 }}
-                className='mx-2'
+                className='mx-2 h-100'
                 titleStyles={{ fontSize: 'small' }}
               />
             ))}
@@ -101,14 +108,14 @@ function TradeUI({
               <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
             </svg>
           </div>
-          <div className='d-flex flex-fill justify-content-center'>
+          <div className={`${tradeStyles.tradeCards} bgColor rounded-3`} type={selectedTradePlayer?.color}>
             {selectedTradePlayer?.cards.filter(c => c.selected).map(c => (
               <Card
                 card={{
                   ...c,
                   selected: false,
                 }}
-                className='mx-2'
+                className='mx-2 h-100'
                 titleStyles={{ fontSize: 'small' }}
               />
             ))}
@@ -119,15 +126,25 @@ function TradeUI({
           <Button
             variants='secondary'
             className='me-3'
-            onClick={() => onCancel()}
+            onClick={() => {
+              setOnTrade(false);
+              onCancel();
+            }}
           >
             {dictionary.cancel}
           </Button>
           <Button
-            onClick={() => setOnTrade(true)}
-            disabled={player.cards.filter(c => c.selected).length !== selectedTradePlayer?.cards.filter(c => c.selected).length}
+            onClick={() => {
+              TradeCards(id, player, selectedTradePlayer)
+                .then((res) => {
+                  aceptTrade(res);
+                  clearSelected();
+                  setOnTrade(false);
+                  onCancel();
+                })
+            }}
           >
-            {dictionary.offer}
+            {dictionary.accept}
           </Button>
         </div>
       </Modal>
@@ -152,6 +169,7 @@ function mapStateToProps(state, { playerIndex }) {
 function mapDispatchToProps(dispatch) {
   return ({
     clearSelected: bindActionCreators(clearSelected, dispatch),
+    aceptTrade: bindActionCreators(aceptTrade, dispatch),
   });
 }
 

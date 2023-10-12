@@ -47,7 +47,7 @@ const PlayerUI = ({
         });
       }}
     >
-      <div className={`${styles.playerBox} ${styles.mainCard}`} type={player.color}>
+      <div className={`bgColor ${styles.mainCard}`} type={player.color}>
         <LeftPlayerUI
           playerIndex={playerIndex}
           handleNextPlayer={handleNextPlayer}

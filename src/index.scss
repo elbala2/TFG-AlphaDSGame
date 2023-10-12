@@ -49,3 +49,18 @@ code {
 .w-max {
   width: max-content;
 }
+
+.bgColor {
+  &[type='RED'] {
+    background-color: var(--playerRed);
+  }
+  &[type='GREEN']  {
+    background-color: var(--playerGreen);
+  }
+  &[type='BLUE'] {
+    background-color: var(--playerBlue);
+  }
+  &[type='YELLOW']  {
+    background-color: var(--playerYellow);
+  }
+}
