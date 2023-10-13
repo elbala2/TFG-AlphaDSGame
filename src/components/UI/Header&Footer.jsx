@@ -23,7 +23,9 @@ const HeaderAndFooter = ({
           <Navbar.Brand href='/'><img src={icon} alt='icono' />{dictionary.appName}</Navbar.Brand>
         </div>
       </Navbar>
-      {children}
+      <main className='overflow-hidden position-relative viewPage'>
+        {children}
+      </main>
       <Navbar fixed='bottom' bg='dark' variant='dark' className={Styles.footer}>
         <div className='flex-fill' />
         <select

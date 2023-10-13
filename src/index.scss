@@ -29,6 +29,15 @@ code {
   --darkerMarketBGColor: #004016;
   --riskBGColor: #d9dad9;
 
+  --cardHeight: 400px;
+  --cardWidth: 225px;
+
+  --mediumCardHeight: 250px;
+  --mediumCardWidth: 140px;
+  
+  --smallCardHeight: 200px;
+  --smallCardWidth: 120px;
+
   --playerRed: #ff9999b3;
   --playerGreen: #99ff99b3;
   --playerBlue: #9999ffb3;
@@ -62,5 +71,49 @@ code {
   }
   &[type='YELLOW']  {
     background-color: var(--playerYellow);
+  }
+}
+
+.viewPage {
+  height: var(--maxHeigth);
+}
+
+.playerIn {
+  position: absolute;
+  
+  animation-name: in;
+  animation-delay: 0s;
+  animation-duration: 0.5s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+}
+
+.playerOut {
+  position: absolute;
+
+  animation-name: out;
+  animation-delay: 0s;
+  animation-duration: 0.5s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+}
+
+@keyframes out {
+  0% {
+    top: 0%;
+  }
+
+  100% {
+    top: -100%;
+  }
+}
+
+@keyframes in {
+  0% {
+    top: 100%;
+  }
+
+  100% {
+    top: 0%;
   }
 }

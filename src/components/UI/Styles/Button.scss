@@ -61,3 +61,7 @@
     border-color: var(--accent);
   }
 }
+
+.transparent:not(:hover) {
+  background-color: transparent;
+}

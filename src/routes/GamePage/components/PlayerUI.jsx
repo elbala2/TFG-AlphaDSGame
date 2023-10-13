@@ -8,7 +8,6 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import { mover } from '../../../stores/gameStore/actions';
 import { MoveSlab } from '../../../utils/ApiConf';
 
-import TradeModal from './TradeModal';
 import LeftPlayerUI from './LeftPlayerUI';
 
 import styles from '../Main.module.scss';
@@ -23,9 +22,9 @@ const PlayerUI = ({
   specialMarket,
   whereIsPilar,
   mover,
+  className,
 }) => {
   const { id } = useParams();
-  const [tradeModalOpen, setTradeModalOpen] = useState(false);
   const [tradeOpen, setTradeOpen] = useState(false);
 
   return (
@@ -47,7 +46,7 @@ const PlayerUI = ({
         });
       }}
     >
-      <div className={`bgColor ${styles.mainCard}`} type={player.color}>
+      <div className={`bgColor viewPage d-lg-flex px-lg-5 ${styles.mainCard} ${className ?? ''}`} type={player.color}>
         <LeftPlayerUI
           playerIndex={playerIndex}
           handleNextPlayer={handleNextPlayer}
@@ -64,10 +63,6 @@ const PlayerUI = ({
           />
         )}
       </div>
-      <TradeModal
-        isOpen={tradeModalOpen}
-        onClose={() => setTradeModalOpen(prevstate => !prevstate)}
-      />
     </DragDropContext>
   );
 };

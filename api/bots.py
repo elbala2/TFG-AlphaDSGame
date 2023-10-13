@@ -201,10 +201,11 @@ class Bot:
 
     res = []
     for index in range(len(game.specialMarket)):
-      if not game.specialMarket[index].isRisk and game.canSlabBeBougth(index + 4):
-        res += self.getCardsConfig(game, game.specialMarket[index])
-        if bot.canBuySlab(None, game.specialMarket[index].costs, game.specialMarket[index].type):
+      specialSlab = game.specialMarket[index]
+      if not specialSlab.isRisk and bot.color == slab.type and game.canSlabBeBougth(index + 4):
+        if bot.canBuySlab(None, specialSlab.costs, specialSlab.type):
           return []
+        res += self.getCardsConfig(game, specialSlab)
 
     best = 999
 

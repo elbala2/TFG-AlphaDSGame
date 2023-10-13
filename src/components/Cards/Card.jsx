@@ -7,7 +7,7 @@ import { getCardIMG } from '../../utils/GetSlabImg';
 
 import Button from '../UI/Button';
 
-import styles from './Cards.module.scss';
+import './styles.scss';
 
 export const Card = ({
   card,
@@ -21,13 +21,13 @@ export const Card = ({
       {...other}
       id={card.id}
       type={card.type}
-      className={`${styles.card} ${other.className}`}
+      className={`tradeCard ${other.className ?? ''}`}
       cardSelected={card.selected && ''}
     >
       {!other.disabled && onDiscard && (
         <Button
-          variants='outlined secondary'
-          className={styles.closebutton}
+          variants='outlined secondary transparent'
+          className='discardButton'
           onClick={onDiscard}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -35,14 +35,14 @@ export const Card = ({
           </svg>
         </Button>
       )}
-      <p className={styles.title} style={titleStyles}>{dictionary.types[card.type]}</p>
+      <p className='title'>{dictionary.types[card.type]}</p>
       <img
         alt='card'
         draggable={false}
-        className={styles.imagen}
+        className='cardimg'
         src={getCardIMG(card.subType)}
       />
-      <p className={styles.title} style={titleStyles}>{dictionary.subTypes[card.subType]}</p>
+      <p className='title'>{dictionary.subTypes[card.subType]}</p>
     </div>  )
 }
 

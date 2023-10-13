@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import './Styles/Button.scss'
 import Loader from './Loader'
+
+import './Styles/Button.scss'
 
 const commonClasses = 'btn-normal'
 
@@ -11,6 +12,7 @@ const classes = {
   secondary: 'secondary',
   danger: 'danger',
   error: 'danger',
+  transparent: 'transparent',
   outlined: 'btn-outlined',
 }
 

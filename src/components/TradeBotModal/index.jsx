@@ -25,6 +25,7 @@ const TradeBotModal = ({
 }) => {
   const { id } = useParams();
   const [step, setStep] = useState(0);
+  const [slabStep, setSlabStep] = useState(0);
 
   async function handleTrade() {
     const tradePlayers = players.filter(f => f.cards.find(f => f.selected) !== undefined);
@@ -33,11 +34,13 @@ const TradeBotModal = ({
         .then((res) => {
           aceptTrade(res);
           clearCardConfig();
+          clearSelected();
         })
     }
   }
   if (!cardConfig?.length) return '';
-  const cardConfigTrade = cardConfig[0]?.needed[step];
+  const cardConfigTrade = cardConfig[0];
+  const playerConf = cardConfigTrade.needed[slabStep];
   return (
     <Modal
       isOpen={cardConfig.length}
@@ -50,27 +53,35 @@ const TradeBotModal = ({
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
           {players
-          .filter(player => player.id === cardConfigTrade?.player || player.id === actualPlayer)
+          .sort((p1, p2) => {
+            if (p1.id === actualPlayer) return -1;
+            if (p2.id === actualPlayer) return 1;
+            return 0;
+          })
           .map((player) => {
-            const selected = cardConfigTrade?.player === player.id ? cardConfigTrade?.cards ?? [] : [];
+            if (player.id !== actualPlayer && playerConf.player !== player.id) return '';
+
             return (
-              <div className={styles.playerContainer} id={player.id} key={player.id} type={player.color}>
-                <h3 className={styles.title}>{player.name}</h3>
-                <div className={styles.playerCardsContainer}>
+              <div className={`bgColor shadow ${styles.playerContainer}`} id={player.id} key={player.id} type={player.color}>
+                <h3 className='p-3'>{player.name}</h3>
+                <div className='px-3 pb-3'>
                   <Cards
                     playerIndex={player.id}
-                    titleStyles={{ fontSize: 'smaller' }}
-                    blocked={actualPlayer === player.id ? cardConfig[0]?.blocked : []}
-                    selected={selected}
+                    className='medium'
+                    disabled={player.id !== actualPlayer}
+                    blocked={cardConfig[0]?.blocked}
+                    selected={playerConf?.cards}
                   />
                 </div>
               </div>
             );
           })}
         </div>
-        <div className={styles.modalbuttoncontainer}>
+        <div className='d-flex'>
+          <div className='flex-fill' />
           <Button
             variants='outlined secondary'
+            className='me-3'
             onClick={() => {
               if (step + 1 < cardConfig.length) setStep(s => s + 1)
               else setCardConfig(cardConfig.slice(1, cardConfig.length))
@@ -98,7 +109,7 @@ function stateToProps(state) {
       ...state.lang.dictionary.utils,
     },
 
-    players: state.game.players,
+    players: [...state.game.players],
     actualPlayer: state.game.actualPlayer,
     cardConfig: state.game.cardConfig,
   };

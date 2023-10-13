@@ -9,6 +9,7 @@ import Cards from '../../../components/Cards';
 import mainStyles from '../Main.module.scss';
 import tradeStyles from './Styles/tradeModal.module.scss';
 import styles from './Styles/rigthUI.module.scss';
+
 import Modal from '../../../components/UI/Modal';
 import { bindActionCreators } from 'redux';
 import { aceptTrade, clearSelected } from '../../../stores/gameStore/actions';
@@ -34,7 +35,7 @@ function TradeUI({
 
   const selectedTradePlayer = tradePlayers.find(p => p.cards.find(c => c.selected))
   return (
-    <div className={`ps-4 ${mainStyles.halfCard}`}>
+    <div className={`${mainStyles.halfCard} col-lg-6`}>
       <div className={`${styles.boardUI}`}>
         <div className='d-flex'>
           <h3 className={`${tradeStyles.title}`}>{dictionary.trade}</h3>
@@ -57,10 +58,12 @@ function TradeUI({
                 }}
               >
                 <h2>{player.name}</h2>
-                <div className='p-3 flex-fill'>
+                <div className='p-3'>
                   <Cards
                     playerIndex={player.id}
-                    titleStyles={{ fontSize: 'smaller' }}
+                    className={`
+                      ${selectedPlayer?.id === player.id ? 'medium' : 'small'}
+                    `}
                     disabled={player.id !== selectedPlayer?.id || (selectedTradePlayer && player.id !== selectedTradePlayer.id)}
                   />
                 </div>
@@ -98,8 +101,7 @@ function TradeUI({
                   ...c,
                   selected: false,
                 }}
-                className='mx-2 h-100'
-                titleStyles={{ fontSize: 'small' }}
+                className='mx-2 medium'
               />
             ))}
           </div>
@@ -115,8 +117,7 @@ function TradeUI({
                   ...c,
                   selected: false,
                 }}
-                className='mx-2 h-100'
-                titleStyles={{ fontSize: 'small' }}
+                className='mx-2 medium'
               />
             ))}
           </div>

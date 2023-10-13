@@ -22,6 +22,11 @@ const GamePage = ({
   const navigate = useNavigate();
 
   const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
+  const [previousPlayerIndex, setPreviousPlayerIndex] = useState(actualPlayer);
+
+  useEffect(() => {
+    setTimeout(() => setPreviousPlayerIndex(actualPlayer), 500)
+  }, [actualPlayer])
 
   useEffect(() => {
     if (id){
@@ -34,11 +39,32 @@ const GamePage = ({
       });
     }
   }, [setState, id, navigate]);
+  
+  
+  const onNextPlayer = previousPlayerIndex !== actualPlayer;
+
+  if (onNextPlayer) {
+    console.log('🚀 ~ file: Main.jsx:51 ~ onNextPlayer:', onNextPlayer);
+    console.log('🚀 ~ file: Main.jsx:52 ~ previousPlayerIndex:', previousPlayerIndex);
+    console.log('🚀 ~ file: Main.jsx:52 ~ actualPlayer:', actualPlayer);
+  }
+  
 
   return (
     <HeaderAndFooter>
-      <PlayerUI playerIndex={actualPlayer} handleNextPlayer={() => setnextPlayerModalOpen(true)} />
-      {/* <PlayerUI playerIndex={actualPlayer+1} handleNextPlayer={() => setnextPlayerModalOpen(true)} /> */}
+      {onNextPlayer && (
+        <PlayerUI
+          playerIndex={previousPlayerIndex}
+          handleNextPlayer={() => setnextPlayerModalOpen(true)}
+          className='playerOut'
+        />
+      )}
+      <PlayerUI
+        playerIndex={actualPlayer}
+        handleNextPlayer={() => setnextPlayerModalOpen(true)}
+        className={onNextPlayer ? 'playerIn' : ''}
+      />
+
       <NexPlayerModal
         isOpen={nextPlayerModalOpen}
         onClose={() => setnextPlayerModalOpen(prevstate => !prevstate)}

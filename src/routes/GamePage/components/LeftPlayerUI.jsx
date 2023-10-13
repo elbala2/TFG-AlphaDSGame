@@ -35,7 +35,7 @@ function LeftPlayerUI({
   };
 
   return (
-    <div className={`pe-4 ${styles.halfCard}`}>
+    <div className={`${styles.halfCard} col-lg-6`}>
       <div className={styles.header}>
         <p className='h2 my-0 me-3'>{players[playerIndex]?.name}</p>
         <div className='flex-fill' />
@@ -67,7 +67,7 @@ function LeftPlayerUI({
       </div>
       <hr />
       <Market />
-      <div className={styles.cartsContainer}>
+      <div className='p-4'>
         <Cards playerIndex={playerIndex} titleStyles={{ fontSize: 'medium' }} descartable/>
       </div>
     </div>

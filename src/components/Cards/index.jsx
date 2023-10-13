@@ -9,7 +9,7 @@ import { Discard } from '../../utils/ApiConf';
 
 import Card from './Card';
 
-import styles from './Cards.module.scss';
+import './styles.scss';
 
 
 const Cards = ({
@@ -18,6 +18,7 @@ const Cards = ({
   blocked = [],
   selected = [],
   disabled,
+  className,
 
   setCardSelected,
   descartar,
@@ -31,15 +32,17 @@ const Cards = ({
   }, [player, selected, setCardSelected])
 
   return (
-    <div className={styles.cardscontainer}>
+    <div className='cardscontainer'>
       {player.cards.map((card, index) => {
         return (
           <Card
             key={card.id}
             card={card}
-            disabled={blocked.includes(card.id)}
+            className={`${className} ${blocked.includes(card.id) ? 'blocked' : ''}`}
+            disabled={disabled}
             onClick={() => {
-              if (!disabled && !blocked.includes(card.id) && !selected.includes(card.id)) setCardSelected(player.id, index);
+              if (disabled || blocked.includes(card.id) || selected.includes(card.id)) return;
+              setCardSelected(player.id, index);
             }}
             onDiscard={descartable ? () => {
               Discard(id, card).then((res) => {

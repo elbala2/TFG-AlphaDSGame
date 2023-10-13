@@ -16,7 +16,7 @@ function BoardUI({
   dictionary,
 }) {
   return (
-    <div className={`ps-4 ${mainStyles.halfCard}`}>
+    <div className={`${mainStyles.halfCard} col-lg-6`}>
       <div className={`${styles.boardUI}`}>
         <div className={`${styles.boardHeader}`}>
           <div className='d-flex flex-fill'>
