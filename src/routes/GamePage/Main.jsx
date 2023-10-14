@@ -41,14 +41,7 @@ const GamePage = ({
   }, [setState, id, navigate]);
   
   
-  const onNextPlayer = previousPlayerIndex !== actualPlayer;
-
-  if (onNextPlayer) {
-    console.log('🚀 ~ file: Main.jsx:51 ~ onNextPlayer:', onNextPlayer);
-    console.log('🚀 ~ file: Main.jsx:52 ~ previousPlayerIndex:', previousPlayerIndex);
-    console.log('🚀 ~ file: Main.jsx:52 ~ actualPlayer:', actualPlayer);
-  }
-  
+  const onNextPlayer = previousPlayerIndex !== actualPlayer; 
 
   return (
     <HeaderAndFooter>

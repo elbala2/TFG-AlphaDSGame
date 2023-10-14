@@ -10,11 +10,12 @@ function Modal({
   isOpen,
   onClose,
   title,
+  fullScreen,
 }) {
   if (!isOpen) return '';
   return ReactDOM.createPortal(
     <div className={styles.back} onClick={onClose}>
-      <div className={styles.content} onClick={(e) => e.stopPropagation()}>
+      <div className={`${styles.content} ${fullScreen ? styles.fullScreen : ''}`} onClick={(e) => e.stopPropagation()}>
         <div className='d-flex p-2'>
           <h4 className='flex-fill ps-2 m-0'>{title}</h4>
           <Button variants='secondary outlined' className='p-0 border-0' onClick={onClose}>
@@ -24,7 +25,7 @@ function Modal({
           </Button>
         </div>
         <hr className='my-0' />
-        <div className='p-3'>
+        <div className={styles.childrenContainer}>
           {children}
         </div>
       </div>

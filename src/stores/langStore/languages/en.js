@@ -18,6 +18,30 @@ const utils = {
     [ES]: 'Spanish',
 };
 
+const instructionsModal = {
+  title: 'Instructions',
+  startGame: 'Start of the game',
+  objective: 'Objective',
+  buySlabs: 'Buy and place components',
+  tradeCards: 'Trade cards',
+  finishGame: 'End of the game',
+
+  homPageExplanation: `.
+    This screen is the welcome screen of the app, to start the game the players must be configured.`,
+  homePlayerInputsExplanation: `.
+    To configure the players use these fields in which you can change the name and type of player (by clicking on the arrows that appear when you hover the cursor over them) between bot and player.`,
+  homPageTransitionExplanation: `
+    Once this is done simply click on the button containing the text '${utils.start}' to start the game`,
+  mainPageStartExplanation: `
+    When the game starts it shows us the interface of the game, there are different elements each one with a very concrete objective that will be developed later. However, the game has already started.`,
+
+  mainMissionExplanation: `
+    The objective of the game is to help Shannon by creating an application that tells him when the wolf is near, for this the team in charge will have to work on different key modules for the correct functioning of the application.`,
+  boardObjetiveExplanation: `
+    These modules will have to be connected to each other by a network in charge of communicating the different components of the application.
+    Therefore, in first instance, the objective is to connect your module with the rest and, later, to increase the complexity of the module by adding more components.`,
+};
+
 const leftUI = {
   dataInWay: 'The data is in your data way, you lose your turn',
 };
@@ -161,6 +185,7 @@ const en = {
   cards,
   risks,
   specialSlabs,
+  instructionsModal,
   utils,
 };
 

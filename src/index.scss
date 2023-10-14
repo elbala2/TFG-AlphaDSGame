@@ -21,6 +21,7 @@ code {
   --secondary: #8d0303;
   --danger: #8d0303;
   --dangerAccentColor: #cb8b02;
+  --warningColor: #cb8b02;
   --accentColor: #fcfcfc;
 
   --slabSize: 10rem;
@@ -43,7 +44,19 @@ code {
   --playerBlue: #9999ffb3;
   --playerYellow: #fff099b3;
 
+  --bgLigthGrey: #d9d9d99c;
+  --bgGrey: #b3b3b39c;
+
   --maxHeigth: 90vh;
+}
+
+.alertCircle {
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
 }
 
 #modal {
@@ -104,13 +117,13 @@ code {
   }
 
   100% {
-    top: -100%;
+    top: 100%;
   }
 }
 
 @keyframes in {
   0% {
-    top: 100%;
+    top: -100%;
   }
 
   100% {

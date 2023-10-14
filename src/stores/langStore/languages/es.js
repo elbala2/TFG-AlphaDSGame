@@ -18,6 +18,31 @@ const utils = {
     [ES]: 'Español',
 };
 
+const instructionsModal = {
+  title: 'Instrucciones',
+  startGame: 'Inicio de la partida',
+  objective: 'Objetivo',
+  buySlabs: 'Comprar y colocar componentes',
+  tradeCards: 'Intercambiar cartas',
+  finishGame: 'Fin de la partida',
+
+  homPageExplanation: `
+    Esta pantalla es la pantalla de bienvenida de la app, para comenzar el juego se deben configurar los jugadores.`,
+  homePlayerInputsExplanation: `
+    Para configurar los jugadores se usan estos campos en los cuales puedes cambiar el nombre y el tipo de jugador (pulsando en las flechas que salen al pasar el cursor por encima) entre bot y jugador.`,
+  homPageTransitionExplanation: `
+    Una vez hecho esto simplemente hay que darle al boton que contiene el texto '${utils.start}' para comenzar el juego.`,
+  mainPageStartExplanation: `
+    Al comenzar el juego nos muestra la interfaz del juego, en ella hay diferentes elementos cada uno con un objetivo muy concreto que pasaremos a desarrollar mas adelante. No obstante, la partida ya ha comenzado.`,
+
+  mainMissionExplanation: `
+    El objetivo del juego es ayudar a Shannon creando una aplicación que le indique cuando el lobo esta cerca, para ello el equipo encargado tendra que trabajar en distintos modulos clave para el correcto funcionamiento de la aplicación.
+  `,
+  boardObjetiveExplanation: `
+    Dichos modulos tendrán que estar conectados entre si mediante una red encargada de comunicar los distintos componentes de la aplicación.
+    Por lo tanto, en primera instancia, el objetivo es conectar tu modulo con el resto y, posteriormente, aumentar la complejidad de dicho modulo añadiendo mas componentes.`
+};
+
 const homePage = {
   wellcomeTo: `Bienvenido a ${utils.appName}`,
 };
@@ -161,6 +186,7 @@ const es = {
   cards,
   risks,
   specialSlabs,
+  instructionsModal,
   utils,
 };
 
