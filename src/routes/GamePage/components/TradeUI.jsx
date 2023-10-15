@@ -42,7 +42,9 @@ function TradeUI({
           <div className='flex-fill' />
         </div>
         <div className={`${tradeStyles.tradePlayerBoxContainer}`}>
-          {tradePlayers.map((player) => {
+          {tradePlayers
+          .filter(p => p.cards.length)
+          .map((player) => {
             return (
               <div
                 className={`p-3 rounded-4 shadow bgColor
@@ -93,6 +95,7 @@ function TradeUI({
         onClose={() => setOnTrade(false)}
         title={dictionary.trade}
       >
+        <p>{dictionary.onTradeAcceptQst}</p>
         <div className={`${tradeStyles.tradeCardsContainer}`}>
           <div className={`${tradeStyles.tradeCards} bgColor rounded-3`} type={player.color}>
             {player.cards.filter(c => c.selected).map(c => (
@@ -162,6 +165,7 @@ function mapStateToProps(state, { playerIndex }) {
     player: state.game.players[playerIndex],
 
     dictionary: {
+      ...state.lang.dictionary.tradeModal,
       ...state.lang.dictionary.utils,
     },
   });

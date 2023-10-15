@@ -22,7 +22,7 @@ const instructionsModal = {
   title: 'Instrucciones',
   startGame: 'Inicio de la partida',
   objective: 'Objetivo',
-  buySlabs: 'Comprar y colocar componentes',
+  buyComponents: 'Comprar y colocar componentes',
   tradeCards: 'Intercambiar cartas',
   finishGame: 'Fin de la partida',
 
@@ -36,11 +36,33 @@ const instructionsModal = {
     Al comenzar el juego nos muestra la interfaz del juego, en ella hay diferentes elementos cada uno con un objetivo muy concreto que pasaremos a desarrollar mas adelante. No obstante, la partida ya ha comenzado.`,
 
   mainMissionExplanation: `
-    El objetivo del juego es ayudar a Shannon creando una aplicación que le indique cuando el lobo esta cerca, para ello el equipo encargado tendra que trabajar en distintos modulos clave para el correcto funcionamiento de la aplicación.
-  `,
+    El objetivo del juego es ayudar a Shannon creando una aplicación que le indique cuando el lobo esta cerca, para ello el equipo encargado tendra que trabajar en distintos modulos clave para el correcto funcionamiento de la aplicación.`,
   boardObjetiveExplanation: `
     Dichos modulos tendrán que estar conectados entre si mediante una red encargada de comunicar los distintos componentes de la aplicación.
-    Por lo tanto, en primera instancia, el objetivo es conectar tu modulo con el resto y, posteriormente, aumentar la complejidad de dicho modulo añadiendo mas componentes.`
+    Por lo tanto, en primera instancia, el objetivo es conectar tu modulo con el resto y, posteriormente, aumentar la complejidad de dicho modulo añadiendo mas componentes.`,
+
+  marketExplanation: `
+    En esta parte de la interfaz es donde se mostrarán los componentes disponibles para comprar junto con sus costes, estos componentes tendrán un sombreado rojo cuando no sea posible comprarlos.
+    Hay distintos tipos de componentes que pueden salir en este mercado:`,
+  normalComponentExplanation: `
+    Estos son los tres tipos de componentes mas normales, cabe destacar que cada componente tiene una puntuación asociada, el dorado vale mas que el plateado y el plateado mas que el básico, hay que tener en cuenta que de estos componentes existen variaciones que no conectan en todas direcciones y que dichos componentes se pueden rotar pulsando en los botones que aparecen al mantener el cursor encima.`,
+  specialComponentExplanation: `
+    A lo largo del juego saldran componetes como estos, estos componentes solo los puede comprar el encargado del modulo correspondiente, hay tres componentes especiales por modulo y como es de suponer tienen mas valor que los componentes anteriores, ademas estos componentes siempre conectan en todas direcciones.`,
+  riskExplanation: `
+    Ademas, es posible que surjan riesgos a lo largo de la partida, los cuales se mostraran de la siguiente manera en el mercado, viendose con una sombra roja en caso de no poder solucionarse.
+    Estos riesgos forzaran a los jugadores a resolverlos si quieren continuar el juego, puesto que, no se podra comprar ningun componete mientras hay un riesgo en el mercado.
+    Para solucionar los riesgos hay que tener las cartas adecuadas para cada tipo, y seleccionarlas, una vez seleccionadas el boton se habilita y te permite solucionar el riesgo.
+    Solucionar los riesgos aporta puntos al jugador que ha conseguido solucionarlo.`,
+  cardsExplanation: `
+    Debajo del mercado cada jugador tiene un maximo de 4 cartas con las que puedes comprar componentes y resolver riesgos, estas cartas se pueden seleccionar pulsando sobre ellas y se pueden descartar haciendo click en el boton que aparece al poner el cursor encima.`,
+  placingExplanation: `
+    Para colocar un componente se tienen que seleccionar las cartas que cumplan los costes especificos del componente a comprar, acto seguido se podrá arrastrar el componente y colocarlo en el tablero donde se colocara en una casilla válida.`,
+  
+  tradeExplanation: `
+    Una característica clave de la interfaz es el hecho de poder intercambiar cartas entre jugadores, para ello, se debe pulsar en el boton en el que pone '${utils.trade}', esto hara que se despliegue la interfaz encargada de los intercambios.
+    Para realizar un intercambio, el jugador debe seleccionar cartas de su baraja. Porteriormente, seleccionar el jugador con el que desee intercambiar, y luego, seleccionar las cartas de este jugador.
+    A continuación, se mostrará un modal al jugador al que le ofreces el intercambio donde podrá aceptar o rechazar el intercambio.`,
+  
 };
 
 const homePage = {
@@ -53,6 +75,7 @@ const leftUI = {
 
 const tradeModal = { // will be deleted
   title: 'Seleccione las cartas que quiere intercambiar',
+  onTradeAcceptQst: '¿Quieres aceptar el siguiente intercambio?',
 };
 
 const rigthUI = {
@@ -77,7 +100,7 @@ const rigthUI = {
 };
 
 const market = {
-  riskMsg: 'El juego se pausara hasta que se resuelva el riesgo.',
+  riskMsg: 'El juego se pausara hasta que se resuelvan todos los riesgos.',
 };
 
 const successModal = {
@@ -125,15 +148,15 @@ const risks = {
     wrongModel: 'Modelo incorrecto',
   },
   descriptions: {
-    cmplxModel: `Usa ${cards.subTypes.simpModel} para arreglar el riesgo`,
-    dngData: `Usa ${cards.subTypes.protData} para arreglar el riesgo`,
-    noData: `Usa ${cards.subTypes.dataBase} para arreglar el riesgo`,
-    oldSW: `Usa ${cards.subTypes.openSource} para arreglar el riesgo`,
-    oldTech: `Usa ${cards.subTypes.newTech} para arreglar el riesgo`,
-    slowModel: `Usa ${cards.subTypes.fastModel} para arreglar el riesgo`,
-    virus: `Usa ${cards.subTypes.antivirus} para arreglar el riesgo`,
-    workingAlone: `Usa ${cards.subTypes.teamSpirit} para arreglar el riesgo`,
-    wrongModel: `Usa ${cards.subTypes.rightModel} para arreglar el riesgo`,
+    cmplxModel: `Usa '${cards.subTypes.simpModel}' para arreglar el riesgo`,
+    dngData: `Usa '${cards.subTypes.protData}' para arreglar el riesgo`,
+    noData: `Usa '${cards.subTypes.dataBase}' para arreglar el riesgo`,
+    oldSW: `Usa '${cards.subTypes.openSource}' para arreglar el riesgo`,
+    oldTech: `Usa '${cards.subTypes.newTech}' para arreglar el riesgo`,
+    slowModel: `Usa '${cards.subTypes.fastModel}' para arreglar el riesgo`,
+    virus: `Usa '${cards.subTypes.antivirus}' para arreglar el riesgo`,
+    workingAlone: `Usa '${cards.subTypes.teamSpirit}' para arreglar el riesgo`,
+    wrongModel: `Usa '${cards.subTypes.rightModel}' para arreglar el riesgo`,
   },
 };
 

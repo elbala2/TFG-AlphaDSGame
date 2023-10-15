@@ -22,7 +22,7 @@ const instructionsModal = {
   title: 'Instructions',
   startGame: 'Start of the game',
   objective: 'Objective',
-  buySlabs: 'Buy and place components',
+  buyComponents: 'Buy and place components',
   tradeCards: 'Trade cards',
   finishGame: 'End of the game',
 
@@ -52,6 +52,7 @@ const homePage = {
 
 const tradeModal = { // will be deleted
   title: 'Please select which cards you want to trade',
+  onTradeAcceptQst: 'Do you want to accept the trade?',
 };
 
 const rigthUI = {
@@ -76,7 +77,7 @@ const rigthUI = {
 };
 
 const market = {
-  riskMsg: 'The game will pause until the risk is resolved.',
+  riskMsg: 'The game will pause until the risks are resolved.',
 };
 
 const successModal = {
@@ -124,15 +125,15 @@ const risks = {
     wrongModel: 'Wrong model',
   },
   descriptions: {
-    cmplxModel: `Use ${cards.subTypes.simpModel} to fix the risk`,
-    dngData: `Use ${cards.subTypes.protData} to fix the risk`,
-    noData: `Use ${cards.subTypes.dataBase} to fix the risk`,
-    oldSW: `Use ${cards.subTypes.openSource} to fix the risk`,
-    oldTech: `Use ${cards.subTypes.newTech} to fix the risk`,
-    slowModel: `Use ${cards.subTypes.fastModel} to fix the risk`,
-    virus: `Use ${cards.subTypes.antivirus} to fix the risk`,
-    workingAlone: `Use ${cards.subTypes.teamSpirit} to fix the risk`,
-    wrongModel: `Use ${cards.subTypes.rightModel} to fix the risk`,
+    cmplxModel: `Use '${cards.subTypes.simpModel}' to fix the risk`,
+    dngData: `Use '${cards.subTypes.protData}' to fix the risk`,
+    noData: `Use '${cards.subTypes.dataBase}' to fix the risk`,
+    oldSW: `Use '${cards.subTypes.openSource}' to fix the risk`,
+    oldTech: `Use '${cards.subTypes.newTech}' to fix the risk`,
+    slowModel: `Use '${cards.subTypes.fastModel}' to fix the risk`,
+    virus: `Use '${cards.subTypes.antivirus}' to fix the risk`,
+    workingAlone: `Use '${cards.subTypes.teamSpirit}' to fix the risk`,
+    wrongModel: `Use '${cards.subTypes.rightModel}' to fix the risk`,
   },
 };
 

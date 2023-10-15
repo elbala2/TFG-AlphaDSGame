@@ -9,10 +9,10 @@ import HomePageIMG from '../../../resources/instructionsImgs/HomePage.png';
 import HomePlayerInPutsIMG from '../../../resources/instructionsImgs/HomePlayerInPuts.png';
 import MainPageIMG from '../../../resources/instructionsImgs/MainPage.png';
 
-export const StartGameSection = ({
+function StartGameSection({
   className,
   dictionary,
-}) => {
+}) {
   return (
     <section className={className}>
       <h4 id={INSTRUCTIONS_TABS.START_GAME} className=''>{dictionary[INSTRUCTIONS_TABS.START_GAME]}</h4>
@@ -20,26 +20,26 @@ export const StartGameSection = ({
       <div className='text-center'>
         <img
           src={HomePageIMG}
-          className='pageImg mb-3'
+          className='scale-100 rounded-3 mb-3'
           alt='homePage'
         />
       </div>
-      <p className='px-4'>{dictionary.homPageExplanation}</p>
-      <div className='d-flex align-items-center px-4'>
+      <p className='px-4 mb-3'>{dictionary.homPageExplanation}</p>
+      <div className='d-flex align-items-center px-4 mb-3'>
         <img
           src={HomePlayerInPutsIMG}
-          className='mediumImg'
+          className='scale-30 rounded-3'
           alt='homePagePlayerInputs'
         />
         <p className='ps-4'>
           {dictionary.homePlayerInputsExplanation}
         </p>
       </div>
-      <p className='px-4'>{dictionary.homPageTransitionExplanation}</p>
+      <p className='px-4 mb-3'>{dictionary.homPageTransitionExplanation}</p>
       <div className='text-center'>
         <img
           src={MainPageIMG}
-          className='pageImg mb-3'
+          className='scale-100 rounded-3 mb-3'
           alt='mainPage'
         />
       </div>

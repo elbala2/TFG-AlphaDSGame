@@ -19,6 +19,10 @@
     height: 100%;
     overflow-y: auto;
     scroll-behavior: smooth;
+
+    p {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -35,28 +39,4 @@
   &:hover {
     padding-left: 20px;
   }
-}
-
-.pageImg {
-  width: 800px;
-  height: 500px;
-  border-radius: 8px;
-}
-
-.mediumSquareImg {
-  width: 370px;
-  height: 370px;
-  border-radius: 8px;
-}
-
-.mediumImg {
-  width: 370px;
-  height: 200px;
-  border-radius: 8px;
-}
-
-.mainMissionImg {
-  width: 370px;
-  height: 370px;
-  border-radius: 8px;
 }

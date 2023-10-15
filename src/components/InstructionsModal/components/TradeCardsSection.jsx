@@ -5,18 +5,27 @@ import { connect } from 'react-redux'
 
 import { INSTRUCTIONS_TABS } from '..'
 
-import BoardObjetive from '../../../resources/instructionsImgs/boardObjetive.png';
-import MainMissionImg from '../../../resources/instructionsImgs/MainMisionImg.png';
+import TradeUIIMG from '../../../resources/instructionsImgs/TradeUI.png'
 
-function ObjetiveSection({
+function TradeCardsSection({
   className,
   dictionary,
 }) {
   return (
     <section className={className}>
-      <h4 id={INSTRUCTIONS_TABS.OBJETIVE} className=''>{dictionary[INSTRUCTIONS_TABS.OBJETIVE]}</h4>
+      <h4 id={INSTRUCTIONS_TABS.TRADE_CARDS} className=''>{dictionary[INSTRUCTIONS_TABS.TRADE_CARDS]}</h4>
       <hr className='mt-0' />
-      <div className='d-flex align-items-center px-4 mb-3'>
+      <div className='text-center'>
+        <img
+          src={TradeUIIMG}
+          className='scale-100 rounded-3 mb-3'
+          alt='TradeUIIMG'
+        />
+      </div>
+      <p>
+        {dictionary.tradeExplanation}
+      </p>
+      {/* <div className='d-flex align-items-center px-4 mb-3'>
         <img
           src={MainMissionImg}
           className='scale-60 rounded-3'
@@ -35,12 +44,12 @@ function ObjetiveSection({
           className='scale-80 rounded-3'
           alt='BoardObjetive'
         />
-      </div>
+      </div> */}
     </section>
   )
 }
 
-ObjetiveSection.propTypes = {
+TradeCardsSection.propTypes = {
 }
 
 function mapStateToProps(state) {
@@ -53,4 +62,4 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ObjetiveSection)
+export default connect(mapStateToProps, mapDispatchToProps)(TradeCardsSection)

@@ -47,7 +47,7 @@ code {
   --bgLigthGrey: #d9d9d99c;
   --bgGrey: #b3b3b39c;
 
-  --maxHeigth: 90vh;
+  --maxHeigth: 89vh;
 }
 
 .alertCircle {
@@ -128,5 +128,14 @@ code {
 
   100% {
     top: 0%;
+  }
+}
+
+.scale {
+  @for $i from 1 through 100 {
+    &-#{$i} {
+      width: auto;
+      height: calc(#{$i}px * 5);
+    }
   }
 }

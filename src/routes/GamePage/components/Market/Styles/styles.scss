@@ -148,17 +148,8 @@
   }
 }
 
-.riskModal {
-  width: 500px;
-  padding: 20px;
+.riskMsg { 
   text-align: center;
-  
-  h1 {
-    color: rgb(177, 0, 0);
-  }
-
-  .text { 
-    font-size: 1rem;
-    margin-top: 2rem;
-  }
+  font-size: 1.2rem;
+  margin: 0 10px;
 }

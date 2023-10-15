@@ -46,9 +46,7 @@ const Market = ({
         onClose={() => setOpen(false)}
         title='Informacion importante'
       >
-        <div className='riskModal'>
-          <p className='text'>{dictionary.riskMsg}</p>
-        </div>
+        <p className='text-danger riskMsg'>{dictionary.riskMsg}</p>
       </Modal>
     </>
   );

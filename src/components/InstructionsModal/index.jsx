@@ -6,14 +6,16 @@ import { connect } from 'react-redux'
 import Modal from '../UI/Modal';
 
 import StartGameSection from './components/StartGameSection';
+import ObjetiveSection from './components/ObjetiveSection';
+import BuyAndPlaceComponents from './components/BuyAndPlaceComponents';
+import TradeCardsSection from './components/TradeCardsSection';
 
 import './styles.scss';
-import ObjetiveSection from './components/ObjetiveSection';
 
 export const INSTRUCTIONS_TABS = {
   START_GAME: 'startGame',
   OBJETIVE: 'objective',
-  BUY_SLABS: 'buySlabs',
+  BUY_COMPONENTS: 'buyComponents',
   TRADE_CARDS: 'tradeCards',
   FINISH_GAME: 'finishGame',
 };
@@ -44,7 +46,9 @@ function InstructionsModal({
         </div>
         <div className='sectionContent'>
             <StartGameSection className='mb-4'/>
-            <ObjetiveSection />
+            <ObjetiveSection className='mb-4'/>
+            <BuyAndPlaceComponents className='mb-4'/>
+            <TradeCardsSection className='mb-4' />
         </div>
       </div>
     </Modal>

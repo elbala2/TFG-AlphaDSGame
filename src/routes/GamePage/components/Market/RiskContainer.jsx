@@ -35,8 +35,8 @@ const RiskContainer = ({
           >
             {costs}
           </p>
-        <Tooltip parentRef={costsRef}>
-          <p className=''>{dictionary.risks.descriptions[type]}</p>
+        <Tooltip parentRef={costsRef} className='px-3 py-2'>
+          {dictionary.risks.descriptions[type]}
         </Tooltip>
         <input
           alt={`img`}
