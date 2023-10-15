@@ -40,6 +40,28 @@ const instructionsModal = {
   boardObjetiveExplanation: `
     These modules will have to be connected to each other by a network in charge of communicating the different components of the application.
     Therefore, in first instance, the objective is to connect your module with the rest and, later, to increase the complexity of the module by adding more components.`,
+
+  marketExplanation: `
+    This part of the interface is where the components available for purchase will be shown together with their costs, these components will have a red shading when it is not possible to buy them.
+    There are different types of components that can be displayed in this marketplace:`,
+  normalComponentExplanation: `.
+    These are the three most normal types of components, it should be noted that each component has an associated score, the gold is worth more than the silver and the silver more than the basic, it should be noted that there are variations of these components that do not connect in all directions and that these components can be rotated by clicking on the buttons that appear when you hold the cursor over them.`,
+  specialComponentExplanation: `
+    Throughout the game there will be components like these, these components can only be bought by the person in charge of the corresponding module, there are three special components per module and as you can imagine they have more value than the previous components, also these components always connect in all directions.`,
+  riskExplanation: `.
+    In addition, it is possible that risks may arise during the game, which will be shown as follows in the market, with a red shadow if they cannot be solved.
+    These risks will force the players to solve them if they want to continue the game, since, it will not be possible to buy any item while there is a risk in the market.
+    To solve the risks you must have the right cards for each type, and select them, once selected the button is enabled and allows you to solve the risk.
+    Solving the risk gives points to the player who has managed to solve it.`,
+  cardsExplanation: `
+    Under the market each player has a maximum of 4 cards with which you can buy components and solve risks, these cards can be selected by clicking on them and can be discarded by clicking on the button that appears when you put the cursor over them.`,
+  placingExplanation: `
+    To place a component you have to select the cards that meet the specific costs of the component to buy, then you can drag the component and place it on the board where it will be placed in a valid square.`,
+  
+  tradeExplanation: `
+    A key feature of the interface is the fact of being able to trade cards between players, to do this, you must click on the button that says '${utils.trade}', this will display the interface in charge of the trades.
+    To perform a trade, the player must select cards from his deck. Next, select the player with whom he wants to trade, and then select the cards of this player.
+    Then, a modal will be displayed to the player to whom the trade is offered where he can accept or refuse the trade.`,
 };
 
 const leftUI = {

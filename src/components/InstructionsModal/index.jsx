@@ -17,7 +17,6 @@ export const INSTRUCTIONS_TABS = {
   OBJETIVE: 'objective',
   BUY_COMPONENTS: 'buyComponents',
   TRADE_CARDS: 'tradeCards',
-  FINISH_GAME: 'finishGame',
 };
 
 function InstructionsModal({
