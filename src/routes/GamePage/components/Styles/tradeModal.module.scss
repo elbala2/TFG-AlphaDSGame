@@ -1,0 +1,52 @@
+.title, .tradeFooter {
+  padding: 20px;
+  height: 80px;
+}
+
+.tradeFooter {
+  display: flex;
+}
+
+.tradePlayerBoxContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  flex-grow: 1;
+  padding: 30px 0px;
+  max-height: calc(100% - 160px);
+  overflow-y: auto;
+  
+  .tradePlayerBox {
+    width: calc(var(--smallCardWidth) * 4 + 6rem);
+
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0px;
+    
+    &.tradePlayerBoxSelected {
+      width: calc(var(--mediumCardWidth) * 4 + 6rem);
+    }
+  }
+}
+
+.tradeCardsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .tradeCards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+
+    height: 100%;
+    padding: 10px;
+  }
+}
+
+.exChangeIcon {
+  height: 50px;
+  width: 50px;
+}

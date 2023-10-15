@@ -1,0 +1,45 @@
+.playerButton {
+  height: 9rem;
+  width: 9rem;
+  border-radius: 10px;
+  
+  &[type='RED'] {
+    background-color: var(--playerRed);
+  }
+  &[type='GREEN']  {
+    background-color: var(--playerGreen);
+  }
+  &[type='BLUE'] {
+    background-color: var(--playerBlue);
+  }
+  &[type='YELLOW']  {
+    background-color: var(--playerYellow);
+  }
+
+  input {
+    margin: 10%;
+    width: 80%;
+    border-radius: 4px;
+    border: solid gray 1px;
+    padding: 5px;
+  }
+
+  &:hover .typeButtonContainer .button{
+    display: flex;
+  }
+  
+  .typeButtonContainer {
+    height: 50px;
+    padding: 0px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .button {
+      display: none;
+      padding: 0px;
+      width: 20px;
+      height: 25px;
+    }
+  }
+}

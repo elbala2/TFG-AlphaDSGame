@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import './Styles/Button.scss'
 import Loader from './Loader'
 
-const commonClasses = 'rounded-1 btn-normal'
+import './Styles/Button.scss'
+
+const commonClasses = 'btn-normal'
 
 const classes = {
   primary: 'primary',
   secondary: 'secondary',
   danger: 'danger',
   error: 'danger',
+  transparent: 'transparent',
   outlined: 'btn-outlined',
 }
 

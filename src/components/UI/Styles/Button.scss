@@ -20,6 +20,7 @@
 
 .btn-normal {
   padding: .25rem 1rem;
+  border-radius: 0.25rem;
 }
 
 .btn-normal:not(.btn-outlined) {
@@ -57,5 +58,10 @@
   &:not(:disabled):hover {
     background-color: var(--color);
     color: var(--accent);
+    border-color: var(--accent);
   }
+}
+
+.transparent:not(:hover) {
+  background-color: transparent;
 }

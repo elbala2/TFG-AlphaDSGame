@@ -2,9 +2,9 @@ from slabs import *
 from utils import *
 
 cardTypes = [
-  'Domain',
-  'Computer Science',
-  'Mathematics',
+  'domain',
+  'compSci',
+  'math',
 ]
 
 class Bot:
@@ -72,7 +72,7 @@ class Bot:
   def computeSlab(self, game, slabIndex, slab):
     bot = game.getActualPlayer()
     res = []
-    if bot.canBuySlab(None, slab.costs):
+    if bot.canBuySlab(None, slab.costs, slab.type):
       cards = bot.getCards(slab)
       for place in bot.getPosiblePlaces(slab):
         res += [{
@@ -130,7 +130,7 @@ class Bot:
           cardIds += [card.id]
       else:
         for i in range(len(cardTypes)):
-          if card.type[0] == cardTypes[i]:
+          if card.type == cardTypes[i]:
             if types[i] > 0:
               cardIds += [card.id]
             else:
@@ -189,7 +189,7 @@ class Bot:
   
   def getBestSlabMark(self, game, slab):
     bot = game.getActualPlayer()
-    if bot.canBuySlab(None, slab.costs):
+    if bot.canBuySlab(None, slab.costs, slab.type):
       return 0
     best = 999
     for place in bot.getPosiblePlaces(slab):
@@ -201,10 +201,11 @@ class Bot:
 
     res = []
     for index in range(len(game.specialMarket)):
-      if not game.specialMarket[index].isRisk and game.canSlabBeBougth(index + 4):
-        res += self.getCardsConfig(game, game.specialMarket[index])
-        if bot.canBuySlab(None, game.specialMarket[index].costs):
+      specialSlab = game.specialMarket[index]
+      if not specialSlab.isRisk and bot.color == specialSlab.type and game.canSlabBeBougth(index + 4):
+        if bot.canBuySlab(None, specialSlab.costs, specialSlab.type):
           return []
+        res += self.getCardsConfig(game, specialSlab)
 
     best = 999
 
@@ -213,7 +214,7 @@ class Bot:
 
     for slab in slabs:
       mark = self.getBestSlabMark(game, slab) == 0
-      if mark <= best and bot.canBuySlab(None, slab.costs):
+      if mark <= best and bot.canBuySlab(None, slab.costs, slab.type):
         return []
       else:
         res += self.getCardsConfig(game, slab)

@@ -1,0 +1,29 @@
+.header {
+  height: 8vh;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+    
+    h1 {
+      color: white;
+      font-size: x-large;
+      margin: 0;
+    }
+  }
+}
+
+.footer {
+  height: 3vh;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}

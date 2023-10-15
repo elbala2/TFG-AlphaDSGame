@@ -1,8 +1,6 @@
 .back {
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.322);
   display: flex;
   align-items: center;
@@ -10,10 +8,23 @@
   z-index: 50;
 }
 .content {
+  display: flex;
+  flex-direction: column;
+
   max-width: 70%;
   min-width: 30%;
   background-color: white;
-  padding: 10px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 10px;
+
+  &.fullScreen {
+    width: calc(100vw - 100px);
+    height: calc(100vh - 100px);
+  }
+
+  .childrenContainer {
+    flex-grow: 1;
+    padding: 1rem;
+    height: calc(100% - 3rem);
+  }
 }

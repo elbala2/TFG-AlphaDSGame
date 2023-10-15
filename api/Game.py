@@ -10,15 +10,15 @@ from bots import Bot
 def genCards():
   res = []
   for i in range(4):
-    res += [Card(1 + (9 * i), False, ['Mathematics', 'Fast Model']),
-            Card(2 + (9 * i), False, ['Mathematics', 'Simple Model']),
-            Card(3 + (9 * i), False, ['Mathematics', 'Right Model']),
-            Card(4 + (9 * i), False, ['Computer Science', 'New Technology']),
-            Card(5 + (9 * i), False, ['Computer Science', 'Antivirus']),
-            Card(6 + (9 * i), False, ['Computer Science', 'Open Source']),
-            Card(7 + (9 * i), False, ['Domain', 'Data Base']),
-            Card(8 + (9 * i), False, ['Domain', 'Protected Data']),
-            Card(9 + (9 * i), False, ['Domain', 'Team Spirit'])]
+    res += [Card(1 + (9 * i), False, 'math', 'fastModel'),
+            Card(2 + (9 * i), False, 'math', 'simpModel'),
+            Card(3 + (9 * i), False, 'math', 'rightModel'),
+            Card(4 + (9 * i), False, 'compSci', 'newTech'),
+            Card(5 + (9 * i), False, 'compSci', 'antivirus'),
+            Card(6 + (9 * i), False, 'compSci', 'openSource'),
+            Card(7 + (9 * i), False, 'domain', 'dataBase'),
+            Card(8 + (9 * i), False, 'domain', 'protData'),
+            Card(9 + (9 * i), False, 'domain', 'teamSpirit')]
   random.shuffle(res);
   return res
 
@@ -44,22 +44,22 @@ def genSlabs():
   + [SpecialGreen(i) for i in range(3)] \
   + [SpecialYellow(i) for i in range(3)]
     
-  risk = [Risk(0, 'Complex Model', 'Use Simple Model to fix the risk', 2),
-    Risk(1, 'Danger Data', 'Use Protected Data to fix the risk', 1),
-    Risk(2, 'No Data', 'Use Data Base to fix the risk', 2),
-    Risk(3, 'Old Software', 'Use Open Source to fix the risk', 1),
-    Risk(4, 'Old Technology', 'Use New Technology to fix the risk', 2),
-    Risk(5, 'Slow Model', 'Use Fast Model to fix the risk', 1),
-    Risk(6, 'Virus', 'Use Antivirus to fix the risk', 2),
-    Risk(7, 'Working Alone', 'Use Team Spirit to fix the risk', 1),
-    Risk(8, 'Wrong Model', 'Use Right Model to fix the risk', 2)]
+  risk = [Risk(0, 'cmplxModel', 2),
+    Risk(1, 'dngData', 1),
+    Risk(2, 'noData', 2),
+    Risk(3, 'oldSW', 1),
+    Risk(4, 'oldTech', 2),
+    Risk(5, 'slowModel', 1),
+    Risk(6, 'virus', 2),
+    Risk(7, 'workingAlone', 1),
+    Risk(8, 'wrongModel', 2)]
   
   random.shuffle(risk)
   res += risk[:4]
   random.shuffle(res)
   return res
 
-colors = ['RED', 'GREEN', 'BLUE', 'YELLOW']
+colors = ['BLUE', 'YELLOW', 'RED', 'GREEN']
 
 class Game():
   def __init__(self, start = 1):
@@ -156,11 +156,14 @@ class Game():
     newslab = copy.deepcopy(slab)
     newslab.reCalculeId()
     player = self.getActualPlayer()
-    self.cards += player.buy(slab, cards)
+    playerCards = player.buy(slab, cards)
     if player.putSlab(slab, destiny, rotation):
+      self.cards += playerCards
       market.pop(realOrigin)
       if not newslab.isSpecial:
         self.slabs.append(newslab)
+    else:
+      player.cards += playerCards
     
   def tradeCards(self, player1ID, cards1, player2ID, cards2):
     if (len(cards1) != len(cards2)):
@@ -181,7 +184,7 @@ class Game():
       index1 = findIndex(player.cards, cards[i])
       if (index1 != -1):
         self.cards.append(player.cards.pop(index1))
-    player.hasBougthhasBougth = True
+    player.hasBougth = True
     self.specialMarket.pop(index)
     self.hasRisk -= 1
 
@@ -227,11 +230,11 @@ class Game():
     costs = slab.costs.copy()
     for player in self.players:
       for card in player.cards:
-        if costs[0] != 0 and card.type[0] == 'Domain':
+        if costs[0] != 0 and card.type == 'domain':
           costs[0] -= 1
-        elif costs[1] != 0 and  card.type[0] == 'Computer Science':
+        elif costs[1] != 0 and  card.type == 'compSci':
           costs[1] -= 1
-        elif costs[2] != 0 and  card.type[0] == 'Mathematics':
+        elif costs[2] != 0 and  card.type == 'math':
           costs[2] -= 1
         if costs[0] == 0 and costs[1] == 0 and costs[2] == 0:
           return True

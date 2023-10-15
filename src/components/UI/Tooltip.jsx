@@ -1,23 +1,52 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import ReactDOM from 'react-dom'
+
 import PropTypes from 'prop-types'
 
-import Styles from './Styles/Tooltip.module.scss'
-
 function Tooltip({
-  title,
   children,
+  parentRef,
+  ...other
 }) {
-  return (
-    <div className={Styles.container}>
-      <div className={Styles.hidden}>{title}</div>
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const elementRef = parentRef?.current;
+    if (!elementRef) return;
+    elementRef.onmouseenter = () => setShow(true); 
+    elementRef.onmouseleave = () => setShow(false); 
+    return () => {
+      if (!elementRef) return;
+      elementRef.onmouseenter = undefined; 
+      elementRef.onmouseleave = undefined; 
+    };
+  }, [parentRef]);
+
+  if (!parentRef?.current || !show) return '';
+
+  const { top, left, width, height } = parentRef.current.getBoundingClientRect();
+
+  return ReactDOM.createPortal(
+    <div
+      {...other}
+      className={`bg-white w-max rounded ${other.className ?? ''}`}
+      style={{
+        top: top + height,
+        left: left + (width / 2),
+        translate: '-50% 0%',
+        position: 'absolute',
+        minWidth: width,
+      }}
+    >
       {children}
-    </div>
+    </div>,
+    document.getElementById('modal'),
   )
 }
 
 Tooltip.propTypes = {
-  title: PropTypes.any.isRequired,
-  children: PropTypes.any.isRequired,
+  children: PropTypes.node.isRequired,
+  parentRef: PropTypes.any.isRequired,
 }
 
 export default Tooltip
