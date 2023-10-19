@@ -98,7 +98,6 @@ class Game():
     
   def setConfig(self, players, start):
     self.start = start
-    self.pos = [start, 0, 0]
     for i in range(4):
       name, type = players[i].values()
       self.players[i] = Player(i, name, 1, self.players[i].cards, colors[i], type)
