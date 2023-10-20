@@ -24,20 +24,20 @@ def genCards():
 
 def genSlabs():
   res = [] \
-  + [NormalSlab([1, 1, 1, 1]) for _ in range(6)] \
-  + [NormalSlab([0, 1, 0, 1]) for _ in range(6)] \
-  + [NormalSlab([0, 1, 1, 0]) for _ in range(12)] \
-  + [NormalSlab([1, 0, 1, 1]) for _ in range(14)] \
+  + [Slab([1, 1, 1, 1]) for _ in range(6)] \
+  + [Slab([0, 1, 0, 1]) for _ in range(6)] \
+  + [Slab([0, 1, 1, 0]) for _ in range(12)] \
+  + [Slab([1, 0, 1, 1]) for _ in range(14)] \
     \
-  + [GoldSlab([0, 1, 0, 1]),
-  GoldSlab([1, 1, 1, 1]),
-  GoldSlab([0, 1, 1, 0]),
-  GoldSlab([1, 0, 1, 1])] \
+  + [Slab([0, 1, 0, 1], 'GOLD'),
+    Slab([1, 1, 1, 1], 'GOLD'),
+    Slab([0, 1, 1, 0], 'GOLD'),
+    Slab([1, 0, 1, 1]), 'GOLD'] \
     \
-  + [SilverSlab([0, 1, 0, 1]),
-  SilverSlab([1, 1, 1, 1]),
-  SilverSlab([0, 1, 1, 0]),
-  SilverSlab([1, 0, 1, 1])] \
+  + [Slab([0, 1, 0, 1], 'SILVER'),
+    Slab([1, 1, 1, 1], 'SILVER'),
+    Slab([0, 1, 1, 0], 'SILVER'),
+    Slab([1, 0, 1, 1], 'SILVER')] \
     \
   + [SpecialRed(i) for i in range(3)] \
   + [SpecialBlue(i) for i in range(3)] \
@@ -179,11 +179,15 @@ class Game():
 
   def fix(self, index, cards):
     player = self.getActualPlayer()
+    risk = self.specialMarket[index]
+    if not risk.isRisk:
+      return
     for i in range(len(cards)):
       index1 = findIndex(player.cards, cards[i])
       if (index1 != -1):
         self.cards.append(player.cards.pop(index1))
     player.hasBougth = True
+    player.points += risk.points
     self.specialMarket.pop(index)
     self.hasRisk -= 1
 

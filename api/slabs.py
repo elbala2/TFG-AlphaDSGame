@@ -8,11 +8,11 @@ cardTypes = [
 ]
 
 def getPointsValue(slab):
-  if isinstance(slab, NormalSlab):
+  if slab.type == 'NORMAL':
     return random.randint(0, 1)
-  if isinstance(slab, SilverSlab):
+  if slab.type == 'SILVER':
     return random.randint(1, 2)
-  if isinstance(slab, GoldSlab):
+  if slab.type == 'GOLD':
     return random.randint(2, 3)
   if isinstance(slab, SpecialSlab):
     return random.randint(3, 4)
@@ -61,7 +61,7 @@ def getRiskFixCardType(type):
 class Risk:
   def __init__(self, id, type, costs):
     self.id = id
-    self.puntos = getPointsValue(self)
+    self.points = getPointsValue(self)
     self.costs = costs
     self.type = type
     self.needed = getRiskFixCardType(type)
@@ -73,7 +73,7 @@ class Risk:
 
 class Slab:
   id = 0
-  def __init__(self, links, type = ''):
+  def __init__(self, links, type = 'NORMAL'):
     Slab.id += 1
     self.id = Slab.id
     self.points = getPointsValue(self)
@@ -95,34 +95,16 @@ class Slab:
       result.insert(0, result.pop(-1))
     return result
 
-  def ApplyRotation(self):
+  def applyRotation(self):
     #arriba,derecha,abajo,izquierda
-    result = self.links.copy()
-    for _ in range(self.rotation):
-      result.insert(0, result.pop(-1))
-    return result
+    self.links = self.getRotatedLinks(self.rotation)
+    return self.link.copy()
 
   def isCardNeeded(self, card):
     for c in range(len(self.costs)):
       if card.type == cardTypes[c] and self.costs[c]:
         return True
     return False
-
-  def toJSON(self):
-    return json.loads(json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o))))
-
-
-class NormalSlab(Slab):
-  def __init__(self, linkers):
-    super().__init__(linkers, 'NORMAL')
-
-class SilverSlab(Slab):
-  def __init__(self, linkers):
-    super().__init__(linkers, 'SILVER')
-
-class GoldSlab(Slab):
-  def __init__(self, linkers):
-    super().__init__(linkers, 'GOLD')
 
 class SpecialSlab(Slab):
   def __init__(self, type, title, descriptionKey, costs):

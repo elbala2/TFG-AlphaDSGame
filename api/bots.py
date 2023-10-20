@@ -47,9 +47,9 @@ class Bot:
         return 20
       if board[x][y] == None:
         return distance
-      if board[x][y].ApplyRotation()[direction]:
+      if board[x][y].applyRotation()[direction]:
         return -distance
-    if pointingInside and board[x][y] != None and board[x][y].ApplyRotation()[direction] == 1:
+    if pointingInside and board[x][y] != None and board[x][y].applyRotation()[direction] == 1:
       return 30
     return 0
 

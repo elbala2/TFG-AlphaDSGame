@@ -3,11 +3,6 @@ import json
 from slabs import *
 from utils import indexOf, apply
 
-
-def toJSON(obj):
-  return json.loads(json.dumps(obj, default=lambda o: getattr(o, '__dict__', str(o))))
-
-
 class Player:
   def __init__(self, id, name, start, cards, color, type=0):
     self.id = id
@@ -68,34 +63,34 @@ class Player:
     lastStep = steps[-1]
     board = self.board
     lastSlab = board[lastStep[y]][lastStep[x]]
-    lastSlabLinks = lastSlab.ApplyRotation() 
+    lastSlabLinks = lastSlab.applyRotation() 
     res = []
 
     if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] - 1 < 3  \
       and lastSlabLinks[0] \
       and board[lastStep[y] - 1][lastStep[x]] is not None \
-      and board[lastStep[y] - 1][lastStep[x]].ApplyRotation()[2] \
+      and board[lastStep[y] - 1][lastStep[x]].applyRotation()[2] \
       and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] - 1), False):
         res.append([lastStep[x], lastStep[y] - 1])
 
     if 0 <= lastStep[x] + 1 < 3 and 0 <= lastStep[y] < 3 \
       and lastSlabLinks[1] \
       and board[lastStep[y]][lastStep[x] + 1] is not None \
-      and board[lastStep[y]][lastStep[x] + 1].ApplyRotation()[3] \
+      and board[lastStep[y]][lastStep[x] + 1].applyRotation()[3] \
       and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + 1 and curr[y] == lastStep[y]), False):
         res.append([lastStep[x] + 1, lastStep[y]])
 
     if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] + 1 < 3 \
       and lastSlabLinks[2] \
       and board[lastStep[y] + 1][lastStep[x]] is not None \
-      and board[lastStep[y] + 1][lastStep[x]].ApplyRotation()[0] \
+      and board[lastStep[y] + 1][lastStep[x]].applyRotation()[0] \
       and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] + 1), False):
         res.append([lastStep[x], lastStep[y] + 1])
 
     if 0 <= lastStep[x] - 1 < 3 and 0 <= lastStep[y] < 3 \
       and lastSlabLinks[3] \
       and board[lastStep[y]][lastStep[x] - 1] is not None \
-      and board[lastStep[y]][lastStep[x] - 1].ApplyRotation()[1] \
+      and board[lastStep[y]][lastStep[x] - 1].applyRotation()[1] \
       and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] - 1 and curr[y] == lastStep[y]), False):
         res.append([lastStep[x] - 1, lastStep[y]])
 
@@ -159,25 +154,25 @@ class Player:
     # comprueba el de arriba del destino
     if (destiny[0] - 1 >= 0):
       slabEnTablero = self.board[destiny[0] - 1][destiny[1]]
-      if slabEnTablero != None and slabLinks[arriba] and slabEnTablero.ApplyRotation()[abajo] and hecho:
+      if slabEnTablero != None and slabLinks[arriba] and slabEnTablero.applyRotation()[abajo] and hecho:
           return 1
 
     # comprueba el de la derecha del destino
     if (destiny[1] + 1 <= 3):
       slabEnTablero = self.board[destiny[0]][destiny[1] + 1]
-      if slabEnTablero and slabLinks[derecha] and slabEnTablero.ApplyRotation()[izquierda] and hecho:
+      if slabEnTablero and slabLinks[derecha] and slabEnTablero.applyRotation()[izquierda] and hecho:
           return 2
 
     # comprueba el de abajo del destino
     if (destiny[0] + 1 <= 3):
       slabEnTablero = self.board[destiny[0] + 1][destiny[1]]
-      if slabEnTablero != None and slabLinks[abajo] and slabEnTablero.ApplyRotation()[arriba] and hecho:
+      if slabEnTablero != None and slabLinks[abajo] and slabEnTablero.applyRotation()[arriba] and hecho:
           return 3
 
     # comprueba el de la izquierda del destino
     if (destiny[1] - 1 >= 0):
       slabEnTablero = self.board[destiny[0]][destiny[1] - 1]
-      if slabEnTablero != None and slabLinks[izquierda] and slabEnTablero.ApplyRotation()[derecha] and hecho:
+      if slabEnTablero != None and slabLinks[izquierda] and slabEnTablero.applyRotation()[derecha] and hecho:
           return 4
     return 0
 
@@ -216,7 +211,7 @@ class Player:
     if 0 <= x < 4 and 0 <= y < 4:
       slab = self.board[y][x]
       if slab != None:
-        link = slab.ApplyRotation()
+        link = slab.applyRotation()
     return link
 
   def getPositionPlaces(self, slab, x, y):
@@ -275,6 +270,3 @@ class Player:
         res += [card]
         costs -= 1
     return res
-
-  def toJSON(self):
-    return json.loads(json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o))))

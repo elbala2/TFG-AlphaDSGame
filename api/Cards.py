@@ -6,6 +6,3 @@ class Card(object):
     self.selected = selected
     self.type = cardType
     self.subType = cardSubtype
-
-  def toJSON(self):
-    return json.loads(json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o))))
