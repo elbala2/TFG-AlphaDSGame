@@ -58,7 +58,7 @@ const TradeBotModal = ({
             if (p2.id === actualPlayer) return 1;
             return 0;
           })
-          .map((player) => {
+          .map((player, index) => {
             if (player.id !== actualPlayer && playerConf.player !== player.id) return '';
 
             return (
@@ -67,7 +67,7 @@ const TradeBotModal = ({
                 <div className='px-3 pb-3'>
                   <Cards
                     playerIndex={player.id}
-                    className='medium'
+                    className={index > 0 ? 'small' : 'medium'}
                     disabled={player.id !== actualPlayer}
                     blocked={cardConfig[0]?.blocked}
                     selected={playerConf?.cards}
@@ -77,7 +77,7 @@ const TradeBotModal = ({
             );
           })}
         </div>
-        <div className='d-flex'>
+        <div className='d-flex pt-3'>
           <div className='flex-fill' />
           <Button
             variants='outlined secondary'

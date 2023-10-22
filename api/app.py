@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pickle
 import json
@@ -8,6 +8,7 @@ import mysql.connector
 from Game import Game
 
 app = Flask(__name__)
+app.debug = True
 CORS(app)
 
 password = 'kiralinda101'

@@ -1,6 +1,8 @@
 from slabs import *
 from utils import *
 
+from config import playerColors
+
 cardTypes = [
   'domain',
   'compSci',
@@ -85,7 +87,6 @@ class Bot:
     return res
 
   def getPosibleSlabsToBuy(self, game):
-    typeOptions = ['RED', 'GREEN', 'BLUE', 'YELLOW']
     res = []
     for slabIndex in range(len(game.normalMarket)):
       slab = game.normalMarket[slabIndex]
@@ -93,7 +94,7 @@ class Bot:
 
     for slabIndex in range(4, len(game.specialMarket) + 4):
       slab = game.specialMarket[slabIndex - 4]
-      if not slab.isRisk and slab.type == typeOptions[game.actualPlayer]:
+      if not slab.isRisk and slab.type == playerColors[game.actualPlayer]:
         res += self.computeSlab(game, slabIndex, slab)
       
     res.sort(key=lambda elem: elem['mark'])
@@ -108,7 +109,7 @@ class Bot:
     if len(slabsToBuy) == 0:
       return False
     targetSlabId, _, pos, rotation, cards = slabsToBuy.pop(0).values()
-    game.moveSlab(targetSlabId, [pos[1], pos[0]], rotation, cards)
+    game.moveSlab(targetSlabId, [pos[0], pos[1]], rotation, cards)
     return True
 
   def computeCards(self, game):
@@ -202,7 +203,7 @@ class Bot:
     res = []
     for index in range(len(game.specialMarket)):
       specialSlab = game.specialMarket[index]
-      if not specialSlab.isRisk and bot.color == specialSlab.type and game.canSlabBeBougth(index + 4):
+      if not specialSlab.isRisk and bot.color == specialSlab.type and game.canSlabBeBought(index + 4):
         if bot.canBuySlab(None, specialSlab.costs, specialSlab.type):
           return []
         res += self.getCardsConfig(game, specialSlab)

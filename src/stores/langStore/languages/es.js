@@ -101,6 +101,7 @@ const rigthUI = {
 
 const market = {
   riskMsg: 'El juego se pausara hasta que se resuelvan todos los riesgos.',
+  importantInfo: 'Información importante',
 };
 
 const successModal = {

@@ -10,7 +10,7 @@ import { playerColors } from '../../../../constants';
 
 
 const canbebougth = (player, slab, needSelected = false) => {
-  const canbebougth = !player.hasBougth &&
+  const canbebougth = !player.hasBought &&
     player.cards.filter((f) => f.type === 'domain'  && (!needSelected || f.selected)).length >= slab.costs[0] &&
     player.cards.filter((f) => f.type === 'compSci' && (!needSelected || f.selected)).length >= slab.costs[1] &&
     player.cards.filter((f) => f.type === 'math'    && (!needSelected || f.selected)).length >= slab.costs[2];

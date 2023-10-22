@@ -1,16 +1,18 @@
+import { useState } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { ALLOWED_LANGS } from '../../stores/langStore/constants';
 import icon from '../../resources/Icon.png';
 
 import { fetchSetLanguage } from '../../stores/langStore/actions';
 
-import Styles from './Styles/Header&Footer.module.scss'
 import Button from './Button';
-import { useState } from 'react';
 import InstructionsModal from '../InstructionsModal';
-import { Link } from 'react-router-dom';
+import DevView from '../DevView';
+
+import Styles from './Styles/Header&Footer.module.scss'
 
 const HeaderAndFooter = ({
   lang,
@@ -19,6 +21,7 @@ const HeaderAndFooter = ({
   children,
 }) => {
   const [instructionsModalOpen, setInstructionsModalOpen] = useState(false);
+  const [devMode, setDevMode] = useState(false);
 
   return (
     <>
@@ -31,6 +34,20 @@ const HeaderAndFooter = ({
         </div>
         <div className='flex-fill' />
         <div className='mx-5'>
+          <Button
+            onClick={() => setDevMode(true)}
+            className='me-3'
+          >
+            dev
+          </Button>
+          {devMode && (
+            <DevView
+              onClose={() => setDevMode(false)}
+            />
+          )}
+
+
+
           <Button
             variants='outlined'
             className='p-1 rounded-circle'
@@ -59,7 +76,7 @@ const HeaderAndFooter = ({
           {ALLOWED_LANGS.map(l => (
             <option key={l} value={l}>{dictionary[l] ?? l}</option>
           ))}
-        </select>  
+        </select>
       </footer>
     </>
   );

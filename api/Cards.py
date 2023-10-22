@@ -1,8 +1,9 @@
 import json
 
 class Card(object):
-  def __init__(self, id, selected, cardType, cardSubtype):
-    self.id = id
-    self.selected = selected
+  id = 0
+  def __init__(self, cardType, cardSubtype):
+    Card.id += 1
+    self.id = Card.id
     self.type = cardType
     self.subType = cardSubtype

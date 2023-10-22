@@ -1,25 +1,12 @@
 import random
-import json
 
-cardTypes = [
-  'domain',
-  'compSci',
-  'math',
-]
-
-def getPointsValue(slab):
-  if slab.type == 'NORMAL':
-    return random.randint(0, 1)
-  if slab.type == 'SILVER':
-    return random.randint(1, 2)
-  if slab.type == 'GOLD':
-    return random.randint(2, 3)
-  if isinstance(slab, SpecialSlab):
-    return random.randint(3, 4)
-  if isinstance(slab, Risk):
-    return 4
-  return 0
-
+from config import (  
+  NORMAL,
+  SILVER,
+  GOLD,
+  cardTypes,
+  risksKeys,
+)
 
 def getCosts():
   total = random.randint(1, 4)
@@ -28,43 +15,16 @@ def getCosts():
   green = total - blue - red
   return [blue, red, green]
 
-def getRiskFixCardType(type):
-  if type == 'cmplxModel':
-    return 'simpModel'
-  
-  if type == 'dngData':
-    return 'protData'
-  
-  if type == 'noData':
-    return 'dataBase'
-  
-  if type == 'oldSW':
-    return 'openSource'
-  
-  if type == 'oldTech':
-    return 'newTech'
-  
-  if type == 'slowModel':
-    return 'fastModel'
-  
-  if type == 'virus':
-    return 'antivirus'
-  
-  if type == 'workingAlone':
-    return 'teamSpirit'
-  
-  if type == 'wrongModel':
-    return 'rightModel'
-  
-  return ''
-
 class Risk:
-  def __init__(self, id, type, costs):
-    self.id = id
-    self.points = getPointsValue(self)
-    self.costs = costs
+  id = 0
+  
+  def __init__(self, type):
+    Risk.id += 1
+    self.id = Risk.id
+    self.points = 4
+    self.costs = random.randint(1, 2)
     self.type = type
-    self.needed = getRiskFixCardType(type)
+    self.needed = risksKeys[type]
     self.isRisk = True
     self.isSpecial = True
 
@@ -73,10 +33,11 @@ class Risk:
 
 class Slab:
   id = 0
-  def __init__(self, links, type = 'NORMAL'):
+  
+  def __init__(self, links, type = NORMAL):
     Slab.id += 1
     self.id = Slab.id
-    self.points = getPointsValue(self)
+    self.points = 0
     self.costs = getCosts()
     self.rotation = 0
     self.links = links
@@ -84,7 +45,14 @@ class Slab:
     self.isRisk = False
     self.isSpecial = False
 
-  def reCalculeId(self):
+    if type == NORMAL:
+      self.points = random.randint(0, 1)
+    if type == SILVER:
+      self.points = random.randint(1, 2)
+    if type == GOLD:
+      self.points = random.randint(2, 3)
+
+  def reEvaluateId(self):
     Slab.id += 1
     self.id = Slab.id
 
@@ -97,12 +65,12 @@ class Slab:
 
   def applyRotation(self):
     #arriba,derecha,abajo,izquierda
-    self.links = self.getRotatedLinks(self.rotation)
-    return self.link.copy()
+    return self.getRotatedLinks(self.rotation)
 
   def isCardNeeded(self, card):
-    for c in range(len(self.costs)):
-      if card.type == cardTypes[c] and self.costs[c]:
+    cardTypesKeys = cardTypes.keys()
+    for i in range(len(cardTypesKeys)):
+      if self.costs[i] and card.type == cardTypesKeys[i]:
         return True
     return False
 
@@ -114,35 +82,6 @@ class SpecialSlab(Slab):
     self.title = title
     self.isRisk = False
     self.isSpecial = True
+    
+    self.points = random.randint(3, 4)
 
-blueTitle = ['bigData', 'goalsDef','dataUnderstanding']
-blueDescription = ['lotOfData', 'questionAnswer', 'dataOkey']
-blueCosts = [[2, 1, 0], [1, 0, 1], [2, 0, 2]]
-
-class SpecialBlue(SpecialSlab):
-  def __init__(self, type):
-    super().__init__('BLUE', blueTitle[type], blueDescription[type], blueCosts[type])
-
-redTitle = ['patternRecognition', 'outlierDetection', 'modelEvaluation']
-redDescription = ['patternsInData', 'strangeData', 'modelGood']
-redCosts = [[0, 1, 2], [1, 0, 1], [2, 1, 1]]
-
-class SpecialRed(SpecialSlab):
-  def __init__(self, type):
-    super().__init__('RED' ,redTitle[type], redDescription[type], redCosts[type])
-
-yellowTitle = ['graficalExploring', 'numericalExploring','dataCleaning']
-yellowDescription = ['graphicalTools', 'mathematicalTools', 'dataAnalysis']
-yellowCosts = [[0, 1, 1], [0, 1, 2], [1, 2, 1]]
-
-class SpecialYellow(SpecialSlab):
-  def __init__(self, type):
-    super().__init__('YELLOW', yellowTitle[type], yellowDescription[type], yellowCosts[type])
-
-greenTitle = ['mobileApplication', 'storytelling', 'deployment']
-greenDescription = ['phoneApp', 'userResults', 'finalProduct']
-greenCosts = [[1, 2, 0], [2, 1, 1], [0, 1, 1]]
-
-class SpecialGreen(SpecialSlab):
-  def __init__(self, type):
-    super().__init__('GREEN', greenTitle[type], greenDescription[type], greenCosts[type])
