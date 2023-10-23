@@ -28,8 +28,10 @@ class Risk:
     self.isRisk = True
     self.isSpecial = True
 
-  def isCardNeeded(self, card):
-    return card.subType == self.needed
+  def costIndexNeeded(self, card):
+    if card.subType == self.needed:
+      return 0
+    return - 1
 
 class Slab:
   id = 0
@@ -57,22 +59,20 @@ class Slab:
     self.id = Slab.id
 
   def getRotatedLinks(self, rotation):
-    #arriba,derecha,abajo,izquierda
     result = self.links.copy()
     for _ in range(rotation):
       result.insert(0, result.pop(-1))
     return result
 
   def applyRotation(self):
-    #arriba,derecha,abajo,izquierda
     return self.getRotatedLinks(self.rotation)
 
-  def isCardNeeded(self, card):
-    cardTypesKeys = cardTypes.keys()
+  def costIndexNeeded(self, card):
+    cardTypesKeys = list(cardTypes.keys())
     for i in range(len(cardTypesKeys)):
       if self.costs[i] and card.type == cardTypesKeys[i]:
-        return True
-    return False
+        return i
+    return - 1
 
 class SpecialSlab(Slab):
   def __init__(self, type, title, descriptionKey, costs):

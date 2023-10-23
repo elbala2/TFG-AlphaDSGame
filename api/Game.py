@@ -24,7 +24,7 @@ from config import (
 def genCards():
   res = []
   for i in range(4):
-    cardTypesKeys = cardTypes.keys()
+    cardTypesKeys = list(cardTypes.keys())
     for cardType in cardTypesKeys:
       for subtype in cardTypes[cardType]:
         res += [Card(cardType, subtype)]
@@ -217,7 +217,7 @@ class Game():
     cost = risk.costs
     for player in self.players:
       for card in player.cards:
-        if cost != 0 and risk.isCardNeeded(card):
+        if cost != 0 and risk.costIndexNeeded(card) != -1:
           cost -= 1
           if cost == 0:
             return True
@@ -230,7 +230,7 @@ class Game():
       slab = self.normalMarket[index]
 
     costs = slab.costs.copy()
-    cardTypesKeys = cardTypes.keys()
+    cardTypesKeys = list(cardTypes.keys())
     for player in self.players:
       for card in player.cards:
         for i in range(len(cardTypesKeys)):

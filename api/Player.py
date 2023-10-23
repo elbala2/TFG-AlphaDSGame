@@ -40,19 +40,21 @@ class Player:
 
     i = len(cards) - 1
     deletedCards = []
+    playerCards = self.cards.copy()
     while (i >= 0 and costs[0] + costs[1] + costs[2] > 0):
       index = indexOf(self.cards, cards[i])
       if index == -1:
         raise Exception('Card not found')
       cardType = self.cards[index].type
 
-      cardTypesKeys = cardTypes.keys()
-      for i in range(len(cardTypesKeys)):
-        if (costs[i] > 0 and cardType == cardTypesKeys[i]):
-          deletedCards += [self.cards.pop(index)]
-          costs[i] -= 1
+      cardTypesKeys = list(cardTypes.keys())
+      for j in range(len(cardTypesKeys)):
+        if (costs[j] > 0 and cardType == cardTypesKeys[j]):
+          deletedCards += [playerCards.pop(index)]
+          costs[j] -= 1
 
       i -= 1
+    self.cards = playerCards
     return deletedCards
   
   def rateSteps(self, steps):
@@ -73,13 +75,13 @@ class Player:
 
     for direction in rotationOrder: 
       vector = positionVectors[direction]
-      compDirection = (direction + (len(rotationOrder) / 2)) % len(rotationOrder)
+      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
       if lastSlabLinks[direction] \
         and 0 <= lastStep[x] + vector[x] < 3 and 0 <= lastStep[y] + vector[y] < 3 \
         and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]] is not None \
         and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]].applyRotation()[compDirection] \
         and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + vector[x] and curr[y] == lastStep[y] + vector[y]), False):
-          res.append([lastStep[x] + vector[y], lastStep[y] + vector[y]])
+          res.append([lastStep[x] + vector[x], lastStep[y] + vector[y]])
 
     return res
     
@@ -111,10 +113,7 @@ class Player:
       return True
 
     nextSteps = self.getBestWay(self.way)
-    print(self.way)
     if len(nextSteps) > len(self.way):
-      print(nextSteps)
-      print(nextSteps[len(self.way)])
       self.way += [nextSteps[len(self.way)]]
     return False
 
@@ -127,7 +126,7 @@ class Player:
 
     for direction in rotationOrder: 
       vector = positionVectors[direction]
-      compDirection = (direction + (len(rotationOrder) / 2)) % len(rotationOrder)
+      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
 
       if (0 <= destiny[x] + vector[x] <= 3 and 0 <= destiny[y] + vector[y] <= 3):
         slabOnBoard = self.board[destiny[y] + vector[y]][destiny[x] + vector[x]]
@@ -161,13 +160,13 @@ class Player:
     return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
 
   def canSolveRisk(self, risk):
-    requiredCardsNeeded = list(filter(lambda f: risk.isCardNeeded(f), self.cards))
+    requiredCardsNeeded = list(filter(lambda f: risk.costIndexNeeded(f) != -1, self.cards))
     return len(requiredCardsNeeded) >= risk.costs
 
   def getCloseLinks(self, coords, movement):
     link = None
     x1 = coords[x] + movement[x]
-    y1 = coords[x] + movement[y]
+    y1 = coords[y] + movement[y]
     if 0 <= x1 <= 3 and 0 <= y1 <= 3:
       slab = self.board[y1][x1]
       if slab != None:
@@ -185,31 +184,31 @@ class Player:
       vector = positionVectors[direction]
       zoneLinks += [self.getCloseLinks(coords, vector)]
 
-    for direction in rotationOrder:
-      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder) 
-      slabLinks = slab.getRotatedLinks(direction)
-      isValid = True
+    for rotation in rotationOrder:
+      slabLinks = slab.getRotatedLinks(rotation)
+      isValid = False
 
       for direction in rotationOrder:
-        if zoneLinks[direction] == None or not slabLinks[compDirection] or not zoneLinks[direction]:
-          isValid = False
+        compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
+        if slabLinks[direction] and zoneLinks[direction] != None and zoneLinks[direction][compDirection]:
+          isValid = True
 
-      if isValid and (coords[x] != 2 or coords[y] != 0 or (slabLinks[compDirection] and coords[x] == 2 and coords[y] == 0)):
-        res += [{ 'pos': coords, 'rotation': direction }]
+      if isValid and (coords[x] != 2 or coords[y] != 0 or (slabLinks[up] and coords[x] == 2 and coords[y] == 0)):
+        res += [{ 'pos': coords, 'rotation': rotation }]
     
     return res
 
-  def getPosiblePlaces(self, slab):
+  def getPossiblePlaces(self, slab):
     res = []
-    for y in range(4):
-      for x in range(4):
-        res += self.getPositionPlaces(slab, [x, y])
+    for y1 in range(4):
+      for x1 in range(4):
+        res += self.getPositionPlaces(slab, [x1, y1])
     return res
 
   def getCards(self, slab):
     res = []
     costs = slab.costs.copy()
-    cardTypesKeys = cardTypes.keys()
+    cardTypesKeys = list(cardTypes.keys())
     for card in self.cards:
       for i in range(len(cardTypesKeys)):
         if (costs[i] >= 1 and card.type == cardTypesKeys[i]):

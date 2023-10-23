@@ -1,13 +1,16 @@
 from slabs import *
-from utils import *
+from utils import (
+  findById,
+)
 
-from config import playerColors
-
-cardTypes = [
-  'domain',
-  'compSci',
-  'math',
-]
+from config import (
+  playerColors,
+  cardTypes,
+  rotationOrder,
+  positionVectors,
+  x,
+  y,
+)
 
 class Bot:
   def getRiskToResolve(self, game):
@@ -15,11 +18,11 @@ class Bot:
     res = []
     if not game.hasRisk:
       return []
-    for riskIndex in range(len(game.specialMarket)):
-      if game.specialMarket[riskIndex].isRisk and bot.canSolveRisk(game.specialMarket[riskIndex]):
+    for specialItems in game.specialMarket:
+      if specialItems.isRisk and bot.canSolveRisk(specialItems):
         res += [{
-          'targetRiskId': game.specialMarket[riskIndex].id,
-          'cards': bot.getRiskCards(game.specialMarket[riskIndex]),
+          'targetRiskId': specialItems.id,
+          'cards': bot.getRiskCards(specialItems),
         }]
     return res
 
@@ -28,88 +31,90 @@ class Bot:
     riskToResolve = self.getRiskToResolve(game)
     if len(riskToResolve) == 0:
       return False
-    hecho = False
+    done = False
     while (len(riskToResolve) != 0):
       targetRiskId, cards = riskToResolve.pop(0).values()
       riskIndex = findById(game.specialMarket, targetRiskId)
       if bot.canSolveRisk(game.specialMarket[riskIndex]):
-        hecho = True
+        done = True
         game.fix(riskIndex, cards)
+    return done
 
-    return hecho
+  def getDistance(self, pos):
+    return abs(2 - pos[x]) + abs(-1 - pos[y])
 
-  def getDistance(self, x, y):
-    return abs(2 - x) + abs(-1 - y)
-
-  def dirMark(self, link, x, y, direction, board):
-    distance = self.getDistance(x, y)
-    pointingInside = (0 <= x <= 3 and 0 <= y <= 3)
+  def dirMark(self, link, pos, compDirection, board):
+    distance = self.getDistance(pos)
+    pointingInside = (0 <= pos[x] <= 3 and 0 <= pos[y] <= 3)
     if link:
       if not pointingInside:
-        return 20
-      if board[x][y] == None:
+        return 30
+      if board[pos[y]][pos[x]] == None:
         return distance
-      if board[x][y].applyRotation()[direction]:
-        return -distance
-    if pointingInside and board[x][y] != None and board[x][y].applyRotation()[direction] == 1:
+      if board[pos[y]][pos[x]].applyRotation()[compDirection]:
+        return 0
+    if pointingInside and board[pos[y]][pos[x]] != None and board[pos[y]][pos[x]].applyRotation()[compDirection] == 1:
       return 30
     return 0
 
   def getMark(self, slab, place, board):
     mark = 0
-    x = place['pos'][0]
-    y = place['pos'][1]
+    pos = place['pos']
     mark -= slab.points * 4
     links = slab.getRotatedLinks(place['rotation'])
-    mark -= self.getDistance(x, y)
+    mark -= self.getDistance(pos) * 4
     mark += sum(slab.costs)
-    if x == 2 and y == 0:
+    if pos[x] == 2 and pos[y] == 0:
       mark -= 40
-    mark += self.dirMark(links[0] == 1, x, y - 1, 2, board)
-    mark += self.dirMark(links[1] == 1, x + 1, y, 3, board)
-    mark += self.dirMark(links[2] == 1, x, y + 1, 0, board)
-    mark += self.dirMark(links[3] == 1, x - 1, y, 1, board)
+
+    for direction in rotationOrder:
+      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
+      vector = positionVectors[direction]
+      mark += self.dirMark(links[direction] == 1, [pos[x] + vector[x], pos[y] + vector[y]], compDirection, board)
     return mark
 
   def computeSlab(self, game, slabIndex, slab):
     bot = game.getActualPlayer()
-    res = []
+    best = None
     if bot.canBuySlab(None, slab.costs, slab.type):
       cards = bot.getCards(slab)
-      for place in bot.getPosiblePlaces(slab):
-        res += [{
-          'targetSlabId': slabIndex,
-          'mark': self.getMark(slab, place, bot.board),
-          'pos': place['pos'],
-          'rotation': place['rotation'],
-          'cards': cards,
-        }]
-    return res
+      for place in bot.getPossiblePlaces(slab):
+        mark = self.getMark(slab, place, bot.board)
+        if best == None or mark < best['mark']:
+          best = {
+            'targetSlabId': slabIndex,
+            'mark': mark,
+            'pos': place['pos'],
+            'rotation': place['rotation'],
+            'cards': cards,
+          }
+    return best
 
-  def getPosibleSlabsToBuy(self, game):
-    res = []
+  def getPossibleSlabsToBuy(self, game):
+    best = None
     for slabIndex in range(len(game.normalMarket)):
       slab = game.normalMarket[slabIndex]
-      res += self.computeSlab(game, slabIndex,  slab)
+      opt = self.computeSlab(game, slabIndex,  slab)
+      if opt != None and (best == None or opt['mark'] < best['mark']):
+        best = opt
 
     for slabIndex in range(4, len(game.specialMarket) + 4):
       slab = game.specialMarket[slabIndex - 4]
       if not slab.isRisk and slab.type == playerColors[game.actualPlayer]:
-        res += self.computeSlab(game, slabIndex, slab)
+        opt = self.computeSlab(game, slabIndex, slab)
+        if opt != None and (best == None or opt['mark'] < best['mark']):
+          best = opt
       
-    res.sort(key=lambda elem: elem['mark'])
-    # for x in res:
-      # print(x)
-    return res
+    return best
 
   def buyPlaceSlab(self, game):
     if game.hasRisk:
       return False
-    slabsToBuy = self.getPosibleSlabsToBuy(game)
-    if len(slabsToBuy) == 0:
+    slabsToBuy = self.getPossibleSlabsToBuy(game)
+    if slabsToBuy == None:
       return False
-    targetSlabId, _, pos, rotation, cards = slabsToBuy.pop(0).values()
-    game.moveSlab(targetSlabId, [pos[0], pos[1]], rotation, cards)
+    targetSlabId, _, pos, rotation, cards = slabsToBuy.values()
+    game.moveSlab(targetSlabId, [pos[x], pos[y]], rotation, cards)
     return True
 
   def computeCards(self, game):
@@ -124,14 +129,15 @@ class Bot:
       if game.hasRisk:
         needed = False
         for risk in risks:
-          if risk.isCardNeeded(card):
+          if risk.costIndexNeeded(card) != -1:
             needed = True
             break
         if not needed:
           cardIds += [card.id]
       else:
-        for i in range(len(cardTypes)):
-          if card.type == cardTypes[i]:
+        cardTypeKeys = list(cardTypes.keys())
+        for i in range(len(cardTypeKeys)):
+          if card.type == cardTypeKeys[i]:
             if types[i] > 0:
               cardIds += [card.id]
             else:
@@ -151,21 +157,25 @@ class Bot:
 
     for cardIndex in range(len(bot.cards)):
       card = bot.cards[cardIndex]
-      if slab.isCardNeeded(card):
+      costNeed = slab.costIndexNeeded(card)
+      if costNeed != -1 and costs[costNeed]:
         blocked += [card.id]
-    if len(blocked) == sum(costs) or len(blocked) == len(bot.cards):
+        costs[costNeed] -= 1
+    if sum(costs) == 0 or len(blocked) == len(bot.cards):
       return []
     else:
       needed = []
       for playerIndex in range(len(game.players)):
         if playerIndex != game.actualPlayer:
+          costsCopy = costs.copy() 
           cards = []
           for cardIndex in range(len(game.players[playerIndex].cards)):
             card = game.players[playerIndex].cards[cardIndex]
-            if len(blocked) + len(cards) < sum(costs):
-              if slab.isCardNeeded(card):
-                cards += [card.id]
-            else:
+            costNeed = slab.costIndexNeeded(card)
+            if costNeed != -1 and costsCopy[costNeed]:
+              cards += [card.id]
+              costsCopy[costNeed] -= 1
+            if sum(costsCopy) == 0:
               if len(cards) > 0:
                 needed += [{
                   'cards': cards,
@@ -180,12 +190,12 @@ class Bot:
         'needed': needed,
       }]
 
-  def getPreferedRiskCards(self, game):
+  def getPreferredRiskCards(self, game):
     res = []
     for index in range(len(game.specialMarket)):
       if game.specialMarket[index].isRisk and game.canRiskBeSolved(index):
         res += self.getCardsConfig(game, game.specialMarket[index])
-    res.sort(key=lambda x: len(x['needed']))
+    res.sort(key=lambda z: len(z['needed']))
     return res
   
   def getBestSlabMark(self, game, slab):
@@ -193,11 +203,11 @@ class Bot:
     if bot.canBuySlab(None, slab.costs, slab.type):
       return 0
     best = 999
-    for place in bot.getPosiblePlaces(slab):
+    for place in bot.getPossiblePlaces(slab):
       best = min(self.getMark(slab, place, bot.board), best)
     return best
 
-  def getPreferedSlabCards(self, game):
+  def getPreferredSlabCards(self, game):
     bot = game.getActualPlayer()
 
     res = []
@@ -220,18 +230,18 @@ class Bot:
       else:
         res += self.getCardsConfig(game, slab)
 
-    res.sort(key=lambda x: self.getBestSlabMark(game, x['slab']))
+    res.sort(key=lambda z: self.getBestSlabMark(game, z['slab']))
     return res
 
 
-  def getPreferedCards(self, game):
+  def getPreferredCards(self, game):
     if game.hasRisk:
-      return self.getPreferedRiskCards(game)
+      return self.getPreferredRiskCards(game)
     else:
-      return self.getPreferedSlabCards(game)
+      return self.getPreferredSlabCards(game)
 
   def trade(self, game):
-    cardConfigurations = self.getPreferedCards(game)
+    cardConfigurations = self.getPreferredCards(game)
     if len(cardConfigurations) == 0:
       return False
     return {
