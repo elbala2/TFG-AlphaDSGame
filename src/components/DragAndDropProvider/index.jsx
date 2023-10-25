@@ -26,9 +26,6 @@ function DragDropProvider({
         const slabIndex = parseInt(draggableId);
         const target = droppableId.replace('boardDrop_', '').split('-').map(n => parseInt(n));
         const slab = slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4];
-        console.log('🚀 ~ file: index.jsx:25 ~ droppableId:', droppableId);
-        console.log('🚀 ~ file: index.jsx:27 ~ slabIndex:', slab, slab);
-        console.log('🚀 ~ file: index.jsx:32 ~ player:', player);
         const cards = player.cards.filter(c => c.selected);
         MoveSlab(
           id,
