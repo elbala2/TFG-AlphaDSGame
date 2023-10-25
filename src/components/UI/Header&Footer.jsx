@@ -10,7 +10,6 @@ import { fetchSetLanguage } from '../../stores/langStore/actions';
 
 import Button from './Button';
 import InstructionsModal from '../InstructionsModal';
-import DevView from '../DevView';
 
 import Styles from './Styles/Header&Footer.module.scss'
 
@@ -34,20 +33,6 @@ const HeaderAndFooter = ({
         </div>
         <div className='flex-fill' />
         <div className='mx-5'>
-          <Button
-            onClick={() => setDevMode(true)}
-            className='me-3'
-          >
-            dev
-          </Button>
-          {devMode && (
-            <DevView
-              onClose={() => setDevMode(false)}
-            />
-          )}
-
-
-
           <Button
             variants='outlined'
             className='p-1 rounded-circle'
