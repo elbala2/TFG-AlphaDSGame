@@ -1,14 +1,14 @@
 import {
-  ACEPTTRADE,
-  CARDSELECTED_ACTION,
+  ACCEPT_TRADE,
+  CARD_SELECTED_ACTION,
   FIX,
   MOVER_ACTION,
-  NEXTPLAYER,
-  ROTAR_ACTION,
-  SETTARGET_ACTION,
-  DESCARTAR,
+  NEXT_PLAYER,
+  ROTATE_ACTION,
+  SET_TARGET_ACtion,
+  DISCARD,
   RESET,
-  SETSTATE,
+  SET_STATE,
   SET_CARD_CONFIG,
   CLEAR_CARD_CONFIG,
   CLEAR_CARDS_ACTION,
@@ -28,13 +28,13 @@ export default function gameReducer(state = initialState, action) {
     case RESET: 
     return initialState;
     
-    case SETSTATE:
+    case SET_STATE:
       return {
         ...state,
         ...action.callbackRes,
       };
 
-    case SETTARGET_ACTION:
+    case SET_TARGET_ACtion:
       return {
         ...state,
         target: action.target,
@@ -51,7 +51,7 @@ export default function gameReducer(state = initialState, action) {
         players: [...players],
       };
 
-    case CARDSELECTED_ACTION:
+    case CARD_SELECTED_ACTION:
       const playerid = typeof action.playerId !== 'undefined' ? action.playerId : actualPlayer;
       players[playerid].cards[action.cardId].selected = !players[playerid].cards[action.cardId].selected;
       players[playerid] = { ...players[playerid] };
@@ -69,7 +69,7 @@ export default function gameReducer(state = initialState, action) {
         specialMarket: action.specialMarket,
       };
 
-    case ROTAR_ACTION:
+    case ROTATE_ACTION:
       const id = action.id < 4 ? action.id : action.id - 4;
       normalMarket[id].rotation = (normalMarket[id].rotation + action.dir) % 4;
       return {
@@ -77,18 +77,18 @@ export default function gameReducer(state = initialState, action) {
         normalMarket: [...normalMarket],
       };
 
-    case ACEPTTRADE:
+    case ACCEPT_TRADE:
       return {
         ...state,
         players: action.players,
       };
 
-    case NEXTPLAYER:
+    case NEXT_PLAYER:
       return {
-        ...action.newstate,
+        ...action.newState,
       };
 
-    case DESCARTAR:
+    case DISCARD:
       players[actualPlayer].cards = action.cards;
       return {
         ...state,

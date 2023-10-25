@@ -18,7 +18,7 @@ function LeftPlayerUI({
   playerIndex,
   handleNextPlayer,
   handleTrade,
-  players,
+  player,
   whereIsPilar,
   setCardConfig,
   setState,
@@ -38,11 +38,13 @@ function LeftPlayerUI({
     })
   };
 
+  const isBot = player?.type === 1;
+
   return (
     <div className={`${styles.halfCard} col-lg-6`}>
       <div className={styles.header}>
-        <p className='h2 my-0 me-3'>{players[playerIndex]?.name}</p>
-        {(players[playerIndex]?.type === 1 || whereIsPilar === playerIndex) ? (
+        <p className='h2 my-0 me-3'>{player?.name}</p>
+        {(isBot || whereIsPilar === playerIndex) ? (
           <div className='d-flex align-items-center'>
             {whereIsPilar === playerIndex && (
               <>
@@ -79,13 +81,12 @@ function LeftPlayerUI({
           </div>
         )}
       </div>
-      <hr />
       <Market />
       <div className='p-4'>
         <Cards
           playerIndex={playerIndex}
           descartable
-          disabled={playerIndex === whereIsPilar}
+          disabled={isBot || playerIndex === whereIsPilar}
         />
       </div>
     </div>
@@ -96,7 +97,7 @@ LeftPlayerUI.propTypes = {}
 
 function stateToProps(state, { playerIndex }) {
   return {
-    players: state.game.players,
+    player: state.game.players[playerIndex],
     whereIsPilar: state.game.whereIsPilar,
     dictionary: {
       ...state.lang.dictionary.leftUI,

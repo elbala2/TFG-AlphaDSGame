@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 
-import { descartar, setCardSelected } from '../../stores/gameStore/actions';
+import { discard, setCardSelected } from '../../stores/gameStore/actions';
 
 import { Discard } from '../../utils/ApiConf';
 
@@ -21,7 +21,7 @@ const Cards = ({
   className,
 
   setCardSelected,
-  descartar,
+  discard,
 }) => {
   const { id } = useParams();
 
@@ -46,7 +46,7 @@ const Cards = ({
             }}
             onDiscard={descartable ? () => {
               Discard(id, card).then((res) => {
-                descartar(res)
+                discard(res)
               })
             } : undefined}
           />
@@ -73,7 +73,7 @@ function stateToProps(state, { playerIndex }) {
 function dispatchToProps(dispatch) {
   return {
     setCardSelected: bindActionCreators(setCardSelected, dispatch),
-    descartar: bindActionCreators(descartar, dispatch),
+    discard: bindActionCreators(discard, dispatch),
   };
 }
 

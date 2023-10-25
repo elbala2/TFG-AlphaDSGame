@@ -22,7 +22,7 @@ export const Card = ({
       id={card.id}
       type={card.type}
       className={`tradeCard ${other.className ?? ''}`}
-      cardSelected={card.selected && ''}
+      cardselected={card.selected && ''}
     >
       {!other.disabled && onDiscard && (
         <Button

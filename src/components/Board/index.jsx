@@ -26,7 +26,7 @@ function Board({
   function renderSlab(slab, x, y) {
     if (!slab) {
       return (
-        <Droppable droppableId={`boardDrop_${y}-${x}`}>
+        <Droppable droppableId={`boardDrop_${x}-${y}`}>
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}

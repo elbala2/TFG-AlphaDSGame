@@ -54,7 +54,7 @@ const instructionsModal = {
     Para solucionar los riesgos hay que tener las cartas adecuadas para cada tipo, y seleccionarlas, una vez seleccionadas el boton se habilita y te permite solucionar el riesgo.
     Solucionar los riesgos aporta puntos al jugador que ha conseguido solucionarlo.`,
   cardsExplanation: `
-    Debajo del mercado cada jugador tiene un maximo de 4 cartas con las que puedes comprar componentes y resolver riesgos, estas cartas se pueden seleccionar pulsando sobre ellas y se pueden descartar haciendo click en el boton que aparece al poner el cursor encima.`,
+    Debajo del mercado cada jugador tiene un maximo de 4 cartas con las que puedes comprar componentes y resolver riesgos, estas cartas se pueden seleccionar pulsando sobre ellas y se pueden discard haciendo click en el boton que aparece al poner el cursor encima.`,
   placingExplanation: `
     Para colocar un componente se tienen que seleccionar las cartas que cumplan los costes especificos del componente a comprar, acto seguido se podrá arrastrar el componente y colocarlo en el tablero donde se colocara en una casilla válida.`,
   
@@ -101,6 +101,7 @@ const rigthUI = {
 
 const market = {
   riskMsg: 'El juego se pausara hasta que se resuelvan todos los riesgos.',
+  importantInfo: 'Información importante',
 };
 
 const successModal = {
