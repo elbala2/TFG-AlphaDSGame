@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { aceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../stores/gameStore/actions';
+import { acceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../stores/gameStore/actions';
 
 
 import styles from './tradeModal.module.scss';
@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 
 
 const TradeBotModal = ({
-  aceptTrade,
+  acceptTrade,
   setCardConfig,
   clearCardConfig,
   clearSelected,
@@ -32,7 +32,7 @@ const TradeBotModal = ({
     if (tradePlayers.length === 2) {
       await TradeCards(id, tradePlayers[0], tradePlayers[1])
         .then((res) => {
-          aceptTrade(res);
+          acceptTrade(res);
           clearCardConfig();
           clearSelected();
         })
@@ -117,7 +117,7 @@ function stateToProps(state) {
 
 function dispatchToProps(dispatch) {
   return {
-    aceptTrade: bindActionCreators(aceptTrade, dispatch),
+    acceptTrade: bindActionCreators(acceptTrade, dispatch),
     setCardConfig: bindActionCreators(setCardConfig, dispatch),
     clearCardConfig: bindActionCreators(clearCardConfig, dispatch),
     clearSelected: bindActionCreators(clearSelected, dispatch),

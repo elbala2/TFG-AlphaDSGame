@@ -12,7 +12,7 @@ import styles from './Styles/rigthUI.module.scss';
 
 import Modal from '../../../components/UI/Modal';
 import { bindActionCreators } from 'redux';
-import { aceptTrade, clearSelected } from '../../../stores/gameStore/actions';
+import { acceptTrade, clearSelected } from '../../../stores/gameStore/actions';
 import Card from '../../../components/Cards/Card';
 import { TradeCards } from '../../../utils/ApiConf';
 import { useParams } from 'react-router-dom';
@@ -23,7 +23,7 @@ function TradeUI({
   player,
   dictionary,
 
-  aceptTrade,
+  acceptTrade,
   clearSelected,
 }) {
   const { id } = useParams();
@@ -47,6 +47,7 @@ function TradeUI({
           .map((player) => {
             return (
               <div
+                key={player.id}
                 className={`p-3 rounded-4 shadow bgColor
                   ${tradeStyles.tradePlayerBox}
                   ${selectedPlayer?.id === player.id ? tradeStyles.tradePlayerBoxSelected : ''}
@@ -100,6 +101,7 @@ function TradeUI({
           <div className={`${tradeStyles.tradeCards} bgColor rounded-3`} type={player.color}>
             {player.cards.filter(c => c.selected).map(c => (
               <Card
+                key={c.id}
                 card={{
                   ...c,
                   selected: false,
@@ -116,6 +118,7 @@ function TradeUI({
           <div className={`${tradeStyles.tradeCards} bgColor rounded-3`} type={selectedTradePlayer?.color}>
             {selectedTradePlayer?.cards.filter(c => c.selected).map(c => (
               <Card
+                key={c.id}
                 card={{
                   ...c,
                   selected: false,
@@ -141,7 +144,7 @@ function TradeUI({
             onClick={() => {
               TradeCards(id, player, selectedTradePlayer)
                 .then((res) => {
-                  aceptTrade(res);
+                  acceptTrade(res);
                   clearSelected();
                   setOnTrade(false);
                   onCancel();
@@ -174,7 +177,7 @@ function mapStateToProps(state, { playerIndex }) {
 function mapDispatchToProps(dispatch) {
   return ({
     clearSelected: bindActionCreators(clearSelected, dispatch),
-    aceptTrade: bindActionCreators(aceptTrade, dispatch),
+    acceptTrade: bindActionCreators(acceptTrade, dispatch),
   });
 }
 

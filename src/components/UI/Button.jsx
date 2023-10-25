@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Loader from './Loader'
 
 import './Styles/Button.scss'
+import { useIsMount } from '../../utils/customHooks'
 
 const commonClasses = 'btn-normal'
 
@@ -25,6 +26,7 @@ function Button({
   onClick,
   style,
 }) {
+  const isMount = useIsMount();
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
 
@@ -34,8 +36,12 @@ function Button({
       await onClick()
     } catch (e) {
       console.log(e)
+      if (!isMount) return;
       setError(e)
-      setTimeout(() => setError(false), 1000)
+      setTimeout(() => {
+        if (!isMount) return;
+        setError(false)
+      }, 1000)
     }
     setLoading(false)
   }

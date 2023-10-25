@@ -25,13 +25,16 @@ function DragDropProvider({
         if (whereIsPilar === playerIndex) return;
         const slabIndex = parseInt(draggableId);
         const target = droppableId.replace('boardDrop_', '').split('-').map(n => parseInt(n));
-        const rotation = (slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4]).rotation;
+        const slab = slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4];
+        console.log('🚀 ~ file: index.jsx:25 ~ droppableId:', droppableId);
+        console.log('🚀 ~ file: index.jsx:27 ~ slabIndex:', slab, slab);
+        console.log('🚀 ~ file: index.jsx:32 ~ player:', player);
         const cards = player.cards.filter(c => c.selected);
         MoveSlab(
           id,
           slabIndex,
           target,
-          rotation,
+          slab.rotation,
           cards,
         ).then((res) => {
           mover(res);
@@ -46,9 +49,9 @@ function DragDropProvider({
 DragDropProvider.propTypes = {
 }
 
-function stateToProps(state, { playerIndex }) {
+function stateToProps(state) {
   return {
-    player: state.game.players[playerIndex],
+    player: state.game.players[state.game.actualPlayer],
     normalMarket: state.game.normalMarket,
     whereIsPilar: state.game.whereIsPilar,
     specialMarket: state.game.specialMarket,

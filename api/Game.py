@@ -143,6 +143,9 @@ class Game():
     return True
     
   def moveSlab(self, origin, destiny, rotation, cards):
+    player = self.getActualPlayer()
+    if player.hasBought:
+      return False
     if (origin < 4):
       market = self.normalMarket
       realOrigin = origin
@@ -153,15 +156,16 @@ class Game():
     slab = market[realOrigin]
     newSlab = copy.deepcopy(slab)
     newSlab.reEvaluateId()
-    player = self.getActualPlayer()
     playerCards = player.buy(slab, cards)
     if player.putSlab(slab, destiny, rotation):
       self.cards += playerCards
       market.pop(realOrigin)
       if not newSlab.isSpecial:
         self.slabs.append(newSlab)
+      return True
     else:
       player.cards += playerCards
+      return False
     
   def tradeCards(self, player1ID, cards1, player2ID, cards2):
     if (len(cards1) != len(cards2)):

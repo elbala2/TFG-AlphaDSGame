@@ -48,24 +48,24 @@ class Bot:
     pointingInside = (0 <= pos[x] <= 3 and 0 <= pos[y] <= 3)
     if link:
       if not pointingInside:
-        return 30
+        return 16
       if board[pos[y]][pos[x]] == None:
         return distance
       if board[pos[y]][pos[x]].applyRotation()[compDirection]:
         return 0
     if pointingInside and board[pos[y]][pos[x]] != None and board[pos[y]][pos[x]].applyRotation()[compDirection] == 1:
-      return 30
-    return 0
+      return 16
+    return 8
 
   def getMark(self, slab, place, board):
     mark = 0
     pos = place['pos']
-    mark -= slab.points * 4
+    mark -= slab.points * 2
     links = slab.getRotatedLinks(place['rotation'])
-    mark -= self.getDistance(pos) * 4
+    mark += self.getDistance(pos)
     mark += sum(slab.costs)
     if pos[x] == 2 and pos[y] == 0:
-      mark -= 40
+      mark -= 100
 
     for direction in rotationOrder:
       compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
@@ -114,8 +114,7 @@ class Bot:
     if slabsToBuy == None:
       return False
     targetSlabId, _, pos, rotation, cards = slabsToBuy.values()
-    game.moveSlab(targetSlabId, [pos[x], pos[y]], rotation, cards)
-    return True
+    return game.moveSlab(targetSlabId, [pos[x], pos[y]], rotation, cards)
 
   def computeCards(self, game):
     bot = game.getActualPlayer()
