@@ -37,7 +37,7 @@ const instructionsModal = {
 
   mainMissionExplanation: `
     El objetivo del juego es ayudar a Shannon creando una aplicación que le indique cuando el lobo esta cerca, para ello el equipo encargado tendra que trabajar en distintos modulos clave para el correcto funcionamiento de la aplicación.`,
-  boardObjetiveExplanation: `
+  boardObjectiveExplanation: `
     Dichos modulos tendrán que estar conectados entre si mediante una red encargada de comunicar los distintos componentes de la aplicación.
     Por lo tanto, en primera instancia, el objetivo es conectar tu modulo con el resto y, posteriormente, aumentar la complejidad de dicho modulo añadiendo mas componentes.`,
 
@@ -54,7 +54,7 @@ const instructionsModal = {
     Para solucionar los riesgos hay que tener las cartas adecuadas para cada tipo, y seleccionarlas, una vez seleccionadas el boton se habilita y te permite solucionar el riesgo.
     Solucionar los riesgos aporta puntos al jugador que ha conseguido solucionarlo.`,
   cardsExplanation: `
-    Debajo del mercado cada jugador tiene un maximo de 4 cartas con las que puedes comprar componentes y resolver riesgos, estas cartas se pueden seleccionar pulsando sobre ellas y se pueden discard haciendo click en el boton que aparece al poner el cursor encima.`,
+    Debajo del mercado cada jugador tiene un maximo de 4 cartas con las que puedes comprar componentes y resolver riesgos, estas cartas se pueden seleccionar pulsando sobre ellas y se pueden descartar haciendo click en el boton que aparece al poner el cursor encima.`,
   placingExplanation: `
     Para colocar un componente se tienen que seleccionar las cartas que cumplan los costes especificos del componente a comprar, acto seguido se podrá arrastrar el componente y colocarlo en el tablero donde se colocara en una casilla válida.`,
   
@@ -76,6 +76,7 @@ const leftUI = {
 const tradeModal = { // will be deleted
   title: 'Seleccione las cartas que quiere intercambiar',
   onTradeAcceptQst: '¿Quieres aceptar el siguiente intercambio?',
+  noPlayersToTrade: 'No hay jugadores con los que intercambiar',
 };
 
 const rigthUI = {

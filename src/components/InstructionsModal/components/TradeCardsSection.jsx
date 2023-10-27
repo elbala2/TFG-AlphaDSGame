@@ -37,12 +37,12 @@ function TradeCardsSection({
       </div>
       <div className='d-flex align-items-center px-4 mb-3'>
         <p className='pe-4'>
-          {dictionary.boardObjetiveExplanation}
+          {dictionary.boardObjectiveExplanation}
         </p>
         <img
-          src={BoardObjetive}
+          src={BoardObjective}
           className='scale-80 rounded-3'
-          alt='BoardObjetive'
+          alt='BoardObjective'
         />
       </div> */}
     </section>
@@ -50,6 +50,8 @@ function TradeCardsSection({
 }
 
 TradeCardsSection.propTypes = {
+  className: PropTypes.string.isRequired,
+  dictionary: PropTypes.string.isRequired,
 }
 
 function mapStateToProps(state) {

@@ -8,6 +8,7 @@ export function useIsMount() {
       setIsMount(true);
     }
     return () => setIsMount(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return isMount;
