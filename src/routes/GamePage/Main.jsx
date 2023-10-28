@@ -15,12 +15,14 @@ import NexPlayerModal from '../../components/NextPlayerModal';
 import SuccessModal from '../../components/SuccessModal';
 import DragAndDropProvider from '../../components/DragAndDropProvider';
 import Modal from '../../components/UI/Modal';
+import Loader from '../../components/UI/Loader';
 
 const GamePage = ({
   actualPlayer,
   setState,
   hasRisk,
   dictionary,
+  gameId,
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -55,7 +57,7 @@ const GamePage = ({
   return (
     <DragAndDropProvider>
       <HeaderAndFooter>
-        {onNextPlayer && (
+        {onNextPlayer && previousPlayerIndex >= 0 && (
           <PlayerUI
             playerIndex={previousPlayerIndex}
             handleNextPlayer={() => setNextPlayerModalOpen(true)}
@@ -88,6 +90,7 @@ const GamePage = ({
 
 function stateToProps(state) {
   return {
+    gameId: state.game.id,
     actualPlayer: state.game.actualPlayer,
     hasRisk: state.game.hasRisk,
     dictionary: {

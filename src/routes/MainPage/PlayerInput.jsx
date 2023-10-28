@@ -6,7 +6,7 @@ import styles from './styles/PlayerInput.module.scss';
 
 export default function PlayerInput({ player, setPlayer, color }) {
   return (
-    <div className={styles.playerButton} type={color}>
+    <div className={`bgColor ${styles.playerButton}`} type={color}>
       <input
         type='text'
         className='bg-transparent text-center'

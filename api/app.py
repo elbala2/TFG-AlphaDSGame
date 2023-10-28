@@ -45,6 +45,7 @@ def startGame():
     game.setConfig(players, start)
   createdId = createGame(game)
   game.id = createdId
+  updateGame(createdId, game)
   return jsonify(toJSON(game))
 
 @app.route('/getGame/<id>', methods=['GET'])

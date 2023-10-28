@@ -67,6 +67,10 @@ const instructionsModal = {
 
 const homePage = {
   wellcomeTo: `Bienvenido a ${utils.appName}`,
+  objectiveDescription: `
+    La granjera Shannon esta preocupada, un lobo esta atacando sus ovejas.
+    ¡La ciencia de datos puede ayudarla!
+    Tu trabajo es ayudarla desarrollando una aplicación que alerte a Shannon cuando el lobo va a atacar.`,
 };
 
 const leftUI = {

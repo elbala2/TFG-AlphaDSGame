@@ -61,7 +61,7 @@ def genSlabs():
   return res
 
 class Game():
-  def __init__(self, start = 1):
+  def __init__(self):
     self.id = 0
     self.cards = genCards()
     self.slabs = genSlabs()
@@ -87,7 +87,7 @@ class Game():
         self.players[i].startWay()
     self.cards = self.cards[16:]
     self.actualPlayer = 0
-    self.start = start
+    self.start = 1
     self.whereIsPilar = 0
     self.finished = False
     self.bot = Bot()

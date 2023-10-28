@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import {
   ACCEPT_TRADE,
   CARD_SELECTED_ACTION,
@@ -5,7 +6,7 @@ import {
   MOVER_ACTION,
   NEXT_PLAYER,
   ROTATE_ACTION,
-  SET_TARGET_ACtion,
+  SET_TARGET_ACTION,
   DISCARD,
   RESET,
   SET_STATE,
@@ -26,7 +27,10 @@ export default function gameReducer(state = initialState, action) {
   
   switch (action.type) {
     case RESET: 
-    return initialState;
+    return {
+      id: undefined,
+      ...state,
+    };
     
     case SET_STATE:
       return {
@@ -34,7 +38,7 @@ export default function gameReducer(state = initialState, action) {
         ...action.callbackRes,
       };
 
-    case SET_TARGET_ACtion:
+    case SET_TARGET_ACTION:
       return {
         ...state,
         target: action.target,

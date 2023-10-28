@@ -70,6 +70,7 @@ const leftUI = {
 
 const homePage = {
   wellcomeTo: `Wellcome to ${utils.appName}`,
+  objectiveDescription: 'Shannon the shepherd is worried about a wolf attacking her sheep. Data science can help her! Your job is to help her by developing an application that alerts Shannon when the wolf is going to attack.',
 };
 
 const tradeModal = { // will be deleted
