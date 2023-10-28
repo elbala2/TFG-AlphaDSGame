@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { isEmpty } from 'lodash'
+import { isEmpty, min, uniqueId } from 'lodash'
 
 import Tooltip from '../UI/Tooltip';
 import { getSlabImg } from '../../utils/GetSlabImg';
 
 import styles from './slab.module.scss'
 
-
-import { min } from 'mathjs';
 import { playerColors } from '../../constants';
 import { connect } from 'react-redux';
 
@@ -23,6 +21,8 @@ function Links({
   rect,
   ...other
 }) {
+  const [uId] = useState(uniqueId())
+
   const lineWPadding = (width - (space * (linesNumber - 1)) - (lineWidth * (linesNumber - 1))) / 2;
   const lineHPadding = (height - (space * (linesNumber - 1)) - (lineWidth * (linesNumber - 1))) / 2;
   
@@ -30,10 +30,12 @@ function Links({
   
   for (let i = 0; i < linesNumber; i += 1) {
     const step = ((space * i) + (lineWidth * i));
+    const id = uId + i;
     lines.push(
-      <>
+      <React.Fragment key={id}>
         {!!links[0] && (
           <line
+            key={`${id}_1`}
             x1={step + lineWPadding}
             y1="0"
             x2={step + lineWPadding}
@@ -47,6 +49,7 @@ function Links({
 
         {!!links[1] && (
           <line
+            key={`${id}_2`}
             x1={lineWPadding - (lineWidth / 2)}
             y1={height - (step + lineHPadding)}
             x2={width}
@@ -60,6 +63,7 @@ function Links({
 
         {!!links[2] && (
           <line
+            key={`${id}_3`}
             x1={step + lineWPadding}
             y1={lineHPadding + (lineWidth / 2)}
             x2={step + lineWPadding}
@@ -73,6 +77,7 @@ function Links({
 
         {!!links[3] && (
           <line
+            key={`${id}_4`}
             x1={0}
             y1={height - (step + lineHPadding)}
             x2={width - lineWPadding + (lineWidth / 2)}
@@ -83,7 +88,7 @@ function Links({
             }}
           />
         )}
-      </>
+      </React.Fragment>
     )
   }
 

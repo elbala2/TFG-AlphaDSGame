@@ -74,24 +74,23 @@ function BoardUI({
           <div className={`${styles.boardCables}`}>
             {board.map((f, i) => {
               return (
-                <>
-                  {start > i && <div key={`borde${i}`} className={`${styles.space}`} />}
+                <React.Fragment key={`borde${i}`} >
+                  {start > i && <div className={`${styles.space}`} />}
                   {start === i && (
-                    <div key={`borde${i}`} className={`${styles.space}`}>
+                    <div className={`${styles.space}`}>
                       <Cable
                         links={[0, 1, 1, 0]}
                       />
                     </div>
                   )}
                   {start + 1 === i && (
-                    <div key={`borde${i}`} className={`${styles.conexion}`}>
+                    <div className={`${styles.conexion}`}>
                       <Cable
                         links={[1, 0, 1, 0]}
-                        key={`borde${i} `}
                       />
                     </div>
                   )}
-                </>
+                </React.Fragment>
               );
             })}
           </div>

@@ -9,6 +9,7 @@ import Slab from '../Slab';
 function Board({
   board,
   way,
+  playerIndex,
 }) {
 
   function isWayPart(x, y) {
@@ -26,12 +27,12 @@ function Board({
   function renderSlab(slab, x, y) {
     if (!slab) {
       return (
-        <Droppable droppableId={`boardDrop_${x}-${y}`}>
+        <Droppable droppableId={`boardDrop${playerIndex}_${x}-${y}`} isDropDisabled={false}>
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
-              {...provided.droppableProps}
               className='h-100 w-100'
+              {...provided.droppableProps}
             >
               {provided.placeholder}
             </div>
@@ -48,13 +49,13 @@ function Board({
       {board.map((f, i) => {
         return (
           <div key={`col${i}`} className={`${styles.boardRow}`}>
-            {f.map((casilla, j) => {
+            {f.map((slab, j) => {
               return (
                 <div
                   key={`fila${j}`}
                   className={`${styles.slabChessContainer}`}
                 >
-                  {renderSlab(casilla, j, i)}
+                  {renderSlab(slab, j, i)}
                 </div>
               );
             })}

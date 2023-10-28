@@ -25,7 +25,7 @@ const GamePage = ({
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
+  const [nextPlayerModalOpen, setNextPlayerModalOpen] = useState(false);
   const [previousPlayerIndex, setPreviousPlayerIndex] = useState(actualPlayer);
   const [openRiskInfo, setOpenRiskInfo] = useState(true);
 
@@ -58,13 +58,13 @@ const GamePage = ({
         {onNextPlayer && (
           <PlayerUI
             playerIndex={previousPlayerIndex}
-            handleNextPlayer={() => setnextPlayerModalOpen(true)}
+            handleNextPlayer={() => setNextPlayerModalOpen(true)}
             className='playerOut'
           />
         )}
         <PlayerUI
           playerIndex={actualPlayer}
-          handleNextPlayer={() => setnextPlayerModalOpen(true)}
+          handleNextPlayer={() => setNextPlayerModalOpen(true)}
           className={onNextPlayer ? 'playerIn' : ''}
         />
 
@@ -77,7 +77,7 @@ const GamePage = ({
       </Modal>
         <NexPlayerModal
           isOpen={nextPlayerModalOpen}
-          onClose={() => setnextPlayerModalOpen(prevstate => !prevstate)}
+          onClose={() => setNextPlayerModalOpen(p => !p)}
         />
         <TradeBotModal />
         <SuccessModal />

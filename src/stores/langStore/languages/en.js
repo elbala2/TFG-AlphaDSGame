@@ -37,7 +37,7 @@ const instructionsModal = {
 
   mainMissionExplanation: `
     The objective of the game is to help Shannon by creating an application that tells him when the wolf is near, for this the team in charge will have to work on different key modules for the correct functioning of the application.`,
-  boardObjetiveExplanation: `
+  boardObjectiveExplanation: `
     These modules will have to be connected to each other by a network in charge of communicating the different components of the application.
     Therefore, in first instance, the objective is to connect your module with the rest and, later, to increase the complexity of the module by adding more components.`,
 
@@ -75,6 +75,7 @@ const homePage = {
 const tradeModal = { // will be deleted
   title: 'Please select which cards you want to trade',
   onTradeAcceptQst: 'Do you want to accept the trade?',
+  noPlayersToTrade: 'No players to trade',
 };
 
 const rigthUI = {

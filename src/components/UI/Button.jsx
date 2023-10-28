@@ -35,7 +35,6 @@ function Button({
     try {
       await onClick()
     } catch (e) {
-      console.log(e)
       if (!isMount) return;
       setError(e)
       setTimeout(() => {
