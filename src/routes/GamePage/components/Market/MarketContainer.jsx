@@ -25,23 +25,24 @@ const MarketContainer = ({
   disabled,
   player,
   rotate,
+  actualPlayer,
 }) => {
   const canBuy = canBeBought(player, slab) && !disabled;
   const canBuyWithSelected = canBeBought(player, slab, true) && !disabled;
 
   return (
     <div className='marketContainer' key={index}>
-      <Droppable droppableId={`marketDrop_${index}`} isDropDisabled>
+      <Droppable droppableId={`marketDrop${actualPlayer}_${index}`} isDropDisabled>
         {provided => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
-            <Draggable draggableId={String(index)} index={index} isDragDisabled={!canBuyWithSelected}>
+            <Draggable draggableId={`slab${actualPlayer}_${index}`} index={index} isDragDisabled={!canBuyWithSelected}>
               {provided => (
                 <div
                   ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
                   className='slabContainer'
                   disabled={!canBuy}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
                 >
                   {!slab.isSpecial && (
                     <>
@@ -92,6 +93,7 @@ function stateToProps(state) {
   const player = state.game.players[state.game.actualPlayer];
   return {
     player,
+    actualPlayer: state.game.actualPlayer,
   };
 }
 

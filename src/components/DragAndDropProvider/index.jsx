@@ -28,8 +28,8 @@ function DragDropProvider({
           || !destination?.droppableId
         ) return;
         const { droppableId } = destination;
-        const slabIndex = parseInt(draggableId);
-        const target = droppableId.replace('boardDrop_', '').split('-').map(n => parseInt(n));
+        const slabIndex = parseInt(draggableId.replace(/slab\d_/g, ''));
+        const target = droppableId.replace(/boardDrop\d_/g, '').split('-').map(n => parseInt(n));
         const slab = slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4];
         const cards = player.cards.filter(c => c.selected);
         MoveSlab(
