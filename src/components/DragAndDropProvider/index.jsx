@@ -60,8 +60,8 @@ DragDropProvider.propTypes = {
 
 function stateToProps(state) {
   return {
-    actualPlayer: state.game.actualPlayer,
-    player: state.game.players[state.game.actualPlayer],
+    actualPlayer: state.game.actualPlayer ?? 0,
+    player: state.game.players[state.game.actualPlayer ?? 0],
     normalMarket: state.game.normalMarket,
     whereIsPilar: state.game.whereIsPilar,
     specialMarket: state.game.specialMarket,

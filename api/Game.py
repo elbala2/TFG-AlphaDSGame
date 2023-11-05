@@ -82,7 +82,7 @@ class Game():
     self.players = []
     for i in range(4):
       cards = self.cards[i * 4 : (i + 1) *4]
-      self.players.append(Player(i, 'Player '+ str(i + 1), start, cards, playerColors[i], 0))
+      self.players.append(Player(i, 'Player '+ str(i + 1), cards, playerColors[i], 0))
       if i == 0:
         self.players[i].startWay()
     self.cards = self.cards[16:]
@@ -99,7 +99,7 @@ class Game():
     self.start = start
     for i in range(4):
       name, type = players[i].values()
-      self.players[i] = Player(i, name, 1, self.players[i].cards, playerColors[i], type)
+      self.players[i] = Player(i, name, self.players[i].cards, playerColors[i], type)
       if i == 0:
         self.players[i].startWay()
 

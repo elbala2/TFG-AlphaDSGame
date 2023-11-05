@@ -16,7 +16,7 @@ from config import (
 )
 
 class Player:
-  def __init__(self, id, name, start, cards, color, type=0):
+  def __init__(self, id, name, cards, color, type=0):
     self.id = id
     self.name = name
     self.type = type
@@ -25,8 +25,7 @@ class Player:
     self.cards = cards
     self.hasBought = False
     self.board = [[None for i in range(4)] for i in range(4)]
-    self.start = start
-    self.board[start][0] = Slab([1, 1, 1, 1], 'Start_' + color)
+    self.board[1][0] = Slab([1, 1, 1, 1], 'Start_' + color)
     self.way = []
 
   def startWay(self):

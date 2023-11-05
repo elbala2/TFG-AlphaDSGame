@@ -16,6 +16,8 @@ const PlayerUI = ({
 }) => {
   const [tradeOpen, setTradeOpen] = useState(false);
 
+  if (!player) return '';
+
   return (
     <div className={`bgColor viewPage d-lg-flex px-lg-5 ${styles.mainCard} ${className ?? ''}`} type={player.color}>
       <LeftPlayerUI
