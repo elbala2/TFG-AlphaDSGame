@@ -25,26 +25,6 @@ function TradeCardsSection({
       <p>
         {dictionary.tradeExplanation}
       </p>
-      {/* <div className='d-flex align-items-center px-4 mb-3'>
-        <img
-          src={MainMissionImg}
-          className='scale-60 rounded-3'
-          alt='MainMission'
-        />
-        <p className='ps-4'>
-          {dictionary.mainMissionExplanation}
-        </p>
-      </div>
-      <div className='d-flex align-items-center px-4 mb-3'>
-        <p className='pe-4'>
-          {dictionary.boardObjectiveExplanation}
-        </p>
-        <img
-          src={BoardObjective}
-          className='scale-80 rounded-3'
-          alt='BoardObjective'
-        />
-      </div> */}
     </section>
   )
 }

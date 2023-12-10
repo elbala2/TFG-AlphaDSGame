@@ -2,8 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-import styles from './Styles/Modal.module.scss'
 import Button from './Button'
+
+import styles from './Styles/Modal.module.scss'
 
 function Modal({
   children,
@@ -15,7 +16,10 @@ function Modal({
   if (!isOpen) return '';
   return ReactDOM.createPortal(
     <div className={styles.back} onClick={onClose}>
-      <div className={`${styles.content} ${fullScreen ? styles.fullScreen : ''}`} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={`${styles.content} ${fullScreen ? styles.fullScreen : ''}`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className='d-flex p-2'>
           <h4 className='flex-fill ps-2 m-0'>{title}</h4>
           <Button variants='secondary outlined' className='p-0 border-0' onClick={onClose}>

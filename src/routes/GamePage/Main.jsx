@@ -22,7 +22,6 @@ const GamePage = ({
   setState,
   hasRisk,
   dictionary,
-  gameId,
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();

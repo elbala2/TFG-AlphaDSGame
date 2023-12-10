@@ -114,10 +114,6 @@ const nextPlayerModal = {
   title: 'Are you sure to finish the turn?',
 };
 
-const failModal = {
-  systemCompromised: 'The system was compromised',
-};
-
 const cards = {
   types: {
     math: 'Mathematics',
@@ -207,7 +203,6 @@ const en = {
   market,
   successModal,
   nextPlayerModal,
-  failModal,
   cards,
   risks,
   specialSlabs,

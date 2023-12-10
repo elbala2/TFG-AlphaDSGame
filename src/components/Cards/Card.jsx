@@ -9,10 +9,9 @@ import Button from '../UI/Button';
 
 import './styles.scss';
 
-export const Card = ({
+const Card = ({
   card,
   onDiscard,
-  titleStyles,
   dictionary,
   ...other
 }) => {
