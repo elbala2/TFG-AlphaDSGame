@@ -51,5 +51,5 @@ export function fixRisk(id, riskID, cards) {
 }
 
 export function getBotAction(id) {
-  return ApiCallBack('GET', `/game/${id}/bot`)
+  return ApiCallBack('GET', `/game/${id}/bot/action`)
 }

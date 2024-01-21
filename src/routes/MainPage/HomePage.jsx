@@ -1,40 +1,51 @@
 import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+import { MISSION_TYPES, MISSION_TYPE_DNA_SHERIFF, MISSION_TYPE_TO_SAFETY, MISSION_TYPE_WOLFS, playerColors } from '../../constants';
 
 import wolf from '../../resources/instructionsImgs/Wolf.png'
 import sheeps from '../../resources/instructionsImgs/Sheeps.png'
+import scientific from '../../resources/instructionsImgs/scientific.png'
+import viruses from '../../resources/instructionsImgs/Viruses.png'
+import Brother from '../../resources/instructionsImgs/Brother.png'
+import Cars from '../../resources/instructionsImgs/Cars.png'
 
 import { StartGame } from '../../utils/ApiConf';
+import { reset } from '../../stores/gameStore/actions';
 
-import HeaderAndFooter from '../../components/UI/Header&Footer';
+import HeaderAndFooter from '../../components/HeaderAndFooter';
 import Button from '../../components/UI/Button';
 import PlayerInput from './PlayerInput';
 
-import { connect } from 'react-redux';
-import { playerColors } from '../../constants';
-
 import styles from './styles/HomePage.module.scss';
-import { bindActionCreators } from 'redux';
-import { reset } from '../../stores/gameStore/actions';
 
 const HomePage = ({
   dictionary,
   reset,
 }) => {
   const navigate = useNavigate();
-  const [players, setPlayers] = useState([
-    { name: `${dictionary.player} 1`, type: 0 },
-    { name: `${dictionary.player} 2`, type: 0 },
-    { name: `${dictionary.player} 3`, type: 0 },
-    { name: `${dictionary.player} 4`, type: 0 },
-  ]);
+  const [config, setConfig] = useState({
+    gameType: MISSION_TYPE_WOLFS,
+    start: 1,
+    players: [
+      { name: `${dictionary.player} 1`, type: 0 },
+      { name: `${dictionary.player} 2`, type: 0 },
+      { name: `${dictionary.player} 3`, type: 0 },
+      { name: `${dictionary.player} 4`, type: 0 },
+    ]
+  });
 
   const handleChangePlayer = (player, i) => {
-    setPlayers((p) => {
-      p[i] = player;
-      return [...p];
+    setConfig((c) => {
+      const newPlayers = [...c.players];
+      newPlayers[i] = player;
+      return {
+        ...c,
+        players: newPlayers,
+      };
     });
   };
 
@@ -47,28 +58,72 @@ const HomePage = ({
     <HeaderAndFooter>
       <div className={styles.mainCard}>
         <div className={` rounded-4 ${styles.container}`}>
-          <h1>{dictionary.wellcomeTo}</h1>
-          <div className='d-flex align-items-center'>
-            <img
-              src={wolf}
-              alt='wolf'
-              className='mx-5'
-            />
+          <div className='d-flex justify-content-between align-items-start'>
+            <h1>{dictionary.wellcomeTo}</h1>
+            <select
+              className={styles.missionSelect}
+              value={config.gameType}
+              onChange={e => setConfig(c => ({
+                ...c,
+                gameType: e.target.value,
+              }))}
+            >
+              {MISSION_TYPES.map(mission => (<option value={mission}>{dictionary.missions[mission] ?? mission}</option>))}
+            </select>
+          </div>
+          <div className='d-flex align-items-center p-4'>
+            {config.gameType === MISSION_TYPE_WOLFS && (
+              <img
+                src={wolf}
+                alt='wolf'
+                className='mx-5'
+              />
+            )}
+            {config.gameType === MISSION_TYPE_DNA_SHERIFF && (
+              <img
+                src={scientific}
+                alt='scientis'
+                className='mx-5'
+              />
+            )}
+            {config.gameType === MISSION_TYPE_TO_SAFETY && (
+              <img
+                src={Brother}
+                alt='Brother'
+                className='mx-5'
+              />
+            )}
             <div>
-              {dictionary.objectiveDescription.split('\n').map(txt => (
+              {dictionary.objectiveDescriptions[config.gameType].split('\n').map(txt => (
                 <h6>
                   {txt}
                 </h6>
               ))}
             </div>
-            <img
-              src={sheeps}
-              alt='sheeps'
-              className='mx-5'
-            />
+            {config.gameType === MISSION_TYPE_WOLFS && (
+              <img
+                src={sheeps}
+                alt='sheeps'
+                className='mx-5'
+              />
+            )}
+            {config.gameType === MISSION_TYPE_DNA_SHERIFF && (
+              <img
+                src={viruses}
+                alt='viruses'
+                className='mx-5'
+              />
+            )}
+            {config.gameType === MISSION_TYPE_TO_SAFETY && (
+              <img
+                src={Cars}
+                alt='Cars'
+                className='mx-5'
+              />
+            )}
           </div>
           <div className={styles.playerButtonsContainer}>
-            {players.map((player, index) => (
+            {config.players.map((player, index) => (
               <PlayerInput
                 key={player.name}
                 color={playerColors[index]}
@@ -82,10 +137,7 @@ const HomePage = ({
             <div className='flex-fill' />
             <Button
               onClick={async () => {
-                const res = await StartGame({
-                  players,
-                  start: 1,
-                })
+                const res = await StartGame(config)
                 navigate(`/Game/${res.id}`);
               }}
             >

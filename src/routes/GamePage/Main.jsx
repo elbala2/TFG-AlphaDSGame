@@ -10,12 +10,11 @@ import { setState } from '../../stores/gameStore/actions';
 import TradeBotModal from '../../components/TradeBotModal';
 
 import PlayerUI from './components/PlayerUI';
-import HeaderAndFooter from '../../components/UI/Header&Footer';
+import HeaderAndFooter from '../../components/HeaderAndFooter';
 import NexPlayerModal from '../../components/NextPlayerModal';
 import SuccessModal from '../../components/SuccessModal';
 import DragAndDropProvider from '../../components/DragAndDropProvider';
 import Modal from '../../components/UI/Modal';
-import Loader from '../../components/UI/Loader';
 
 const GamePage = ({
   actualPlayer,

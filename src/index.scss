@@ -140,3 +140,7 @@ code {
     }
   }
 }
+
+.svg-shadow-md {
+  filter: drop-shadow(0 .5rem 1rem rgba(0,0,0,.15));
+}

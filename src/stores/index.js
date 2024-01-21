@@ -1,4 +1,4 @@
-import { combineReducers, createStore } from "redux"
+import { combineReducers, compose, createStore } from "redux"
 import lang from './langStore'
 import game from './gameStore'
 
@@ -7,6 +7,8 @@ const rootReducer = combineReducers({
   game,
 });
 
-const store = createStore(rootReducer);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(rootReducer, composeEnhancers());
 
 export default store;

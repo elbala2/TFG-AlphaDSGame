@@ -25,7 +25,7 @@ const TradeBotModal = ({
 }) => {
   const { id } = useParams();
   const [step, setStep] = useState(0);
-  const [slabStep, setSlabStep] = useState(0);
+  const [slabStep] = useState(0);
 
   async function handleTrade() {
     const tradePlayers = players.filter(f => f.cards.find(f => f.selected) !== undefined);

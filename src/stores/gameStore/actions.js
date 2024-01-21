@@ -1,6 +1,5 @@
 export const MOVER_ACTION = 'MOVER';
 export const ROTATE_ACTION = 'ROTATE';
-export const SET_TARGET_ACTION = 'SET_TARGET';
 export const CARD_SELECTED_ACTION = 'CARD_SELECTED';
 export const CLEAR_CARDS_ACTION = 'CLEAR_CARDS_ACTION';
 export const NEXT_PLAYER = 'NEXT_PLAYER';
@@ -26,13 +25,6 @@ export const rotate = (marketId, dir) => {
     type: ROTATE_ACTION,
     id: marketId,
     dir,
-  }
-}
-
-export const setTarget = target => {
-  return {
-    type: SET_TARGET_ACTION,
-    target,
   }
 }
 

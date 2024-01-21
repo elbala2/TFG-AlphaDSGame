@@ -41,6 +41,11 @@
       min-width: var(--slabSize);
       text-align: center;
 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+
       .misionCompletedImg {
         height: calc(var(--slabSize) * 2);
       }

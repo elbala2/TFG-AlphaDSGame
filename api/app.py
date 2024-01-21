@@ -41,8 +41,9 @@ def toJSON(obj):
 def startGame():
   game = Game()
   if bool(request.get_json()):
-    players, start = request.get_json().values()
-    game.setConfig(players, start)
+    players = request.get_json()['players']
+    gameType = request.get_json()['gameType']
+    game.setConfig(gameType, players)
   createdId = createGame(game)
   game.id = createdId
   updateGame(createdId, game)
@@ -98,7 +99,7 @@ def fix(id, riskID):
   updateGame(id, game)
   return jsonify(toJSON({ 'players': game.players, 'specialMarket': game.specialMarket }))
 
-@app.route('/game/<id>/bot', methods=['GET'])
+@app.route('/game/<id>/bot/action', methods=['GET'])
 def bot_moves(id):
   game = getGame(id)
   hecho = game.botAction()
@@ -106,4 +107,3 @@ def bot_moves(id):
   if hecho != True:
     return jsonify(toJSON(hecho))
   return jsonify(toJSON(game))
-

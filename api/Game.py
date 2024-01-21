@@ -10,6 +10,8 @@ from bots import Bot
 from config import (
   playerColors,
 
+  MISSION_TYPE_WOLFS,
+
   SILVER,
   GOLD,
 
@@ -63,6 +65,7 @@ def genSlabs():
 class Game():
   def __init__(self):
     self.id = 0
+    self.gameType = MISSION_TYPE_WOLFS;
     self.cards = genCards()
     self.slabs = genSlabs()
     self.normalMarket = []
@@ -87,7 +90,6 @@ class Game():
         self.players[i].startWay()
     self.cards = self.cards[16:]
     self.actualPlayer = 0
-    self.start = 1
     self.whereIsPilar = 0
     self.finished = False
     self.bot = Bot()
@@ -95,8 +97,8 @@ class Game():
   def getActualPlayer(self):
     return self.players[self.actualPlayer]
     
-  def setConfig(self, players, start):
-    self.start = start
+  def setConfig(self, gameType, players):
+    self.gameType = gameType
     for i in range(4):
       name, type = players[i].values()
       self.players[i] = Player(i, name, self.players[i].cards, playerColors[i], type)

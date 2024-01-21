@@ -1,4 +1,4 @@
-import { BLUE, GREEN, RED, YELLOW } from "../../../constants";
+import { BLUE, GREEN, MISSION_TYPE_DNA_SHERIFF, MISSION_TYPE_TO_SAFETY, MISSION_TYPE_WOLFS, RED, YELLOW } from "../../../constants";
 import { EN, ES } from "../constants";
 
 const utils = {
@@ -70,7 +70,27 @@ const leftUI = {
 
 const homePage = {
   wellcomeTo: `Wellcome to ${utils.appName}`,
-  objectiveDescription: 'Shannon the shepherd is worried about a wolf attacking her sheep. Data science can help her! Your job is to help her by developing an application that alerts Shannon when the wolf is going to attack.',
+  missions: {
+    [MISSION_TYPE_WOLFS]: 'Wolfs!',
+    [MISSION_TYPE_DNA_SHERIFF]: 'DNA Sheriff',
+    [MISSION_TYPE_TO_SAFETY]: 'Highway to safety',
+  },
+  objectiveDescriptions: {
+    [MISSION_TYPE_WOLFS]: `
+      Shannon the shepherd is worried about a wolf attacking her sheep.
+      Data science can help her!
+      Your job is to help her by developing an application that alerts Shannon when the wolf is going to attack.`,
+    
+    [MISSION_TYPE_DNA_SHERIFF]: `
+      Margarita Salas, biochemist needs help with her research.
+      Data science can help her!
+      Your job is to help her by developing an application that analyzes and classifies DNA samples from various viruses.`,
+    
+    [MISSION_TYPE_TO_SAFETY]: `
+      Prudens and her siblings are worried about safety on their way to school.
+      Data science can help her!
+      Your job is to help them by developing an application that provides them with the safest way to class.`,
+  },
 };
 
 const tradeModal = { // will be deleted
@@ -87,13 +107,21 @@ const rigthUI = {
     [GREEN]: 'Visualization mission',
   },
   misionDescription: {
-    [BLUE]: 'Help Shannon to collect all the possible information about her sheep and their behavior when the wolf is around',
+    [BLUE]: {
+      [MISSION_TYPE_WOLFS]: 'Help Shannon to collect all the possible information about her sheep and their behavior when the wolf is around',
+      [MISSION_TYPE_DNA_SHERIFF]: 'Help Margarita to collect all the possible information about the viruses',
+      [MISSION_TYPE_TO_SAFETY]: 'Help Prudens and his brothers to collect all the possible information about the ways on their town',
+    },
     [YELLOW]: 'Help the computer scientist to explore the sheep data using computer software!',
     [RED]: 'Help the mathematician to build a model to detect when the wolf is going to attack!',
     [GREEN]: 'Help the computer scientist to create a mobile app to alert Shannon when the wolf is dangerously near her sheep!',
   },
   misionCompletedDescription: {
-    [BLUE]: 'You fully understand what Shannon needs.\nYou have collected the data about the sheep.\nYou have stored the data in a computer.',
+    [BLUE]: {
+      [MISSION_TYPE_WOLFS]: 'You fully understand what Shannon needs.\nYou have collected the data about the sheep.\nYou have stored the data in a computer.',
+      [MISSION_TYPE_DNA_SHERIFF]: 'You fully understand what Margarita needs.\nYou have collected the data about the viruses.\nYou have stored the data in a computer.',
+      [MISSION_TYPE_TO_SAFETY]: 'You fully understand what Prudens and his brothers needs.\nYou have collected the data about the ways.\nYou have stored the data in a computer.',
+    },
     [YELLOW]: 'You have an overview of the sheep and their features.\nAfter organizing and cleaning your data, they are ready for the next step.',
     [RED]: 'You have tried and evaluate different models.\nYou have chosen the best one to detect the wolf’s attack. \nYou are ready to tell Shannon the good news',
     [GREEN]: 'You have developed a useful mobile app that alerts Shannon whenever the wolf is about to attack her sheep.\nYou have explained the model and the app to Shannon and she is so happy because she masters it',

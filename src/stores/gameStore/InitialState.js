@@ -5,7 +5,6 @@ const initialState = {
   start: 1,
   slabs: [],
   cards: [],
-  target: null,
   finished: false,
   actualPlayer: undefined,
   whereIsPilar: 0,

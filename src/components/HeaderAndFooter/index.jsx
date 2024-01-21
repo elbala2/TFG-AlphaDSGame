@@ -8,10 +8,10 @@ import icon from '../../resources/Icon.png';
 
 import { fetchSetLanguage } from '../../stores/langStore/actions';
 
-import Button from './Button';
+import Button from '../UI/Button';
 import InstructionsModal from '../InstructionsModal';
 
-import Styles from './Styles/Header&Footer.module.scss'
+import Styles from './styles.module.scss'
 
 const HeaderAndFooter = ({
   lang,
