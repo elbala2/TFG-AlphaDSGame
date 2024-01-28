@@ -27,7 +27,7 @@ function BoardUI({
   dictionary,
 }) {
   const hasConnectedWay = whereIsPilar > playerIndex;
-  const isMissionComplete = !!player.board[0][2] || true;
+  const isMissionComplete = !!player.board[0][2];
 
   function getPlayerIcon({ color }) {
     if (color === GREEN) {
