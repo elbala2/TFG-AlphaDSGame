@@ -1,16 +1,29 @@
 import React from 'react'
 
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
-import styles from './board.module.scss';
+import { useParams } from 'react-router-dom';
 import { Droppable } from 'react-beautiful-dnd';
+
+import { mover, selectSlab } from '../../stores/gameStore/actions';
+
 import Slab from '../Slab';
 
+import styles from './board.module.scss';
+import { MoveSlab } from '../../utils/ApiConf';
+
 function Board({
-  board,
-  way,
+  player: { board, way, cards },
   playerIndex,
+  selectedSlab,
+
+  normalMarket,
+  specialMarket,
+
+  mover,
+  selectSlab,
 }) {
+  const { id } = useParams();
 
   function isWayPart(x, y) {
     const xcoord = 0;
@@ -31,7 +44,26 @@ function Board({
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
-              className='h-100 w-100'
+              className={`h-100 w-100 ${selectedSlab ? styles.clickable : ''}`}
+              onClick={() => {
+                let slabIndex = normalMarket.findIndex(s => s.id === selectedSlab);
+                if (slabIndex < 0) {
+                  slabIndex = specialMarket.findIndex(s => s.id === selectedSlab) + 4;
+                }
+
+                const slab = slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4];
+
+                MoveSlab(
+                  id,
+                  slabIndex,
+                  [x, y],
+                  slab.rotation,
+                  cards.filter(c => c.selected),
+                ).then((res) => {
+                  mover(res);
+                  selectSlab();
+                });
+              }}
               {...provided.droppableProps}
             >
               {provided.placeholder}
@@ -69,13 +101,17 @@ Board.propTypes = {}
 
 function stateToProps(state, { playerIndex }) {
   return {
-    board: state.game.players[playerIndex].board,
-    way: state.game.players[playerIndex].way,
+    player: state.game.players[playerIndex],
+    selectedSlab: state.game.selectedSlab,
+    normalMarket: state.game.normalMarket,
+    specialMarket: state.game.specialMarket,
   };
 }
 
 function dispatchToProps(dispatch) {
   return {
+    mover: bindActionCreators(mover, dispatch),
+    selectSlab: bindActionCreators(selectSlab, dispatch),
   };
 }
 

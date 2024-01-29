@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { rotate } from '../../../../stores/gameStore/actions';
+import { rotate, selectSlab } from '../../../../stores/gameStore/actions';
 
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Button from '../../../../components/UI/Button';
@@ -26,6 +26,8 @@ const MarketContainer = ({
   player,
   rotate,
   actualPlayer,
+  selectedSlab,
+  selectSlab,
 }) => {
   const canBuy = canBeBought(player, slab) && !disabled;
   const canBuyWithSelected = canBeBought(player, slab, true) && !disabled;
@@ -39,7 +41,7 @@ const MarketContainer = ({
               {provided => (
                 <div
                   ref={provided.innerRef}
-                  className='slabContainer'
+                  className={`slabContainer${selectedSlab === slab.id ? ' selected' : ''}`}
                   disabled={!canBuy}
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
@@ -66,7 +68,13 @@ const MarketContainer = ({
                       </Button>
                     </>
                   )}
-                  <Slab slab={slab} />
+                  <Slab
+                    slab={slab}
+                    onClick={() => {
+                      if (!canBuyWithSelected) return;
+                      selectSlab(slab.id);
+                    }}
+                  />
                   {provided.placeholder}
                 </div>
               )}
@@ -94,12 +102,14 @@ function stateToProps(state) {
   return {
     player,
     actualPlayer: state.game.actualPlayer,
+    selectedSlab: state.game.selectedSlab,
   };
 }
 
 function dispatchToProps(dispatch) {
   return {
     rotate: bindActionCreators(rotate, dispatch),
+    selectSlab: bindActionCreators(selectSlab, dispatch),
   };
 }
 

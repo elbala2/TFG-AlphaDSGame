@@ -11,6 +11,7 @@ import {
   SET_CARD_CONFIG,
   CLEAR_CARD_CONFIG,
   CLEAR_CARDS_ACTION,
+  SELECT_SLAB,
 } from './actions';
 import initialState from './InitialState';
 
@@ -21,6 +22,7 @@ export default function gameReducer(state = initialState, action) {
     normalMarket,
     actualPlayer,
     players,
+    selectedSlab,
   } = state;
   
   switch (action.type) {
@@ -54,6 +56,12 @@ export default function gameReducer(state = initialState, action) {
       return {
         ...state,
         players: [...players],
+      };
+
+    case SELECT_SLAB:
+      return {
+        ...state,
+        selectedSlab: selectedSlab === action.id ? undefined : action.id, 
       };
 
     case MOVER_ACTION:

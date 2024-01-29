@@ -17,5 +17,9 @@
     align-items: center;
     height: var(--slabSize);
     width: var(--slabSize);
+
+    .clickable:hover {
+      box-shadow: rgb(0, 154, 226) 0px 0px 12px 4px;
+    }
   }
 }

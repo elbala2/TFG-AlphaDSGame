@@ -200,6 +200,7 @@ function Slab({
   slab,
   isWayPart,
   dictionary,
+  onClick,
 }) {
   const [size, setSize] = useState();
 
@@ -248,7 +249,11 @@ function Slab({
   if (isWayPart) cableProps.lineColor = '#f5e83b'
 
   return (
-    <div className='w-100 h-100 position-relative' ref={slabRef}>
+    <div
+      ref={slabRef}
+      className='w-100 h-100 position-relative'
+      onClick={onClick}
+    >
       <Links
         {...size}
         {...cableProps}

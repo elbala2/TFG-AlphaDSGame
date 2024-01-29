@@ -1,4 +1,5 @@
 export const MOVER_ACTION = 'MOVER';
+export const SELECT_SLAB = 'SELECT_SLAB';
 export const ROTATE_ACTION = 'ROTATE';
 export const CARD_SELECTED_ACTION = 'CARD_SELECTED';
 export const CLEAR_CARDS_ACTION = 'CLEAR_CARDS_ACTION';
@@ -17,6 +18,13 @@ export const mover = (callbackRes) => {
   return {
     type: MOVER_ACTION,
     ...callbackRes,
+  }
+}
+
+export const selectSlab = (id) => {
+  return {
+    type: SELECT_SLAB,
+    id,
   }
 }
 
