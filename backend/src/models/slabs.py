@@ -1,4 +1,5 @@
 import random
+import uuid
 
 from src.utils.config import (  
   NORMAL,
@@ -16,17 +17,21 @@ def getCosts():
   return [blue, red, green]
 
 class Risk:
-  id = 0
-  
-  def __init__(self, type):
-    Risk.id += 1
-    self.id = Risk.id
-    self.points = 4
-    self.costs = random.randint(1, 2)
-    self.type = type
-    self.needed = risksKeys[type]
-    self.isRisk = True
-    self.isSpecial = True
+  def __init__(self,
+    riskType,
+    riskId = uuid.uuid4().__str__(),
+    points = 4,
+    costs = random.randint(1, 2),
+    isRisk = True,
+    isSpecial = True,
+  ):
+    self.id = riskId
+    self.costs = costs
+    self.points = points
+    self.isRisk = isRisk
+    self.isSpecial = isSpecial
+    self.type = riskType
+    self.needed = risksKeys[riskType]
 
   def costIndexNeeded(self, card):
     if card.subType == self.needed:

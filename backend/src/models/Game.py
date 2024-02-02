@@ -1,3 +1,5 @@
+import uuid
+
 import random
 import copy
 
@@ -8,18 +10,17 @@ from src.models.Player import Player
 from src.utils.utils import findIndex, findById
 from src.utils.config import (
   playerColors,
-
   MISSION_TYPE_WOLFS,
-
-  SILVER,
-  GOLD,
-
-  risksKeys,
-  specialSlabs,
+  cardTypes,
   TITLE_KEYS,
   DESCRIPTION_KEYS,
 
+  SILVER,
+  GOLD,
   cardTypes,
+  risksKeys,
+  specialSlabs,
+  playerColors,
 )
 
 def genCards():
@@ -63,21 +64,25 @@ def genSlabs():
 
 class Game():
   def __init__(self,
-    id,
-    type,
-    riskNumber,
-    nextBotAction,
-    actualPlayer,
-    whereIsPilar,
-    finished,
-    slabs,
-    cards,
-    normalMarket,
-    specialMarket,
-    players,
+    gameId = None,
+    gameType = MISSION_TYPE_WOLFS,
+    riskNumber = 0,
+    nextBotAction = 0,
+    actualPlayer = 0,
+    whereIsPilar = 0,
+    finished = False,
+    slabs = None,
+    cards = None,
+    normalMarket = None,
+    specialMarket = None,
+    players = None,
   ):
-    self.id = id
-    self.type = type
+    if (gameId == None):
+      self.createGame(gameType, players)
+      return
+
+    self.id = gameId
+    self.type = gameType
     self.riskNumber = riskNumber
     self.nextBotAction = nextBotAction
     self.actualPlayer = actualPlayer
@@ -89,36 +94,53 @@ class Game():
     self.players = players
     self.cards = cards
 
-
-  def genData(self):
-    self.id = 0
-    self.gameType = MISSION_TYPE_WOLFS;
-    self.riskNumber = 0
-    self.nextBotAction = 0
-    self.actualPlayer = 0
-    self.whereIsPilar = 0
-    self.finished = False
-    self.cards = genCards()
-    self.slabs = genSlabs()
-    self.normalMarket = []
-    self.specialMarket = []
-    while(len(self.normalMarket) < 4):
-      item = self.slabs.pop(0)
+  def createGame(self, gameType, playerConfig):
+    gameId = uuid.uuid4().__str__()
+    riskNumber = 0
+    nextBotAction = 0
+    actualPlayer = 0
+    whereIsPilar = 0
+    finished = False
+    slabs = genSlabs()
+    cards = genCards()
+    normalMarket = []
+    specialMarket = []
+    while(len(normalMarket) < 4):
+      item = slabs.pop(0)
       if not item.isSpecial:
-        self.normalMarket.append(item)
-      elif len(self.specialMarket) < 4:
+        normalMarket.append(item)
+      elif len(specialMarket) < 4:
         if item.isRisk:
-          self.riskNumber += 1
-        self.specialMarket.append(item)
+          riskNumber += 1
+        specialMarket.append(item)
       else:
-        self.slabs.append(item)
-    self.players = []
+        slabs.append(item)
+
+    players = []
     for i in range(4):
-      cards = self.cards[i * 4 : (i + 1) *4]
-      self.players.append(Player(i, 'Player '+ str(i + 1), cards, playerColors[i], 0))
+      name = 'Player '+ str(i + 1)
+      playertype = 0
+      if (playerConfig != None and len(playerConfig) != 0):
+        name = playerConfig[i]['name']
+        playertype = playerConfig[i]['type']
+      playerCards = cards[i * 4 : (i + 1) *4]
+      players.append(Player(i, name, playerCards, playerColors[i], playertype))
       if i == 0:
-        self.players[i].startWay()
-    self.cards = self.cards[16:]
+        players[i].startWay()
+    cards = cards[16:]
+
+    self.id = gameId
+    self.type = gameType
+    self.riskNumber = riskNumber
+    self.nextBotAction = nextBotAction
+    self.actualPlayer = actualPlayer
+    self.whereIsPilar = whereIsPilar
+    self.finished = finished
+    self.slabs = slabs
+    self.normalMarket = normalMarket
+    self.specialMarket = specialMarket
+    self.players = players
+    self.cards = cards
     
   def getActualPlayer(self):
     return self.players[self.actualPlayer]

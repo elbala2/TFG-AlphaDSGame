@@ -11,3 +11,6 @@
 
     \sql
     \connect root@localhost
+
+
+.\venv\Scripts\activate
