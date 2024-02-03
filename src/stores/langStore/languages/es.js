@@ -1,4 +1,4 @@
-import { BLUE, GREEN, RED, YELLOW } from "../../../constants";
+import { BLUE, GREEN, MISSION_TYPE_DNA_SHERIFF, MISSION_TYPE_TO_SAFETY, MISSION_TYPE_WOLFS, RED, YELLOW } from "../../../constants";
 import { EN, ES } from "../constants";
 
 const utils = {
@@ -37,7 +37,7 @@ const instructionsModal = {
 
   mainMissionExplanation: `
     El objetivo del juego es ayudar a Shannon creando una aplicación que le indique cuando el lobo esta cerca, para ello el equipo encargado tendra que trabajar en distintos modulos clave para el correcto funcionamiento de la aplicación.`,
-  boardObjetiveExplanation: `
+  boardObjectiveExplanation: `
     Dichos modulos tendrán que estar conectados entre si mediante una red encargada de comunicar los distintos componentes de la aplicación.
     Por lo tanto, en primera instancia, el objetivo es conectar tu modulo con el resto y, posteriormente, aumentar la complejidad de dicho modulo añadiendo mas componentes.`,
 
@@ -67,6 +67,27 @@ const instructionsModal = {
 
 const homePage = {
   wellcomeTo: `Bienvenido a ${utils.appName}`,
+  missions: {
+    [MISSION_TYPE_WOLFS]: 'Lobos!',
+    [MISSION_TYPE_DNA_SHERIFF]: 'La sheriff del ADN',
+    [MISSION_TYPE_TO_SAFETY]: 'Camino a la seguridad',
+  },
+  objectiveDescriptions: {
+    [MISSION_TYPE_WOLFS]: `
+      La granjera Shannon esta preocupada, un lobo esta atacando sus ovejas.
+      ¡La ciencia de datos puede ayudarla!
+      Tu trabajo es ayudarla desarrollando una aplicación que alerte a Shannon cuando el lobo va a atacar.`,
+      
+    [MISSION_TYPE_DNA_SHERIFF]: `
+      Margarita Salas, la bioquimica necesita ayuda con su investigación.
+      ¡La ciencia de datos puede ayudarla!
+      Tu trabajo es ayudarla desarrollando una aplicación que analice y clasifique las muestras de ADN de varios virus.`,
+      
+    [MISSION_TYPE_TO_SAFETY]: `
+      Prudens y sus hermanos estan preocupados por la seguridad de camino al colegio.
+      ¡La ciencia de datos puede ayudarla!
+      Tu trabajo es ayudarlos desarrollando una aplicación que les proporcione el camino mas seguro hasta clase.`,
+  },
 };
 
 const leftUI = {
@@ -76,6 +97,7 @@ const leftUI = {
 const tradeModal = { // will be deleted
   title: 'Seleccione las cartas que quiere intercambiar',
   onTradeAcceptQst: '¿Quieres aceptar el siguiente intercambio?',
+  noPlayersToTrade: 'No hay jugadores con los que intercambiar',
 };
 
 const rigthUI = {
@@ -86,13 +108,21 @@ const rigthUI = {
     [GREEN]: 'Misión de visualización',
   },
   misionDescription: {
-    [BLUE]: 'Ayuda a Shannon a recopilar toda la información posible sobre sus ovejas y su comportamiento cuando el lobo está cerca',
+    [BLUE]: {
+      [MISSION_TYPE_WOLFS]: 'Ayuda a Shannon a recopilar toda la información posible sobre sus ovejas y su comportamiento cuando el lobo está cerca',
+      [MISSION_TYPE_DNA_SHERIFF]: 'Ayuda a Margarita a recopilar toda la información posible sobre los virus',
+      [MISSION_TYPE_TO_SAFETY]: 'Ayuda a Prudens y sus hermanos a recopilar toda la información posible sobre los caminos de su ciudad',
+    },
     [YELLOW]: '¡Ayuda al informático a explorar los datos de las ovejas utilizando software informático!',
     [RED]: '¡Ayuda al matemático a construir un modelo para detectar cuándo va a atacar el lobo!',
     [GREEN]: '¡Ayuda al informático a crear una aplicación móvil que avise a Shannon cuando el lobo se acerque peligrosamente a sus ovejas!',
   },
   misionCompletedDescription: {
-    [BLUE]: 'Entiendes perfectamente lo que Shannon necesita.\nHas recopilado los datos sobre las ovejas.\nHas almacenado los datos en un ordenador.',
+    [BLUE]: {
+      [MISSION_TYPE_WOLFS]: 'Entiendes perfectamente lo que Shannon necesita.\nHas recopilado los datos sobre las ovejas.\nHas almacenado los datos en un ordenador.',
+      [MISSION_TYPE_DNA_SHERIFF]: 'Entiendes perfectamente lo que Margarita necesita.\nHas recopilado los datos sobre los virus.\nHas almacenado los datos en un ordanedor.',
+      [MISSION_TYPE_TO_SAFETY]: 'Entiendes perfectamente lo que Prudens y sus hermanos necesitan.\nHas recopilado los datos sobre los caminos.\nHas almacenado los datos en un ordanedor.',
+    },
     [YELLOW]: 'Tienes una visión general de las ovejas y sus características.\nDespués de organizar y limpiar tus datos, están listos para el siguiente paso',
     [RED]: 'Has probado y evaluado diferentes modelos.\nHas elegido el mejor para detectar el ataque del lobo. \nEstán listos para dar la buena noticia a Shannon',
     [GREEN]: 'Has desarrollado una útil aplicación móvil que alerta a Shannon cuando el lobo está a punto de atacar a sus ovejas.\nLe has explicado el modelo y la aplicación a Shannon y está muy contenta porque lo domina',
@@ -101,6 +131,7 @@ const rigthUI = {
 
 const market = {
   riskMsg: 'El juego se pausara hasta que se resuelvan todos los riesgos.',
+  importantInfo: 'Información importante',
 };
 
 const successModal = {
@@ -110,10 +141,6 @@ const successModal = {
 
 const nextPlayerModal = {
   title: '¿Esta seguro de terminar el turno?',
-};
-
-const failModal = {
-  systemCompromised: 'El sistema se vio comprometido',
 };
 
 const cards = {
@@ -205,7 +232,6 @@ const es = {
   market,
   successModal,
   nextPlayerModal,
-  failModal,
   cards,
   risks,
   specialSlabs,

@@ -38,9 +38,8 @@ const RiskContainer = ({
         <Tooltip parentRef={costsRef} className='px-3 py-2'>
           {dictionary.risks.descriptions[type]}
         </Tooltip>
-        <input
+        <img
           alt={`img`}
-          type='image'
           className='riskImg'
           src={getSlabImg(slab)}
           draggable={false}

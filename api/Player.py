@@ -3,23 +3,29 @@ import json
 from slabs import *
 from utils import indexOf, apply
 
+from config import (
+  playerColors,
+  cardTypes,
+  
+  up,
+  rotationOrder,
+  positionVectors,
 
-def toJSON(obj):
-  return json.loads(json.dumps(obj, default=lambda o: getattr(o, '__dict__', str(o))))
-
+  x,
+  y,
+)
 
 class Player:
-  def __init__(self, id, name, start, cards, color, type=0):
+  def __init__(self, id, name, cards, color, type=0):
     self.id = id
     self.name = name
     self.type = type
     self.color = color
     self.points = 0
     self.cards = cards
-    self.hasBougth = False
+    self.hasBought = False
     self.board = [[None for i in range(4)] for i in range(4)]
-    self.start = start
-    self.board[start][0] = Slab([1, 1, 1, 1], 'Start_' + color)
+    self.board[1][0] = Slab([1, 1, 1, 1], 'Start_' + color)
     self.way = []
 
   def startWay(self):
@@ -29,32 +35,29 @@ class Player:
     costs = slab.costs.copy()
 
     if not self.canBuySlab(cards, costs, slab.type):
-      print('here 1')
       return []
 
     i = len(cards) - 1
     deletedCards = []
+    playerCards = self.cards.copy()
     while (i >= 0 and costs[0] + costs[1] + costs[2] > 0):
       index = indexOf(self.cards, cards[i])
       if index == -1:
         raise Exception('Card not found')
       cardType = self.cards[index].type
-      if (costs[0] > 0 and cardType == 'domain'):
-        deletedCards += [self.cards.pop(index)]
-        costs[0] -= 1
-      if (costs[1] > 0 and cardType == 'compSci'):
-        deletedCards += [self.cards.pop(index)]
-        costs[1] -= 1
-      if (costs[2] > 0 and cardType == 'math'):
-        deletedCards += [self.cards.pop(index)]
-        costs[2] -= 1
+
+      cardTypesKeys = list(cardTypes.keys())
+      for j in range(len(cardTypesKeys)):
+        if (costs[j] > 0 and cardType == cardTypesKeys[j]):
+          deletedCards += [playerCards.pop(index)]
+          costs[j] -= 1
+
       i -= 1
+    self.cards = playerCards
     return deletedCards
   
   def rateSteps(self, steps):
     mark = len(steps) * 2
-    x = 0
-    y = 1
     lastStep = steps[-1]
     if (lastStep[x] != 2 or lastStep[y] != 0):
       mark += 20
@@ -63,48 +66,26 @@ class Player:
   
     
   def getNextOpt(self, steps):
-    x = 0
-    y = 1
     lastStep = steps[-1]
     board = self.board
     lastSlab = board[lastStep[y]][lastStep[x]]
-    lastSlabLinks = lastSlab.ApplyRotation() 
+    lastSlabLinks = lastSlab.applyRotation() 
     res = []
 
-    if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] - 1 < 3  \
-      and lastSlabLinks[0] \
-      and board[lastStep[y] - 1][lastStep[x]] is not None \
-      and board[lastStep[y] - 1][lastStep[x]].ApplyRotation()[2] \
-      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] - 1), False):
-        res.append([lastStep[x], lastStep[y] - 1])
-
-    if 0 <= lastStep[x] + 1 < 3 and 0 <= lastStep[y] < 3 \
-      and lastSlabLinks[1] \
-      and board[lastStep[y]][lastStep[x] + 1] is not None \
-      and board[lastStep[y]][lastStep[x] + 1].ApplyRotation()[3] \
-      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + 1 and curr[y] == lastStep[y]), False):
-        res.append([lastStep[x] + 1, lastStep[y]])
-
-    if 0 <= lastStep[x] < 3 and 0 <= lastStep[y] + 1 < 3 \
-      and lastSlabLinks[2] \
-      and board[lastStep[y] + 1][lastStep[x]] is not None \
-      and board[lastStep[y] + 1][lastStep[x]].ApplyRotation()[0] \
-      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] and curr[y] == lastStep[y] + 1), False):
-        res.append([lastStep[x], lastStep[y] + 1])
-
-    if 0 <= lastStep[x] - 1 < 3 and 0 <= lastStep[y] < 3 \
-      and lastSlabLinks[3] \
-      and board[lastStep[y]][lastStep[x] - 1] is not None \
-      and board[lastStep[y]][lastStep[x] - 1].ApplyRotation()[1] \
-      and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] - 1 and curr[y] == lastStep[y]), False):
-        res.append([lastStep[x] - 1, lastStep[y]])
+    for direction in rotationOrder: 
+      vector = positionVectors[direction]
+      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
+      if lastSlabLinks[direction] \
+        and 0 <= lastStep[x] + vector[x] < 3 and 0 <= lastStep[y] + vector[y] < 3 \
+        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]] is not None \
+        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]].applyRotation()[compDirection] \
+        and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + vector[x] and curr[y] == lastStep[y] + vector[y]), False):
+          res.append([lastStep[x] + vector[x], lastStep[y] + vector[y]])
 
     return res
     
 
   def getBestWay(self, steps):
-    x = 0
-    y = 1
     lastStep = steps[-1]
 
     if lastStep[x] == 2 and lastStep[y] == 0:
@@ -116,13 +97,10 @@ class Player:
     
     bestWay = steps
     bestWayMark = self.rateSteps(bestWay)
-    print('bestWay', bestWay)
-    print('bestWayMark', bestWayMark)
+
     for nextOpt in nextOpts:
       wayCandidate = self.getBestWay(steps + [nextOpt])
       wayCandidateMark = self.rateSteps(wayCandidate)
-      print('wayCandidate', wayCandidate)
-      print('bestWayMark', wayCandidateMark)
 
       if bestWayMark > wayCandidateMark:
         bestWay = wayCandidate
@@ -130,74 +108,49 @@ class Player:
     return bestWay
   
   def moveWay(self):
-    x = 0
-    y = 1
-
     if self.way[-1][x] == 2 and self.way[-1][y] == 0:
       return True
 
     nextSteps = self.getBestWay(self.way)
-    print(self.way)
     if len(nextSteps) > len(self.way):
-      print(nextSteps)
-      print(nextSteps[len(self.way)])
       self.way += [nextSteps[len(self.way)]]
     return False
 
   def whereCanBePlace(self, slab, destiny, rotation = 0):
-    arriba = 0
-    derecha = 1
-    abajo = 2
-    izquierda = 3
-
     slabLinks = slab.getRotatedLinks(rotation)
 
-    hecho = True
-    if (destiny[0] == 0 and destiny[1] == 2):
-      hecho = slabLinks[arriba] == 1
+    done = True
+    if (destiny[x] == 0 and destiny[y] == 2):
+      done = slabLinks[up] == 1
 
-    # comprueba el de arriba del destino
-    if (destiny[0] - 1 >= 0):
-      slabEnTablero = self.board[destiny[0] - 1][destiny[1]]
-      if slabEnTablero != None and slabLinks[arriba] and slabEnTablero.ApplyRotation()[abajo] and hecho:
-          return 1
+    for direction in rotationOrder: 
+      vector = positionVectors[direction]
+      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
 
-    # comprueba el de la derecha del destino
-    if (destiny[1] + 1 <= 3):
-      slabEnTablero = self.board[destiny[0]][destiny[1] + 1]
-      if slabEnTablero and slabLinks[derecha] and slabEnTablero.ApplyRotation()[izquierda] and hecho:
-          return 2
+      if (0 <= destiny[x] + vector[x] <= 3 and 0 <= destiny[y] + vector[y] <= 3):
+        slabOnBoard = self.board[destiny[y] + vector[y]][destiny[x] + vector[x]]
+        if slabOnBoard != None and slabLinks[direction] and slabOnBoard.applyRotation()[compDirection] and done:
+            return direction + 1
 
-    # comprueba el de abajo del destino
-    if (destiny[0] + 1 <= 3):
-      slabEnTablero = self.board[destiny[0] + 1][destiny[1]]
-      if slabEnTablero != None and slabLinks[abajo] and slabEnTablero.ApplyRotation()[arriba] and hecho:
-          return 3
-
-    # comprueba el de la izquierda del destino
-    if (destiny[1] - 1 >= 0):
-      slabEnTablero = self.board[destiny[0]][destiny[1] - 1]
-      if slabEnTablero != None and slabLinks[izquierda] and slabEnTablero.ApplyRotation()[derecha] and hecho:
-          return 4
     return 0
 
   def putSlab(self, slab, destiny, rotation):
-    if (destiny == None or self.board[destiny[0]][destiny[1]] != None):
+    if (destiny == None or self.board[destiny[y]][destiny[x]] != None):
       return False
 
     if (self.whereCanBePlace(slab, destiny, rotation) == 0):
       return False
 
     slab.rotation = rotation
-    self.board[destiny[0]][destiny[1]] = slab
-    if (destiny[0] == 0 and destiny[1] == 2):
+    self.board[destiny[y]][destiny[x]] = slab
+    if (destiny[y] == 0 and destiny[x] == 2):
       self.points += 10
     self.points += slab.points
-    self.hasBougth = True
+    self.hasBought = True
     return True
 
   def canBuySlab(self, cards, costs, slabColor = ''):
-    if ['BLUE', 'YELLOW', 'RED', 'GREEN'].__contains__(slabColor) and slabColor != self.color: return False
+    if playerColors.__contains__(slabColor) and slabColor != self.color: return False
     if cards == None:
       cards = self.cards
     domainList = list(filter(lambda f: f.type == 'domain', cards))
@@ -206,65 +159,61 @@ class Player:
     return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
 
   def canSolveRisk(self, risk):
-    requiredCardsNeeded = list(filter(lambda f: risk.isCardNeeded(f), self.cards))
+    requiredCardsNeeded = list(filter(lambda f: risk.costIndexNeeded(f) != -1, self.cards))
     return len(requiredCardsNeeded) >= risk.costs
 
   def getCloseLinks(self, coords, movement):
     link = None
-    x = coords[1] + movement[1]
-    y = coords[0] + movement[0]
-    if 0 <= x < 4 and 0 <= y < 4:
-      slab = self.board[y][x]
+    x1 = coords[x] + movement[x]
+    y1 = coords[y] + movement[y]
+    if 0 <= x1 <= 3 and 0 <= y1 <= 3:
+      slab = self.board[y1][x1]
       if slab != None:
-        link = slab.ApplyRotation()
+        link = slab.applyRotation()
     return link
 
-  def getPositionPlaces(self, slab, x, y):
-    if self.board[y][x] != None:
+  def getPositionPlaces(self, slab, coords):
+    if self.board[coords[y]][coords[x]] != None:
       return []
-    
-    arriba = [-1, 0]
-    derecha = [0, 1]
-    abajo = [1, 0]
-    izquierda = [0, -1]
 
     res = []
-    link_arriba    = self.getCloseLinks([y, x], arriba)
-    link_derecha   = self.getCloseLinks([y, x], derecha)
-    link_abajo     = self.getCloseLinks([y, x], abajo)
-    link_izquierda = self.getCloseLinks([y, x], izquierda)
-    for rot in range(4):
-      slabLinks = slab.getRotatedLinks(rot)
-      
-      if ((link_arriba   != None and slabLinks[0]  and link_arriba[2]   ) \
-      or (link_derecha   != None and slabLinks[1]  and link_derecha[3]  ) \
-      or (link_abajo     != None and slabLinks[2]  and link_abajo[0]    ) \
-      or (link_izquierda != None and slabLinks[3]  and link_izquierda[1]))\
-      and (x != 2 or y != 0 or (slabLinks[0] and x == 2 and y == 0)):
-        res += [{ 'pos': [x, y], 'rotation': rot }]
+    zoneLinks = []
+
+    for direction in rotationOrder:
+      vector = positionVectors[direction]
+      zoneLinks += [self.getCloseLinks(coords, vector)]
+
+    for rotation in rotationOrder:
+      slabLinks = slab.getRotatedLinks(rotation)
+      isValid = False
+
+      for direction in rotationOrder:
+        compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
+        if slabLinks[direction] and zoneLinks[direction] != None and zoneLinks[direction][compDirection]:
+          isValid = True
+
+      if isValid and (coords[x] != 2 or coords[y] != 0 or (slabLinks[up] and coords[x] == 2 and coords[y] == 0)):
+        res += [{ 'pos': coords, 'rotation': rotation }]
     
     return res
 
-  def getPosiblePlaces(self, slab):
+  def getPossiblePlaces(self, slab):
     res = []
-    for y in range(4):
-      for x in range(4):
-        res += self.getPositionPlaces(slab, x, y)
+    for y1 in range(4):
+      for x1 in range(4):
+        res += self.getPositionPlaces(slab, [x1, y1])
     return res
 
   def getCards(self, slab):
     res = []
     costs = slab.costs.copy()
+    cardTypesKeys = list(cardTypes.keys())
     for card in self.cards:
-      if costs[0] >= 1 and card.type == 'domain':
-        res += [card]
-        costs[0] -= 1
-      if costs[1] >= 1 and card.type == 'compSci':
-        res += [card]
-        costs[1] -= 1
-      if costs[2] >= 1 and card.type == 'math':
-        res += [card]
-        costs[2] -= 1
+      for i in range(len(cardTypesKeys)):
+        if (costs[i] >= 1 and card.type == cardTypesKeys[i]):
+          res += [card]
+          costs[i] -= 1
+
     return res
 
   def getRiskCards(self, risk):
@@ -275,6 +224,3 @@ class Player:
         res += [card]
         costs -= 1
     return res
-
-  def toJSON(self):
-    return json.loads(json.dumps(self, default=lambda o: getattr(o, '__dict__', str(o))))

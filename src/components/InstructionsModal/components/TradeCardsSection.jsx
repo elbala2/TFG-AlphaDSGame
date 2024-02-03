@@ -25,31 +25,13 @@ function TradeCardsSection({
       <p>
         {dictionary.tradeExplanation}
       </p>
-      {/* <div className='d-flex align-items-center px-4 mb-3'>
-        <img
-          src={MainMissionImg}
-          className='scale-60 rounded-3'
-          alt='MainMission'
-        />
-        <p className='ps-4'>
-          {dictionary.mainMissionExplanation}
-        </p>
-      </div>
-      <div className='d-flex align-items-center px-4 mb-3'>
-        <p className='pe-4'>
-          {dictionary.boardObjetiveExplanation}
-        </p>
-        <img
-          src={BoardObjetive}
-          className='scale-80 rounded-3'
-          alt='BoardObjetive'
-        />
-      </div> */}
     </section>
   )
 }
 
 TradeCardsSection.propTypes = {
+  className: PropTypes.string.isRequired,
+  dictionary: PropTypes.string.isRequired,
 }
 
 function mapStateToProps(state) {

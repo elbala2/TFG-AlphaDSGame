@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { isEmpty } from 'lodash'
+import { isEmpty, min, uniqueId } from 'lodash'
 
 import Tooltip from '../UI/Tooltip';
 import { getSlabImg } from '../../utils/GetSlabImg';
 
 import styles from './slab.module.scss'
 
-
-import { min } from 'mathjs';
 import { playerColors } from '../../constants';
 import { connect } from 'react-redux';
 
@@ -21,8 +19,11 @@ function Links({
   height = 24,
   lineColor = '#d0bfc7',
   rect,
+  className,
   ...other
 }) {
+  const [uId] = useState(uniqueId())
+
   const lineWPadding = (width - (space * (linesNumber - 1)) - (lineWidth * (linesNumber - 1))) / 2;
   const lineHPadding = (height - (space * (linesNumber - 1)) - (lineWidth * (linesNumber - 1))) / 2;
   
@@ -30,10 +31,12 @@ function Links({
   
   for (let i = 0; i < linesNumber; i += 1) {
     const step = ((space * i) + (lineWidth * i));
+    const id = uId + i;
     lines.push(
-      <>
+      <React.Fragment key={id}>
         {!!links[0] && (
           <line
+            key={`${id}_1`}
             x1={step + lineWPadding}
             y1="0"
             x2={step + lineWPadding}
@@ -47,6 +50,7 @@ function Links({
 
         {!!links[1] && (
           <line
+            key={`${id}_2`}
             x1={lineWPadding - (lineWidth / 2)}
             y1={height - (step + lineHPadding)}
             x2={width}
@@ -60,6 +64,7 @@ function Links({
 
         {!!links[2] && (
           <line
+            key={`${id}_3`}
             x1={step + lineWPadding}
             y1={lineHPadding + (lineWidth / 2)}
             x2={step + lineWPadding}
@@ -73,6 +78,7 @@ function Links({
 
         {!!links[3] && (
           <line
+            key={`${id}_4`}
             x1={0}
             y1={height - (step + lineHPadding)}
             x2={width - lineWPadding + (lineWidth / 2)}
@@ -83,7 +89,7 @@ function Links({
             }}
           />
         )}
-      </>
+      </React.Fragment>
     )
   }
 
@@ -143,33 +149,46 @@ function Links({
   }
 
   return (
-      <svg {...other} viewBox={`0 0 ${width} ${height}`} className='position-absolute' preserveAspectRatio="">
+      <svg {...other} viewBox={`0 0 ${width} ${height}`} className={`position-absolute ${className ?? ''}`} preserveAspectRatio="">
         {lines}
         {rectangle}
       </svg>
   )
 }
 
-export function Cable(props) {
-  const [, setValue] = useState(0);
+export function Cable({
+  isWayPart,
+  ...otherProps
+}) {
+  const [size, setSize] = useState();
 
   const cableRef = useRef();
-  
-  const forceUpdate = () => {
-    setValue(value => value + 1);
+
+  function loadSize() {
+    const { width, height } = cableRef.current?.getBoundingClientRect();
+
+    setSize({ width, height });
   }
   
-  const { width, height } = cableRef.current?.getBoundingClientRect() ?? {};
+  const loadInit = () => {
+    if (!cableRef?.current) return;
+    loadSize();
+    const rObserver = new ResizeObserver(loadSize);
+    rObserver.observe(cableRef?.current);
+  }
   
-  useEffect(forceUpdate, [width, height]);
+  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(loadInit, [cableRef?.current]);
 
   return (
     <div className='w-100 h-100 position-relative' ref={cableRef}>
       {cableRef.current && (
         <Links
-          {...props}
-          width={width}
-          height={height}
+          className='svg-shadow-md'
+          {...otherProps}
+          {...size}
+          lineColor = {isWayPart ? 'gold' : undefined}
         />
       )}
     </div>
@@ -177,22 +196,33 @@ export function Cable(props) {
 }
 
 function Slab({
+  gameType,
   slab,
   isWayPart,
   dictionary,
+  onClick,
 }) {
-  const [, setValue] = useState(0);
+  const [size, setSize] = useState();
+
   const slabRef = useRef();
   const descriptionRef = useRef();
-  
-  const forceUpdate = () => {
-    setValue(value => value + 1);
+
+  function loadSize() {
+    const { width, height } = slabRef.current?.getBoundingClientRect();
+
+    setSize({ width, height });
   }
   
-  const { width, height } = slabRef.current?.getBoundingClientRect() ?? {};
+  const loadInit = () => {
+    if (!slabRef?.current) return;
+    loadSize();
+    const rObserver = new ResizeObserver(loadSize);
+    rObserver.observe(slabRef?.current);
+  }
   
-  useEffect(forceUpdate, [width, height, slab, isWayPart]);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(loadInit, [slabRef?.current]);
+  
   if (isEmpty(slab)) return '';
 
   const cableProps = {};
@@ -206,7 +236,7 @@ function Slab({
     cableProps.rect = {
       isBig: true,
       color: slab.type.replace('Start_', ''),
-      image: getSlabImg(slab),
+      image: getSlabImg(slab, gameType),
     };
   }
   if (slab.isSpecial) {
@@ -215,14 +245,17 @@ function Slab({
       color: slab.type,
     };
   }
+  
   if (isWayPart) cableProps.lineColor = '#f5e83b'
 
-
   return (
-    <div className='w-100 h-100 position-relative' ref={slabRef}>
+    <div
+      ref={slabRef}
+      className='w-100 h-100 position-relative'
+      onClick={onClick}
+    >
       <Links
-        width={width}
-        height={height}
+        {...size}
         {...cableProps}
       /> 
       {slab.isSpecial && slab.descriptionKey && (
@@ -253,6 +286,8 @@ function stateToProps(state) {
       ...state.lang.dictionary.specialSlabs,
       ...state.lang.dictionary.utils,
     },
+
+    gameType: state.game.gameType,
   };
 }
 

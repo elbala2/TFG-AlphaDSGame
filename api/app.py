@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pickle
 import json
@@ -8,6 +8,7 @@ import mysql.connector
 from Game import Game
 
 app = Flask(__name__)
+app.debug = True
 CORS(app)
 
 password = 'kiralinda101'
@@ -36,37 +37,39 @@ def updateGame(id, game):
 def toJSON(obj):
   return json.loads(json.dumps(obj, default=lambda o: getattr(o, '__dict__', str(o))))
 
-@app.route('/startGame', methods=['PUT'])
+@app.route('/game', methods=['POST'])
 def startGame():
   game = Game()
   if bool(request.get_json()):
-    players, start = request.get_json().values()
-    game.setConfig(players, start)
+    players = request.get_json()['players']
+    gameType = request.get_json()['gameType']
+    game.setConfig(gameType, players)
   createdId = createGame(game)
   game.id = createdId
+  updateGame(createdId, game)
   return jsonify(toJSON(game))
 
-@app.route('/getGame/<id>', methods=['GET'])
+@app.route('/game/<id>', methods=['GET'])
 def getGameEndpoint(id):
   game = getGame(id)
   return jsonify(toJSON(game))
 
-@app.route('/moveSlab/<id>', methods=['POST'])   
-def moveSlab(id):
+@app.route('/game/<id>/slabs/<slabID>/move', methods=['PUT'])   
+def moveSlab(id, slabID):
   game = getGame(id)
-  origin, destiny, rotation, cards = request.get_json().values()
-  game.moveSlab(origin, destiny, rotation, [namedtuple('Card', c.keys())(*c.values()) for c in list(filter(lambda f: f['selected'] == True, cards))])
+  destiny, rotation, cards = request.get_json().values()
+  game.moveSlab(int(slabID), destiny, rotation, [namedtuple('Card', c.keys())(*c.values()) for c in list(filter(lambda f: f['selected'] == True, cards))])
   updateGame(id, game)
   return jsonify(toJSON({ 'player': game.players[game.actualPlayer], 'normalMarket': game.normalMarket, 'specialMarket': game.specialMarket }))
 
-@app.route('/nextTurn/<id>', methods=['GET'])   
+@app.route('/game/<id>/players/next', methods=['GET'])
 def nextTurn(id):
   game = getGame(id)
   game.nextTurn()
   updateGame(id, game)
   return jsonify(toJSON(game))
 
-@app.route('/tradeCards/<id>', methods=['POST'])   
+@app.route('/game/<id>/cards/trade', methods=['PUT'])   
 def tradeCards(id):
   game = getGame(id)
   player1ID, cards1, player2ID, cards2 = request.get_json().values()
@@ -81,22 +84,22 @@ def tradeCards(id):
     return jsonify(toJSON({ 'players': game.players }))
   raise Exception('Not same len')
 
-@app.route('/discard/<id>/<cardID>', methods=['GET'])   
+@app.route('/game/<id>/cards/<cardID>/discard', methods=['PUT'])   
 def discard(id, cardID):
   game = getGame(id)
   game.discard(cardID)
   updateGame(id, game)
   return jsonify(toJSON({ 'cards': game.players[game.actualPlayer].cards }))
 
-@app.route('/fix/<id>', methods=['POST'])   
-def fix(id):
+@app.route('/game/<id>/fix/<riskID>', methods=['PUT'])   
+def fix(id, riskID):
   game = getGame(id)
-  slabID, cards = request.get_json().values()
-  game.fix(slabID, [namedtuple('Card', c.keys())(*c.values()) for c in list(filter(lambda f: f['selected'] == True, cards))])
+  cards = request.get_json()['cards']
+  game.fix(int(riskID), [namedtuple('Card', c.keys())(*c.values()) for c in list(filter(lambda f: f['selected'] == True, cards))])
   updateGame(id, game)
   return jsonify(toJSON({ 'players': game.players, 'specialMarket': game.specialMarket }))
 
-@app.route('/bot/<id>', methods=['GET'])
+@app.route('/game/<id>/bot/action', methods=['GET'])
 def bot_moves(id):
   game = getGame(id)
   hecho = game.botAction()
@@ -104,4 +107,3 @@ def bot_moves(id):
   if hecho != True:
     return jsonify(toJSON(hecho))
   return jsonify(toJSON(game))
-

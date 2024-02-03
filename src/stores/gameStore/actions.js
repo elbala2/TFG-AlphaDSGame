@@ -1,15 +1,15 @@
 export const MOVER_ACTION = 'MOVER';
-export const ROTAR_ACTION = 'ROTAR';
-export const SETTARGET_ACTION = 'SETTARGET';
-export const CARDSELECTED_ACTION = 'CARDSELECTED';
+export const SELECT_SLAB = 'SELECT_SLAB';
+export const ROTATE_ACTION = 'ROTATE';
+export const CARD_SELECTED_ACTION = 'CARD_SELECTED';
 export const CLEAR_CARDS_ACTION = 'CLEAR_CARDS_ACTION';
-export const NEXTPLAYER = 'NEXTPLAYER';
-export const ACEPTTRADE = 'ACEPTTRADE';
+export const NEXT_PLAYER = 'NEXT_PLAYER';
+export const ACCEPT_TRADE = 'ACCEPT_TRADE';
 export const FIX = 'FIX';
 export const CONFIG = 'CONFIG';
-export const DESCARTAR = 'DESCARTAR';
+export const DISCARD = 'DISCARD';
 export const START = 'START';
-export const SETSTATE = 'SETSTATE';
+export const SET_STATE = 'SET_STATE';
 export const SET_CARD_CONFIG = 'SET_CARD_CONFIG';
 export const CLEAR_CARD_CONFIG = 'CLEAR_CARD_CONFIG';
 export const RESET = 'RESET';
@@ -21,24 +21,24 @@ export const mover = (callbackRes) => {
   }
 }
 
-export const rotar = (marketId, dir) => {
+export const selectSlab = (id) => {
   return {
-    type: ROTAR_ACTION,
+    type: SELECT_SLAB,
+    id,
+  }
+}
+
+export const rotate = (marketId, dir) => {
+  return {
+    type: ROTATE_ACTION,
     id: marketId,
     dir,
   }
 }
 
-export const setTarget = target => {
-  return {
-    type: SETTARGET_ACTION,
-    target,
-  }
-}
-
 export const setCardSelected = (playerId, id) => {
   return {
-    type: CARDSELECTED_ACTION,
+    type: CARD_SELECTED_ACTION,
     cardId: id,
     playerId,
   }
@@ -53,14 +53,14 @@ export const clearSelected = (playerId) => {
 
 export const nextPlayer = (callbackRes) => {
   return {
-    type: NEXTPLAYER,
-    newstate: callbackRes,
+    type: NEXT_PLAYER,
+    newState: callbackRes,
   }
 }
 
-export const aceptTrade = (callbackRes) => {
+export const acceptTrade = (callbackRes) => {
   return {
-    type: ACEPTTRADE,
+    type: ACCEPT_TRADE,
     ...callbackRes,
   }
 }
@@ -72,16 +72,16 @@ export const fix = (callbackRes) => {
   }
 }
 
-export const descartar = (callbackRes) => {
+export const discard = (callbackRes) => {
   return {
-    type: DESCARTAR,
+    type: DISCARD,
     ...callbackRes,
   }
 }
 
 export const setState = (callbackRes) => {
   return {
-    type: SETSTATE,
+    type: SET_STATE,
     callbackRes,
   }
 }

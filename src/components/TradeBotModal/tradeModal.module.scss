@@ -36,10 +36,10 @@
   .playersContainer {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
 
     .playerContainer {
-      width: 620px;
-      margin: 10px 20px;
       border-radius: 10px;
 
       .title {

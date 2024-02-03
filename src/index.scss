@@ -30,8 +30,8 @@ code {
   --darkerMarketBGColor: #004016;
   --riskBGColor: #d9dad9;
 
-  --cardHeight: 400px;
-  --cardWidth: 225px;
+  --cardHeight: 330px;
+  --cardWidth: 190px;
 
   --mediumCardHeight: 250px;
   --mediumCardWidth: 140px;
@@ -44,6 +44,7 @@ code {
   --playerBlue: #9999ffb3;
   --playerYellow: #fff099b3;
 
+  --bgGreen: #9eef65;
   --bgLigthGrey: #d9d9d99c;
   --bgGrey: #b3b3b39c;
 
@@ -138,4 +139,8 @@ code {
       height: calc(#{$i}px * 5);
     }
   }
+}
+
+.svg-shadow-md {
+  filter: drop-shadow(0 .5rem 1rem rgba(0,0,0,.15));
 }

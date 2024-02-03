@@ -1,12 +1,6 @@
 import { useState } from 'react';
 
-import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { DragDropContext } from 'react-beautiful-dnd';
-
-import { mover } from '../../../stores/gameStore/actions';
-import { MoveSlab } from '../../../utils/ApiConf';
 
 import LeftPlayerUI from './LeftPlayerUI';
 
@@ -18,67 +12,41 @@ const PlayerUI = ({
   playerIndex,
   handleNextPlayer,
   player,
-  normalMarket,
-  specialMarket,
-  whereIsPilar,
-  mover,
   className,
 }) => {
-  const { id } = useParams();
   const [tradeOpen, setTradeOpen] = useState(false);
 
+  if (!player) return '';
+
   return (
-    <DragDropContext
-      onDragEnd={({ draggableId, destination: { droppableId } }) => {
-        if (whereIsPilar === playerIndex) return;
-        const slabIndex = parseInt(draggableId);
-        const target = droppableId.replace('boardDrop_', '').split('-').map(n => parseInt(n));
-        const rotation = (slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4]).rotation;
-        const cards = player.cards.filter(c => c.selected);
-        MoveSlab(
-          id,
-          slabIndex,
-          target,
-          rotation,
-          cards,
-        ).then((res) => {
-          mover(res);
-        });
-      }}
-    >
-      <div className={`bgColor viewPage d-lg-flex px-lg-5 ${styles.mainCard} ${className ?? ''}`} type={player.color}>
-        <LeftPlayerUI
+    <div className={`bgColor viewPage d-lg-flex px-lg-5 ${styles.mainCard} ${className ?? ''}`} type={player.color}>
+      <LeftPlayerUI
+        playerIndex={playerIndex}
+        handleNextPlayer={handleNextPlayer}
+        handleTrade={() => setTradeOpen(prevstate => !prevstate)}
+      />
+      {tradeOpen ? (
+        <TradeUI
           playerIndex={playerIndex}
-          handleNextPlayer={handleNextPlayer}
-          handleTrade={() => setTradeOpen(prevstate => !prevstate)}
+          onCancel={() => setTradeOpen(false)}
         />
-        {tradeOpen ? (
-          <TradeUI
-            playerIndex={playerIndex}
-            onCancel={() => setTradeOpen(false)}
-          />
-        ) : (
-          <BoardUI
-            playerIndex={playerIndex}
-          />
-        )}
-      </div>
-    </DragDropContext>
+      ) : (
+        <BoardUI
+          playerIndex={playerIndex}
+        />
+      )}
+    </div>
   );
 };
 
 function stateToProps(state, { playerIndex }) {
   return {
     player: state.game.players[playerIndex],
-    normalMarket: state.game.normalMarket,
-    whereIsPilar: state.game.whereIsPilar,
-    specialMarket: state.game.specialMarket,
   };
 }
 
 function dispatchToProps(dispatch) {
   return {
-    mover: bindActionCreators(mover, dispatch),
   };
 }
 

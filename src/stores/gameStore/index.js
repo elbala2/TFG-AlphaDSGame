@@ -1,17 +1,17 @@
 import {
-  ACEPTTRADE,
-  CARDSELECTED_ACTION,
+  ACCEPT_TRADE,
+  CARD_SELECTED_ACTION,
   FIX,
   MOVER_ACTION,
-  NEXTPLAYER,
-  ROTAR_ACTION,
-  SETTARGET_ACTION,
-  DESCARTAR,
+  NEXT_PLAYER,
+  ROTATE_ACTION,
+  DISCARD,
   RESET,
-  SETSTATE,
+  SET_STATE,
   SET_CARD_CONFIG,
   CLEAR_CARD_CONFIG,
   CLEAR_CARDS_ACTION,
+  SELECT_SLAB,
 } from './actions';
 import initialState from './InitialState';
 
@@ -22,22 +22,20 @@ export default function gameReducer(state = initialState, action) {
     normalMarket,
     actualPlayer,
     players,
+    selectedSlab,
   } = state;
   
   switch (action.type) {
     case RESET: 
-    return initialState;
+    return {
+      id: undefined,
+      ...state,
+    };
     
-    case SETSTATE:
+    case SET_STATE:
       return {
         ...state,
         ...action.callbackRes,
-      };
-
-    case SETTARGET_ACTION:
-      return {
-        ...state,
-        target: action.target,
       };
 
     case CLEAR_CARDS_ACTION:
@@ -51,13 +49,19 @@ export default function gameReducer(state = initialState, action) {
         players: [...players],
       };
 
-    case CARDSELECTED_ACTION:
+    case CARD_SELECTED_ACTION:
       const playerid = typeof action.playerId !== 'undefined' ? action.playerId : actualPlayer;
       players[playerid].cards[action.cardId].selected = !players[playerid].cards[action.cardId].selected;
       players[playerid] = { ...players[playerid] };
       return {
         ...state,
         players: [...players],
+      };
+
+    case SELECT_SLAB:
+      return {
+        ...state,
+        selectedSlab: selectedSlab === action.id ? undefined : action.id, 
       };
 
     case MOVER_ACTION:
@@ -69,7 +73,7 @@ export default function gameReducer(state = initialState, action) {
         specialMarket: action.specialMarket,
       };
 
-    case ROTAR_ACTION:
+    case ROTATE_ACTION:
       const id = action.id < 4 ? action.id : action.id - 4;
       normalMarket[id].rotation = (normalMarket[id].rotation + action.dir) % 4;
       return {
@@ -77,18 +81,18 @@ export default function gameReducer(state = initialState, action) {
         normalMarket: [...normalMarket],
       };
 
-    case ACEPTTRADE:
+    case ACCEPT_TRADE:
       return {
         ...state,
         players: action.players,
       };
 
-    case NEXTPLAYER:
+    case NEXT_PLAYER:
       return {
-        ...action.newstate,
+        ...action.newState,
       };
 
-    case DESCARTAR:
+    case DISCARD:
       players[actualPlayer].cards = action.cards;
       return {
         ...state,

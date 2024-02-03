@@ -4,7 +4,7 @@
   border: 4px solid black;
   border-bottom: none;
   border-top: none;
-  background-color: #9eef65;
+  background-color: var(--bgGreen);
   height: 100%;
   width: calc(var(--slabSize) * 5);
 
@@ -40,6 +40,11 @@
     .missionLogoContainer {
       min-width: var(--slabSize);
       text-align: center;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
 
       .misionCompletedImg {
         height: calc(var(--slabSize) * 2);
@@ -121,7 +126,7 @@
       
     
         .slab{
-          background-color: rgb(158, 239, 101);
+          background-color: var(--bgGreen);
           user-select: none;
           height: 100%;
           width: 100%;

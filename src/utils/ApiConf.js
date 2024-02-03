@@ -17,23 +17,23 @@ const ApiCallBack = async (type, url, params) => {
 }
 
 export async function StartGame(config = undefined) {
-  return ApiCallBack('PUT', '/startGame', { ...config });
+  return ApiCallBack('POST', '/game', { ...config });
 }
 
 export async function GetGame(id) {
-  return ApiCallBack('GET', `/getGame/${id}`);
+  return ApiCallBack('GET', `/game/${id}`);
 }
 
-export function MoveSlab(id, origin, destiny, rotation, cards) {
-  return ApiCallBack('POST', `/moveSlab/${id}`, { origin, destiny, rotation, cards });
+export function MoveSlab(id, slabID, destiny, rotation, cards) {
+  return ApiCallBack('PUT', `/game/${id}/slabs/${slabID}/move`, { destiny, rotation, cards });
 }
 
 export function NextTurn(id) {
-  return ApiCallBack('GET', `/nextTurn/${id}`);
+  return ApiCallBack('GET', `/game/${id}/players/next`);
 }
 
 export function TradeCards(id, player1, player2) {
-  return ApiCallBack('POST', `/tradeCards/${id}`,
+  return ApiCallBack('PUT', `/game/${id}/cards/trade`,
   {
     player1ID: player1.id,
     cards1: player1.cards.filter(f => f.selected),
@@ -43,13 +43,13 @@ export function TradeCards(id, player1, player2) {
 }
 
 export function Discard(id, card) {
-  return ApiCallBack('GET', `/discard/${id}/${card.id}`);
+  return ApiCallBack('PUT', `/game/${id}/cards/${card.id}/discard`);
 }
 
-export function fixRisk(id, slabID, cards) {
-  return ApiCallBack('POST', `/fix/${id}`, { slabID, cards })
+export function fixRisk(id, riskID, cards) {
+  return ApiCallBack('PUT', `/game/${id}/fix/${riskID}`, { cards })
 }
 
 export function getBotAction(id) {
-  return ApiCallBack('GET', `/bot/${id}`)
+  return ApiCallBack('GET', `/game/${id}/bot/action`)
 }

@@ -18,7 +18,7 @@ function LeftPlayerUI({
   playerIndex,
   handleNextPlayer,
   handleTrade,
-  players,
+  player,
   whereIsPilar,
   setCardConfig,
   setState,
@@ -38,17 +38,19 @@ function LeftPlayerUI({
     })
   };
 
+  const isBot = player?.type === 1;
+
   return (
     <div className={`${styles.halfCard} col-lg-6`}>
       <div className={styles.header}>
-        <p className='h2 my-0 me-3'>{players[playerIndex]?.name}</p>
-        {(players[playerIndex]?.type === 1 || whereIsPilar === playerIndex) ? (
+        <p className='h2 my-0 me-3'>{player?.name}</p>
+        {(isBot || whereIsPilar === playerIndex) ? (
           <div className='d-flex align-items-center'>
             {whereIsPilar === playerIndex && (
               <>
                 <div className='alertCircle shadow bg-warning me-3' ref={alertRef}>
-                  <svg className='text-white' stroke-width={2} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height={24} width={24}>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                  <svg className='text-white' strokeWidth={2} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height={24} width={24}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                   </svg>
                 </div>
                 <Tooltip parentRef={alertRef} className='px-3 py-2'>
@@ -79,13 +81,12 @@ function LeftPlayerUI({
           </div>
         )}
       </div>
-      <hr />
       <Market />
       <div className='p-4'>
         <Cards
           playerIndex={playerIndex}
           descartable
-          disabled={playerIndex === whereIsPilar}
+          disabled={isBot || playerIndex === whereIsPilar}
         />
       </div>
     </div>
@@ -96,7 +97,7 @@ LeftPlayerUI.propTypes = {}
 
 function stateToProps(state, { playerIndex }) {
   return {
-    players: state.game.players,
+    player: state.game.players[playerIndex],
     whereIsPilar: state.game.whereIsPilar,
     dictionary: {
       ...state.lang.dictionary.leftUI,

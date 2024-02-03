@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { aceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../stores/gameStore/actions';
+import { acceptTrade, clearCardConfig, setCardConfig, clearSelected } from '../../stores/gameStore/actions';
 
 
 import styles from './tradeModal.module.scss';
@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 
 
 const TradeBotModal = ({
-  aceptTrade,
+  acceptTrade,
   setCardConfig,
   clearCardConfig,
   clearSelected,
@@ -25,14 +25,14 @@ const TradeBotModal = ({
 }) => {
   const { id } = useParams();
   const [step, setStep] = useState(0);
-  const [slabStep, setSlabStep] = useState(0);
+  const [slabStep] = useState(0);
 
   async function handleTrade() {
     const tradePlayers = players.filter(f => f.cards.find(f => f.selected) !== undefined);
     if (tradePlayers.length === 2) {
       await TradeCards(id, tradePlayers[0], tradePlayers[1])
         .then((res) => {
-          aceptTrade(res);
+          acceptTrade(res);
           clearCardConfig();
           clearSelected();
         })
@@ -58,7 +58,7 @@ const TradeBotModal = ({
             if (p2.id === actualPlayer) return 1;
             return 0;
           })
-          .map((player) => {
+          .map((player, index) => {
             if (player.id !== actualPlayer && playerConf.player !== player.id) return '';
 
             return (
@@ -67,9 +67,9 @@ const TradeBotModal = ({
                 <div className='px-3 pb-3'>
                   <Cards
                     playerIndex={player.id}
-                    className='medium'
+                    className={index > 0 ? 'small' : 'medium'}
                     disabled={player.id !== actualPlayer}
-                    blocked={cardConfig[0]?.blocked}
+                    blocked={cardConfigTrade?.blocked}
                     selected={playerConf?.cards}
                   />
                 </div>
@@ -77,7 +77,7 @@ const TradeBotModal = ({
             );
           })}
         </div>
-        <div className='d-flex'>
+        <div className='d-flex pt-3'>
           <div className='flex-fill' />
           <Button
             variants='outlined secondary'
@@ -117,7 +117,7 @@ function stateToProps(state) {
 
 function dispatchToProps(dispatch) {
   return {
-    aceptTrade: bindActionCreators(aceptTrade, dispatch),
+    acceptTrade: bindActionCreators(acceptTrade, dispatch),
     setCardConfig: bindActionCreators(setCardConfig, dispatch),
     clearCardConfig: bindActionCreators(clearCardConfig, dispatch),
     clearSelected: bindActionCreators(clearSelected, dispatch),

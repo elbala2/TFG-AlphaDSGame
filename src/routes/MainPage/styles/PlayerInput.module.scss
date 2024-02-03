@@ -2,19 +2,7 @@
   height: 9rem;
   width: 9rem;
   border-radius: 10px;
-  
-  &[type='RED'] {
-    background-color: var(--playerRed);
-  }
-  &[type='GREEN']  {
-    background-color: var(--playerGreen);
-  }
-  &[type='BLUE'] {
-    background-color: var(--playerBlue);
-  }
-  &[type='YELLOW']  {
-    background-color: var(--playerYellow);
-  }
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
 
   input {
     margin: 10%;

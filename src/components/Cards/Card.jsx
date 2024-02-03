@@ -9,10 +9,9 @@ import Button from '../UI/Button';
 
 import './styles.scss';
 
-export const Card = ({
+const Card = ({
   card,
   onDiscard,
-  titleStyles,
   dictionary,
   ...other
 }) => {
@@ -22,7 +21,7 @@ export const Card = ({
       id={card.id}
       type={card.type}
       className={`tradeCard ${other.className ?? ''}`}
-      cardSelected={card.selected && ''}
+      cardselected={card.selected ? '' : undefined}
     >
       {!other.disabled && onDiscard && (
         <Button
@@ -58,4 +57,9 @@ function mapStateToProps(state) {
   });
 }
 
-export default connect(mapStateToProps)(Card)
+function mapDispatchToProps(dispatch) {
+  return ({
+  });
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Card)

@@ -1,7 +1,9 @@
 import red_start from '../resources/slabs/red-start.png';
 import green_start from '../resources/slabs/green-start.png';
 import yellow_start from '../resources/slabs/yellow-start.png';
-import blue_start from '../resources/slabs/blue-start.png';
+import blue_start1 from '../resources/slabs/blue-start1.png';
+import blue_start2 from '../resources/slabs/blue-start2.png';
+import blue_start3 from '../resources/slabs/blue-start3.png';
 
 import DataBase from '../resources/Cards/Data Base.png';
 import TeamSpirit from '../resources/Cards/Team Spirit.png';
@@ -23,14 +25,18 @@ import Virus from '../resources/Risks/Virus.png';
 import WorkingAlone from '../resources/Risks/Working Alone.png';
 import WrongModel from '../resources/Risks/Wrong Model.png';
 
-export const getSlabImg = (slab) => {
+import { MISSION_TYPE_DNA_SHERIFF, MISSION_TYPE_TO_SAFETY } from '../constants';
+
+export const getSlabImg = (slab, gameType) => {
   switch (slab.type) {
     case 'redStart':
     case 'Start_RED':
       return red_start;
     case 'blueStart':
     case 'Start_BLUE':
-      return blue_start;
+      if (gameType === MISSION_TYPE_DNA_SHERIFF) return blue_start2;
+      if (gameType === MISSION_TYPE_TO_SAFETY) return blue_start3;
+      return blue_start1;
     case 'yellowStart':
     case 'Start_YELLOW':
       return yellow_start;

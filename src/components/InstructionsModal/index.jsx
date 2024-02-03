@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import Modal from '../UI/Modal';
 
 import StartGameSection from './components/StartGameSection';
-import ObjetiveSection from './components/ObjetiveSection';
+import ObjectivesSection from './components/ObjectivesSection';
 import BuyAndPlaceComponents from './components/BuyAndPlaceComponents';
 import TradeCardsSection from './components/TradeCardsSection';
 
@@ -14,7 +14,7 @@ import './styles.scss';
 
 export const INSTRUCTIONS_TABS = {
   START_GAME: 'startGame',
-  OBJETIVE: 'objective',
+  OBJECTIVE: 'objective',
   BUY_COMPONENTS: 'buyComponents',
   TRADE_CARDS: 'tradeCards',
 };
@@ -36,6 +36,7 @@ function InstructionsModal({
         <div className='sidePanel'>
           {Object.values(INSTRUCTIONS_TABS).map(sectionId => (
             <a
+              key={sectionId}
               href={`#${sectionId}`}
               className='sectionLink me-3'
             >
@@ -45,7 +46,7 @@ function InstructionsModal({
         </div>
         <div className='sectionContent'>
             <StartGameSection className='mb-4'/>
-            <ObjetiveSection className='mb-4'/>
+            <ObjectivesSection className='mb-4'/>
             <BuyAndPlaceComponents className='mb-4'/>
             <TradeCardsSection className='mb-4' />
         </div>
@@ -55,6 +56,10 @@ function InstructionsModal({
 }
 
 InstructionsModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+
+  dictionary: PropTypes.object.isRequired,
 }
 
 function mapStateToProps(state) {

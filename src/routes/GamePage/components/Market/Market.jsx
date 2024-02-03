@@ -1,31 +1,22 @@
 /* eslint-disable default-case */
 import { connect } from 'react-redux';
-import { useState } from 'react';
 
 import RiskContainer from './RiskContainer';
 import MarketContainer from './MarketContainer';
 
 import icon from '../../../../resources/Icon.png';
-import Modal from '../../../../components/UI/Modal';
 
 import './Styles/styles.scss'
 
 const Market = ({
   normalMarket,
   specialMarket,
-  dictionary,
+  hasRisk,
 }) => {
-
-  const [open, setOpen] = useState(true);
-
-  const hasRisk = !!specialMarket.find(f => f.isRisk);
-
   return (
     <>
       <div className='market'>
-        <div className='text-center'>
-          <img src={icon} alt='icono' style={{ userSelect: 'none' }}/>
-        </div>
+        <img src={icon} className='marketLogo' alt='icono' style={{ userSelect: 'none' }}/>
         <div className='slabListContainer'>
           {normalMarket?.map((slab, i) => {
             return (
@@ -41,13 +32,6 @@ const Market = ({
           })}
         </div>
       </div>
-      <Modal
-        isOpen={open && specialMarket.find(f => f.isRisk) !== undefined}
-        onClose={() => setOpen(false)}
-        title='Informacion importante'
-      >
-        <p className='text-danger riskMsg'>{dictionary.riskMsg}</p>
-      </Modal>
     </>
   );
 };
@@ -56,6 +40,7 @@ function stateToProps(state) {
   return {
     normalMarket: state.game.normalMarket,
     specialMarket: state.game.specialMarket,
+    hasRisk: state.game.hasRisk,
 
     dictionary: {
       ...state.lang.dictionary.market,

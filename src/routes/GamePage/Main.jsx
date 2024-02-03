@@ -10,19 +10,28 @@ import { setState } from '../../stores/gameStore/actions';
 import TradeBotModal from '../../components/TradeBotModal';
 
 import PlayerUI from './components/PlayerUI';
-import HeaderAndFooter from '../../components/UI/Header&Footer';
+import HeaderAndFooter from '../../components/HeaderAndFooter';
 import NexPlayerModal from '../../components/NextPlayerModal';
 import SuccessModal from '../../components/SuccessModal';
+import DragAndDropProvider from '../../components/DragAndDropProvider';
+import Modal from '../../components/UI/Modal';
 
 const GamePage = ({
   actualPlayer,
   setState,
+  hasRisk,
+  dictionary,
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [nextPlayerModalOpen, setnextPlayerModalOpen] = useState(false);
+  const [nextPlayerModalOpen, setNextPlayerModalOpen] = useState(false);
   const [previousPlayerIndex, setPreviousPlayerIndex] = useState(actualPlayer);
+  const [openRiskInfo, setOpenRiskInfo] = useState(true);
+
+  useEffect(() => {
+    setOpenRiskInfo(false);
+  }, [hasRisk])
 
   useEffect(() => {
     setTimeout(() => setPreviousPlayerIndex(actualPlayer), 500)
@@ -44,33 +53,48 @@ const GamePage = ({
   const onNextPlayer = previousPlayerIndex !== actualPlayer; 
 
   return (
-    <HeaderAndFooter>
-      {onNextPlayer && (
+    <DragAndDropProvider>
+      <HeaderAndFooter>
+        {onNextPlayer && previousPlayerIndex >= 0 && (
+          <PlayerUI
+            playerIndex={previousPlayerIndex}
+            handleNextPlayer={() => setNextPlayerModalOpen(true)}
+            className='playerOut'
+          />
+        )}
         <PlayerUI
-          playerIndex={previousPlayerIndex}
-          handleNextPlayer={() => setnextPlayerModalOpen(true)}
-          className='playerOut'
+          playerIndex={actualPlayer}
+          handleNextPlayer={() => setNextPlayerModalOpen(true)}
+          className={onNextPlayer ? 'playerIn' : ''}
         />
-      )}
-      <PlayerUI
-        playerIndex={actualPlayer}
-        handleNextPlayer={() => setnextPlayerModalOpen(true)}
-        className={onNextPlayer ? 'playerIn' : ''}
-      />
 
-      <NexPlayerModal
-        isOpen={nextPlayerModalOpen}
-        onClose={() => setnextPlayerModalOpen(prevstate => !prevstate)}
-      />
-      <TradeBotModal />
-      <SuccessModal />
-    </HeaderAndFooter>
+      <Modal
+        isOpen={openRiskInfo && !!hasRisk}
+        onClose={() => setOpenRiskInfo(false)}
+        title={dictionary.importantInfo}
+      >
+        <p className='text-danger riskMsg'>{dictionary.riskMsg}</p>
+      </Modal>
+        <NexPlayerModal
+          isOpen={nextPlayerModalOpen}
+          onClose={() => setNextPlayerModalOpen(p => !p)}
+        />
+        <TradeBotModal />
+        <SuccessModal />
+      </HeaderAndFooter>
+    </DragAndDropProvider>
   );
 };
 
 function stateToProps(state) {
   return {
+    gameId: state.game.id,
     actualPlayer: state.game.actualPlayer,
+    hasRisk: state.game.hasRisk,
+    dictionary: {
+      ...state.lang.dictionary.market,
+      ...state.lang.dictionary.utils,
+    },
   };
 }
 

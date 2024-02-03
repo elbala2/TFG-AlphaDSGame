@@ -12,7 +12,7 @@ import styles from './Styles/rigthUI.module.scss';
 
 import Modal from '../../../components/UI/Modal';
 import { bindActionCreators } from 'redux';
-import { aceptTrade, clearSelected } from '../../../stores/gameStore/actions';
+import { acceptTrade, clearSelected } from '../../../stores/gameStore/actions';
 import Card from '../../../components/Cards/Card';
 import { TradeCards } from '../../../utils/ApiConf';
 import { useParams } from 'react-router-dom';
@@ -23,12 +23,13 @@ function TradeUI({
   player,
   dictionary,
 
-  aceptTrade,
+  acceptTrade,
   clearSelected,
 }) {
   const { id } = useParams();
   useEffect(() => {
     clearSelected();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [selectedPlayer, setSelectedPlayer] = useState();
   const [onTrade, setOnTrade] = useState(false);
@@ -42,11 +43,19 @@ function TradeUI({
           <div className='flex-fill' />
         </div>
         <div className={`${tradeStyles.tradePlayerBoxContainer}`}>
+          {!tradePlayers.filter(p => p.cards.length).length && (
+            <h4 className=''>
+              <b>
+                {dictionary.noPlayersToTrade}
+              </b>
+            </h4>
+          )}
           {tradePlayers
           .filter(p => p.cards.length)
           .map((player) => {
             return (
               <div
+                key={player.id}
                 className={`p-3 rounded-4 shadow bgColor
                   ${tradeStyles.tradePlayerBox}
                   ${selectedPlayer?.id === player.id ? tradeStyles.tradePlayerBoxSelected : ''}
@@ -100,6 +109,7 @@ function TradeUI({
           <div className={`${tradeStyles.tradeCards} bgColor rounded-3`} type={player.color}>
             {player.cards.filter(c => c.selected).map(c => (
               <Card
+                key={c.id}
                 card={{
                   ...c,
                   selected: false,
@@ -109,13 +119,14 @@ function TradeUI({
             ))}
           </div>
           <div className={`${tradeStyles.exChangeIcon}`}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
             </svg>
           </div>
           <div className={`${tradeStyles.tradeCards} bgColor rounded-3`} type={selectedTradePlayer?.color}>
             {selectedTradePlayer?.cards.filter(c => c.selected).map(c => (
               <Card
+                key={c.id}
                 card={{
                   ...c,
                   selected: false,
@@ -141,7 +152,7 @@ function TradeUI({
             onClick={() => {
               TradeCards(id, player, selectedTradePlayer)
                 .then((res) => {
-                  aceptTrade(res);
+                  acceptTrade(res);
                   clearSelected();
                   setOnTrade(false);
                   onCancel();
@@ -157,6 +168,13 @@ function TradeUI({
 }
 
 TradeUI.propTypes = {
+  onCancel: PropTypes.func.isRequired,
+  tradePlayers: PropTypes.array.isRequired,
+  player: PropTypes.object.isRequired,
+  dictionary: PropTypes.object.isRequired,
+
+  acceptTrade: PropTypes.func.isRequired,
+  clearSelected: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state, { playerIndex }) {
@@ -174,7 +192,7 @@ function mapStateToProps(state, { playerIndex }) {
 function mapDispatchToProps(dispatch) {
   return ({
     clearSelected: bindActionCreators(clearSelected, dispatch),
-    aceptTrade: bindActionCreators(aceptTrade, dispatch),
+    acceptTrade: bindActionCreators(acceptTrade, dispatch),
   });
 }
 

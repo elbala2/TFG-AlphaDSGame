@@ -5,16 +5,16 @@ import { connect } from 'react-redux'
 
 import { INSTRUCTIONS_TABS } from '..'
 
-import BoardObjetive from '../../../resources/instructionsImgs/boardObjetive.png';
-import MainMissionImg from '../../../resources/instructionsImgs/MainMisionImg.png';
+import BoardObjective from '../../../resources/instructionsImgs/boardObjective.png';
+import MainMissionImg from '../../../resources/instructionsImgs/MainMissionImg.png';
 
-function ObjetiveSection({
+function ObjectivesSection({
   className,
   dictionary,
 }) {
   return (
     <section className={className}>
-      <h4 id={INSTRUCTIONS_TABS.OBJETIVE} className=''>{dictionary[INSTRUCTIONS_TABS.OBJETIVE]}</h4>
+      <h4 id={INSTRUCTIONS_TABS.OBJECTIVE} className=''>{dictionary[INSTRUCTIONS_TABS.OBJECTIVE]}</h4>
       <hr className='mt-0' />
       <div className='d-flex align-items-center px-4 mb-3'>
         <img
@@ -28,19 +28,21 @@ function ObjetiveSection({
       </div>
       <div className='d-flex align-items-center px-4 mb-3'>
         <p className='pe-4'>
-          {dictionary.boardObjetiveExplanation}
+          {dictionary.boardObjectiveExplanation}
         </p>
         <img
-          src={BoardObjetive}
+          src={BoardObjective}
           className='scale-80 rounded-3'
-          alt='BoardObjetive'
+          alt='BoardObjective'
         />
       </div>
     </section>
   )
 }
 
-ObjetiveSection.propTypes = {
+ObjectivesSection.propTypes = {
+  className: PropTypes.string.isRequired,
+  dictionary: PropTypes.object.isRequired,
 }
 
 function mapStateToProps(state) {
@@ -53,4 +55,4 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ObjetiveSection)
+export default connect(mapStateToProps, mapDispatchToProps)(ObjectivesSection)
