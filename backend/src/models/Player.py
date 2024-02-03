@@ -1,9 +1,10 @@
-import json
+import uuid
 
+from src.models.Cards import dictToCard
 from src.models.slabs import *
 from src.utils.utils import indexOf, apply
 
-from src.utils.config import (
+from src.utils.GameConfig import (
   playerColors,
   cardTypes,
   
@@ -16,17 +17,34 @@ from src.utils.config import (
 )
 
 class Player:
-  def __init__(self, id, name, cards, color, type=0):
-    self.id = id
+  def __init__(self,
+    name,
+    color,
+    cards,
+    playerId = None,
+    playerType = 0,
+    points = 0,
+    hasBought = False,
+    board = None,
+    way = []
+  ):
     self.name = name
-    self.type = type
     self.color = color
-    self.points = 0
+    if playerId == None:
+      self.id = uuid.uuid4().__str__()
+    else:
+      self.id = playerId
+    self.type = playerType
+    self.points = points
     self.cards = cards
-    self.hasBought = False
-    self.board = [[None for i in range(4)] for i in range(4)]
-    self.board[1][0] = Slab([1, 1, 1, 1], 'Start_' + color)
-    self.way = []
+    self.hasBought = hasBought
+    self.way = way
+
+    if board != None:
+      self.board = board
+    else:
+      self.board = [[None for i in range(4)] for i in range(4)]
+      self.board[1][0] = Slab(links=[1, 1, 1, 1], slabType='Start_' + color)
 
   def startWay(self):
     self.way = [[0, 1]]
@@ -224,3 +242,21 @@ class Player:
         res += [card]
         costs -= 1
     return res
+
+
+
+def dictToPlayer(dict):
+  if dict == None:
+    return None
+  
+  return Player(
+    playerId = dict['id'],
+    name = dict['name'],
+    color = dict['color'],
+    playerType = dict['type'],
+    points = dict['points'],
+    way = dict['way'],
+    hasBought = dict['hasBought'],
+    board = [[dictToSlab(dict['board'][y][x]) for x in range(4)] for y in range(4)],
+    cards = [dictToCard(c) for c in dict['cards']],
+  )

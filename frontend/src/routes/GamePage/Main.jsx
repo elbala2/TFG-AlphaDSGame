@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { GetGame, StartGame } from '../../utils/ApiConf';
+import { GetGame, createGame } from '../../utils/ApiConf';
 import { setState } from '../../stores/gameStore/actions';
 
 import TradeBotModal from '../../components/TradeBotModal';
@@ -43,7 +43,7 @@ const GamePage = ({
         setState(res);
       });
     } else {
-      StartGame().then((res) => {
+      createGame().then((res) => {
         navigate(`/Game/${res.id}`)
       });
     }

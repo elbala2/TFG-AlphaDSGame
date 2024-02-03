@@ -1,7 +1,7 @@
 import random
 import uuid
 
-from src.utils.config import (  
+from src.utils.GameConfig import (  
   NORMAL,
   SILVER,
   GOLD,
@@ -16,22 +16,40 @@ def getCosts():
   green = total - blue - red
   return [blue, red, green]
 
+def getSlabPoints(slab):
+  if isinstance(slab, SpecialSlab):
+    return random.randint(3, 4)
+  elif isinstance(slab, Slab):
+    if slab.type == NORMAL:
+      return random.randint(0, 1)
+    elif slab.type == SILVER:
+      return random.randint(1, 2)
+    elif slab.type == GOLD:
+      return random.randint(2, 3)
+    else:
+      return 0
+
 class Risk:
   def __init__(self,
     riskType,
-    riskId = uuid.uuid4().__str__(),
-    points = 4,
-    costs = random.randint(1, 2),
-    isRisk = True,
-    isSpecial = True,
+    riskId = None,
+    costs = None,
   ):
-    self.id = riskId
-    self.costs = costs
-    self.points = points
-    self.isRisk = isRisk
-    self.isSpecial = isSpecial
+    if riskId == None:
+      self.id = uuid.uuid4().__str__()
+    else:
+      self.id = riskId
+
+    if costs == None:
+      self.costs = random.randint(1, 2)
+    else:
+      self.costs = costs
+
     self.type = riskType
     self.needed = risksKeys[riskType]
+    self.points = 4
+    self.isRisk = True
+    self.isSpecial = True
 
   def costIndexNeeded(self, card):
     if card.subType == self.needed:
@@ -39,29 +57,37 @@ class Risk:
     return - 1
 
 class Slab:
-  id = 0
-  
-  def __init__(self, links, type = NORMAL):
-    Slab.id += 1
-    self.id = Slab.id
-    self.points = 0
-    self.costs = getCosts()
-    self.rotation = 0
+  def __init__(self,
+    links,
+    slabId = None,
+    slabType = NORMAL,
+    costs = None,
+    points = None,
+    rotation = 0
+  ):
+    if slabId == None:
+      self.id = uuid.uuid4().__str__()
+    else:
+      self.id = slabId
+
+    if costs == None:
+      self.costs = getCosts()
+    else:
+      self.costs = costs
+
+    self.type = slabType
     self.links = links
-    self.type = type
+    self.rotation = rotation
     self.isRisk = False
     self.isSpecial = False
 
-    if type == NORMAL:
-      self.points = random.randint(0, 1)
-    if type == SILVER:
-      self.points = random.randint(1, 2)
-    if type == GOLD:
-      self.points = random.randint(2, 3)
+    if points == None:
+      self.points = getSlabPoints(self)
+    else:
+      self.points = points
 
   def reEvaluateId(self):
-    Slab.id += 1
-    self.id = Slab.id
+    self.id = uuid.uuid4().__str__()
 
   def getRotatedLinks(self, rotation):
     result = self.links.copy()
@@ -80,12 +106,54 @@ class Slab:
     return - 1
 
 class SpecialSlab(Slab):
-  def __init__(self, type, title, descriptionKey, costs):
-    super().__init__([1, 1, 1, 1], type)
-    self.descriptionKey = descriptionKey
-    self.costs = costs
+  def __init__(self,
+    slabType,
+    title,
+    descriptionKey,
+    slabId = None,
+    costs = None,
+    points = None,
+  ):
+    super().__init__(
+      links=[1,1,1,1],
+      costs=costs,
+      slabId=slabId,
+      slabType=slabType,
+      points=points,
+    )
     self.title = title
-    self.isRisk = False
+    self.descriptionKey = descriptionKey
+
     self.isSpecial = True
-    
-    self.points = random.randint(3, 4)
+
+
+def dictToSlab(dict):
+  if dict == None:
+    return None
+
+  if dict['isRisk']:
+    return Risk(
+      riskId=dict['id'],
+      riskType=dict['type'],
+      costs=dict['costs'],
+    )
+
+  elif dict['isSpecial']:
+    return SpecialSlab(
+      slabId=dict['id'],
+      slabType=dict['type'],
+      costs=dict['costs'],
+      points=dict['points'],
+      title=dict['title'],
+      descriptionKey=dict['descriptionKey']
+    )
+
+  else:
+    return Slab(
+      slabId=dict['id'],
+      slabType=dict['type'],
+      costs=dict['costs'],
+      links=dict['links'],
+      points=dict['points'],
+      rotation=dict['rotation'],
+    )

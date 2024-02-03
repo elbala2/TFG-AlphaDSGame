@@ -50,9 +50,10 @@ export default function gameReducer(state = initialState, action) {
       };
 
     case CARD_SELECTED_ACTION:
-      const playerid = typeof action.playerId !== 'undefined' ? action.playerId : actualPlayer;
-      players[playerid].cards[action.cardId].selected = !players[playerid].cards[action.cardId].selected;
-      players[playerid] = { ...players[playerid] };
+      const playerId = action.playerId;
+      const pIndex = players.findIndex((p, i) => playerId ? p.id === playerId : i === actualPlayer)
+      players[pIndex].cards[action.cardId].selected = !players[pIndex].cards[action.cardId].selected;
+      players[pIndex] = { ...players[pIndex] };
       return {
         ...state,
         players: [...players],

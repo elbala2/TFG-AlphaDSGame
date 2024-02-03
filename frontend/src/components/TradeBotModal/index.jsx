@@ -66,9 +66,9 @@ const TradeBotModal = ({
                 <h3 className='p-3'>{player.name}</h3>
                 <div className='px-3 pb-3'>
                   <Cards
-                    playerIndex={player.id}
+                    player={player}
                     className={index > 0 ? 'small' : 'medium'}
-                    disabled={player.id !== actualPlayer}
+                    disabled={index === 0}
                     blocked={cardConfigTrade?.blocked}
                     selected={playerConf?.cards}
                   />

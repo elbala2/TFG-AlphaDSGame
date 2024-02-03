@@ -71,7 +71,7 @@ function TradeUI({
                 <h2>{player.name}</h2>
                 <div className='p-3'>
                   <Cards
-                    playerIndex={player.id}
+                    player={player}
                     className={`
                       ${selectedPlayer?.id === player.id ? 'medium' : 'small'}
                     `}

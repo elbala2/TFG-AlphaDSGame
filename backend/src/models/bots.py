@@ -1,9 +1,7 @@
-from slabs import *
-from utils import (
-  findById,
-)
+from src.models.slabs import *
 
-from config import (
+from src.utils.utils import findIndexById
+from src.utils.GameConfig import (
   playerColors,
   cardTypes,
   rotationOrder,
@@ -34,7 +32,7 @@ class Bot:
     done = False
     while (len(riskToResolve) != 0):
       targetRiskId, cards = riskToResolve.pop(0).values()
-      riskIndex = findById(game.specialMarket, targetRiskId)
+      riskIndex = findIndexById(game.specialMarket, targetRiskId)
       if bot.canSolveRisk(game.specialMarket[riskIndex]):
         done = True
         game.fix(riskIndex, cards)

@@ -30,7 +30,7 @@ const Cards = ({
       if (selected.includes(card.id) && !card.selected) setCardSelected(player.id, index);
     })
   }, [player, selected, setCardSelected])
-
+  
   return (
     <div className='cardscontainer'>
       {player.cards.map((card, index) => {
@@ -59,14 +59,12 @@ const Cards = ({
 
 
 
-function stateToProps(state, { playerIndex }) {
+function stateToProps(state) {
   return {
     dictionary: {
       cards: state.lang.dictionary.cards,
       ...state.lang.dictionary.utils
     },
-
-    player: state.game.players[playerIndex],
   };
 }
 

@@ -13,7 +13,7 @@ import viruses from '../../resources/instructionsImgs/Viruses.png'
 import Brother from '../../resources/instructionsImgs/Brother.png'
 import Cars from '../../resources/instructionsImgs/Cars.png'
 
-import { StartGame } from '../../utils/ApiConf';
+import { createGame } from '../../utils/ApiConf';
 import { reset } from '../../stores/gameStore/actions';
 
 import HeaderAndFooter from '../../components/HeaderAndFooter';
@@ -68,7 +68,7 @@ const HomePage = ({
                 gameType: e.target.value,
               }))}
             >
-              {MISSION_TYPES.map(mission => (<option value={mission}>{dictionary.missions[mission] ?? mission}</option>))}
+              {MISSION_TYPES.map(mission => (<option key={mission} value={mission}>{dictionary.missions[mission] ?? mission}</option>))}
             </select>
           </div>
           <div className='d-flex align-items-center p-4'>
@@ -95,7 +95,7 @@ const HomePage = ({
             )}
             <div>
               {dictionary.objectiveDescriptions[config.gameType].split('\n').map(txt => (
-                <h6>
+                <h6 key={txt}>
                   {txt}
                 </h6>
               ))}
@@ -137,7 +137,7 @@ const HomePage = ({
             <div className='flex-fill' />
             <Button
               onClick={async () => {
-                const res = await StartGame(config)
+                const res = await createGame(config)
                 navigate(`/Game/${res.id}`);
               }}
             >

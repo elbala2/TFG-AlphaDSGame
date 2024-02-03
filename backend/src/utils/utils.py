@@ -11,11 +11,18 @@ def findIndex(array, object):
       return i
   return -1
 
-def findById(array, id):
+def findIndexById(array, id):
   for i in range(len(array)):
-    if (array[i].id == int(id)):
+    print(array[i].id, id)
+    if (array[i].id == id):
       return i
   return -1
+
+def findById(array, id):
+  for i in range(len(array)):
+    if (array[i].id == id):
+      return array[i]
+  return None
 
 def apply(listA, function, default):
   defaultAux = default

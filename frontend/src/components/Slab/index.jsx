@@ -165,7 +165,9 @@ export function Cable({
   const cableRef = useRef();
 
   function loadSize() {
-    const { width, height } = cableRef.current?.getBoundingClientRect();
+    if (!cableRef?.current) return;
+
+    const { width, height } = cableRef.current.getBoundingClientRect();
 
     setSize({ width, height });
   }
@@ -208,7 +210,9 @@ function Slab({
   const descriptionRef = useRef();
 
   function loadSize() {
-    const { width, height } = slabRef.current?.getBoundingClientRect();
+    if (!slabRef?.current) return;
+
+    const { width, height } = slabRef.current.getBoundingClientRect();
 
     setSize({ width, height });
   }

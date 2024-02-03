@@ -37,7 +37,7 @@ const MarketContainer = ({
       <Droppable droppableId={`marketDrop${actualPlayer}_${index}`} isDropDisabled>
         {provided => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
-            <Draggable draggableId={`slab${actualPlayer}_${index}`} index={index} isDragDisabled={!canBuyWithSelected}>
+            <Draggable draggableId={`slab${actualPlayer}_${slab.id}`} index={index} isDragDisabled={!canBuyWithSelected}>
               {provided => (
                 <div
                   ref={provided.innerRef}

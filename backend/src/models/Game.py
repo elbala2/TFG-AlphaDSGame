@@ -6,9 +6,10 @@ import copy
 from src.models.Cards import Card
 from src.models.slabs import *
 from src.models.Player import Player
+from src.models.bots import Bot
 
-from src.utils.utils import findIndex, findById
-from src.utils.config import (
+from src.utils.utils import findIndex, findIndexById, findById
+from src.utils.GameConfig import (
   playerColors,
   MISSION_TYPE_WOLFS,
   cardTypes,
@@ -35,27 +36,32 @@ def genCards():
 
 def genSlabs():
   res = [] \
-  + [Slab([1, 1, 1, 1]) for _ in range(6)] \
-  + [Slab([0, 1, 0, 1]) for _ in range(6)] \
-  + [Slab([0, 1, 1, 0]) for _ in range(12)] \
-  + [Slab([1, 0, 1, 1]) for _ in range(14)] \
+  + [Slab(links=[1, 1, 1, 1]) for _ in range(6)] \
+  + [Slab(links=[0, 1, 0, 1]) for _ in range(6)] \
+  + [Slab(links=[0, 1, 1, 0]) for _ in range(12)] \
+  + [Slab(links=[1, 0, 1, 1]) for _ in range(14)] \
     \
-  + [Slab([0, 1, 0, 1], GOLD),
-    Slab([1, 1, 1, 1], GOLD),
-    Slab([0, 1, 1, 0], GOLD),
-    Slab([1, 0, 1, 1], GOLD)] \
+  + [Slab(links=[0, 1, 0, 1], slabType=GOLD),
+    Slab(links=[1, 1, 1, 1], slabType=GOLD),
+    Slab(links=[0, 1, 1, 0], slabType=GOLD),
+    Slab(links=[1, 0, 1, 1], slabType=GOLD)] \
     \
-  + [Slab([0, 1, 0, 1], SILVER),
-    Slab([1, 1, 1, 1], SILVER),
-    Slab([0, 1, 1, 0], SILVER),
-    Slab([1, 0, 1, 1], SILVER)]
+  + [Slab(links=[0, 1, 0, 1], slabType=SILVER),
+    Slab(links=[1, 1, 1, 1], slabType=SILVER),
+    Slab(links=[0, 1, 1, 0], slabType=SILVER),
+    Slab(links=[1, 0, 1, 1], slabType=SILVER)]
   
   for type in specialSlabs.keys():
     slabConfig = specialSlabs[type]
     for i in range(len(specialSlabs[type][TITLE_KEYS])):
-      res += [SpecialSlab(type, slabConfig[TITLE_KEYS][i], slabConfig[DESCRIPTION_KEYS][i], slabConfig['costs'][i])]
+      res += [SpecialSlab(
+        slabType=type,
+        title=slabConfig[TITLE_KEYS][i],
+        descriptionKey=slabConfig[DESCRIPTION_KEYS][i],
+        costs=slabConfig['costs'][i],
+      )]
     
-  risk = [Risk(key) for key in risksKeys.keys()]
+  risk = [Risk(riskType=key) for key in risksKeys.keys()]
   
   random.shuffle(risk)
   res += risk[:4]
@@ -124,7 +130,14 @@ class Game():
         name = playerConfig[i]['name']
         playertype = playerConfig[i]['type']
       playerCards = cards[i * 4 : (i + 1) *4]
-      players.append(Player(i, name, playerCards, playerColors[i], playertype))
+      players.append(
+        Player(
+          name=name,
+          color=playerColors[i],
+          cards=playerCards,
+          playerType=playertype,
+        )
+      )
       if i == 0:
         players[i].startWay()
     cards = cards[16:]
@@ -192,16 +205,20 @@ class Game():
     self.nextBotAction = 0
     return True
     
-  def moveSlab(self, origin, destiny, rotation, cards):
+  def moveSlab(self, slabId, destiny, rotation, cards):
     player = self.getActualPlayer()
     if player.hasBought:
       return False
-    if (origin < 4):
-      market = self.normalMarket
-      realOrigin = origin
-    else:
+    
+    market = self.normalMarket
+    realOrigin = findIndexById(self.normalMarket, slabId)
+    print(realOrigin)
+    if realOrigin == -1:
       market = self.specialMarket
-      realOrigin = origin - 4
+      realOrigin = findIndexById(self.specialMarket, slabId)
+
+      if realOrigin == -1:
+        raise Exception('Slab not found')
   
     slab = market[realOrigin]
     newSlab = copy.deepcopy(slab)
@@ -221,14 +238,17 @@ class Game():
     if (len(cards1) != len(cards2)):
       raise Exception('The trade must be equivalent')
     
+    p1 = findById(self.players, player1ID)
+    p2 = findById(self.players, player2ID)
+
     for i in range(len(cards1)):
-      index1 = findIndex(self.players[player1ID].cards, cards1[i])
+      index1 = findIndex(p1.cards, cards1[i])
       if (index1 != -1):
-        self.players[player2ID].cards.append(self.players[player1ID].cards.pop(index1))
+        p2.cards.append(p1.cards.pop(index1))
         
-      index2 = findIndex(self.players[player2ID].cards, cards2[i])
+      index2 = findIndex(p2.cards, cards2[i])
       if (index2 != -1):
-        self.players[player1ID].cards.append(self.players[player2ID].cards.pop(index2))
+        p1.cards.append(p2.cards.pop(index2))
 
   def fix(self, index, cards):
     player = self.getActualPlayer()
@@ -245,17 +265,18 @@ class Game():
     self.riskNumber -= 1
 
   def discard(self, cardID):
-    index = findById(self.getActualPlayer().cards, cardID)
+    index = findIndexById(self.getActualPlayer().cards, cardID)
     if (index != -1):
       self.cards.append(self.getActualPlayer().cards.pop(index))
 
   def botAction(self):
     done = False
+    bot = Bot()
     actions = [
-      self.bot.trade,
-      self.bot.resolveRisks,
-      self.bot.buyPlaceSlab,
-      self.bot.computeCards,
+      bot.trade,
+      bot.resolveRisks,
+      bot.buyPlaceSlab,
+      bot.computeCards,
       Game.nextTurn,
     ]
     for botActionIndex in range(self.nextBotAction, len(actions)):

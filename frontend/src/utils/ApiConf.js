@@ -1,14 +1,14 @@
-const BASE_URL = 'http://127.0.0.1:5000';
-
 const ApiCallBack = async (type, url, params) => {
   return await (
     await fetch(
-      BASE_URL + url,
+      window.BACK_URL + url,
       {
+        mode: 'cors',
         method: type,
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': window.location.origin,
         },
         body: params ? JSON.stringify(params) : undefined,
       },
@@ -16,8 +16,8 @@ const ApiCallBack = async (type, url, params) => {
   ).json()
 }
 
-export async function StartGame(config = undefined) {
-  return ApiCallBack('POST', '/game', { ...config });
+export async function createGame(config = undefined) {
+  return ApiCallBack('POST', '/game/new', { ...config });
 }
 
 export async function GetGame(id) {
@@ -35,9 +35,9 @@ export function NextTurn(id) {
 export function TradeCards(id, player1, player2) {
   return ApiCallBack('PUT', `/game/${id}/cards/trade`,
   {
-    player1ID: player1.id,
+    player1Id: player1.id,
     cards1: player1.cards.filter(f => f.selected),
-    player2ID: player2.id,
+    player2Id: player2.id,
     cards2: player2.cards.filter(f => f.selected), 
   });
 }

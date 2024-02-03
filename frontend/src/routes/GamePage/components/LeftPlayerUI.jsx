@@ -84,7 +84,7 @@ function LeftPlayerUI({
       <Market />
       <div className='p-4'>
         <Cards
-          playerIndex={playerIndex}
+          player={player}
           descartable
           disabled={isBot || playerIndex === whereIsPilar}
         />
