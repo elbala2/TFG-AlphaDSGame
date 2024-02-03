@@ -38,9 +38,14 @@ const TradeBotModal = ({
         })
     }
   }
+
   if (!cardConfig?.length) return '';
   const cardConfigTrade = cardConfig[0];
   const playerConf = cardConfigTrade.needed[slabStep];
+
+  const actPlayer = players.find(p => p.id === actualPlayer);
+  const tradePlayer = players.find(p => p.id === playerConf.playerId);
+
   return (
     <Modal
       isOpen={cardConfig.length}
@@ -48,34 +53,38 @@ const TradeBotModal = ({
         setCardConfig(cardConfig.slice(1, cardConfig.length));
         clearCardConfig();
       }}
-      title={dictionary.title}
+      title={dictionary.title(tradePlayer.name)}
     >
       <div className={styles.modalContainer}>
         <div className={styles.playersContainer}>
-          {players
-          .sort((p1, p2) => {
-            if (p1.id === actualPlayer) return -1;
-            if (p2.id === actualPlayer) return 1;
-            return 0;
-          })
-          .map((player, index) => {
-            if (player.id !== actualPlayer && playerConf.player !== player.id) return '';
-
-            return (
-              <div className={`bgColor shadow ${styles.playerContainer}`} id={player.id} key={player.id} type={player.color}>
-                <h3 className='p-3'>{player.name}</h3>
-                <div className='px-3 pb-3'>
-                  <Cards
-                    player={player}
-                    className={index > 0 ? 'small' : 'medium'}
-                    disabled={index === 0}
-                    blocked={cardConfigTrade?.blocked}
-                    selected={playerConf?.cards}
-                  />
-                </div>
-              </div>
-            );
-          })}
+          <div className={`bgColor shadow ${styles.playerContainer}`} type={actPlayer.color}>
+            <h3 className='p-3'>{actPlayer.name}</h3>
+            <div className='px-3 pb-3'>
+              <Cards
+                player={actPlayer}
+                className='medium'
+                blocked={cardConfigTrade?.blockedIds}
+                selected={playerConf?.cardIds}
+              />
+            </div>
+          </div>
+          <div className={styles.exChangeIcon}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            </svg>
+          </div>
+          <div className={`bgColor shadow ${styles.playerContainer}`} type={tradePlayer.color}>
+            <h3 className='p-3'>{tradePlayer.name}</h3>
+            <div className='px-3 pb-3'>
+              <Cards
+                disabled
+                player={tradePlayer}
+                className='small'
+                blocked={cardConfigTrade?.blockedIds}
+                selected={playerConf?.cardIds}
+              />
+            </div>
+          </div>
         </div>
         <div className='d-flex pt-3'>
           <div className='flex-fill' />

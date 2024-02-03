@@ -8,18 +8,15 @@
       "name": "Python: Api Flask",
       "type": "python",
       "request": "launch",
-      "module": "flask",
-      "env": {
-        "FLASK_APP": "backend/index.py",
-        "FLASK_DEBUG": "1",
-      },
+      "module": "index",
+      "app": "index", 
       "args": [
-        "run",
-        "--no-debugger",
-        "--no-reload"
+          "run",
+          "--no-debugger",
+          "--no-reload"
       ],
       "jinja": true,
-      "justMyCode": true
+      "justMyCode": true,
     }
   ]
 }

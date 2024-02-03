@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import { connect } from 'react-redux';
 
@@ -11,6 +11,7 @@ import blueData from '../../../resources/Misiones/blue_data.png';
 import yellowPhone from '../../../resources/Misiones/yellow_phone.png';
 import redBrain from '../../../resources/Misiones/red_brain.png';
 
+import { PlayerContext } from '../../../components/PlayerProvider';
 import Board from '../../../components/Board';
 import { Cable } from '../../../components/Slab';
 
@@ -18,15 +19,12 @@ import mainStyles from '../Main.module.scss';
 import styles from './Styles/rigthUI.module.scss';
 
 function BoardUI({
-  whereIsPilar,
   gameType,
-  playerIndex,
-  player,
-  prevPlayer,
   start,
   dictionary,
 }) {
-  const hasConnectedWay = whereIsPilar > playerIndex;
+  const { player, prevPlayer } = useContext(PlayerContext);
+
   const isMissionComplete = !!player.board[0][2];
 
   function getPlayerIcon({ color }) {
@@ -101,12 +99,11 @@ function BoardUI({
       ? dictionary.misionCompletedDescription[color]?.[gameType]
       : dictionary.misionDescription[color]?.[gameType];
     }
-
+    
     return isMissionComplete
     ? dictionary.misionCompletedDescription[color]
     : dictionary.misionDescription[color];
   }
-
 
   return (
     <div className={`${mainStyles.halfCard} col-lg-6`}>
@@ -116,7 +113,7 @@ function BoardUI({
             <div className={`${styles.cableContainer}`}>
               <Cable
                 links={[1, 0, 1, 0]}
-                isWayPart={hasConnectedWay}
+                isWayPart={player.hasConnectedWay}
               />
             </div>
             <div className='d-flex flex-fill justify-content-around align-items-center px-4'>
@@ -142,25 +139,25 @@ function BoardUI({
             <div className={`${styles.cableContainer}`}>
               <Cable
                 links={[1, 1, 0, 0]}
-                isWayPart={hasConnectedWay}
+                isWayPart={player.hasConnectedWay}
               />
             </div>
             <div className={`${styles.longCableContainer}`}>
               <Cable
                 links={[0, 1, 0, 1]}
-                isWayPart={hasConnectedWay}
+                isWayPart={player.hasConnectedWay}
               />
             </div>
             <div className={`${styles.longCableContainer}`}>
               <Cable
                 links={[0, 1, 0, 1]}
-                isWayPart={hasConnectedWay}
+                isWayPart={player.hasConnectedWay}
               />
             </div>
             <div className={`${styles.longCableContainer}`}>
               <Cable
                 links={[0, 0, 1, 1]}
-                isWayPart={hasConnectedWay}
+                isWayPart={player.hasConnectedWay}
               />
             </div>
           </div>
@@ -192,7 +189,7 @@ function BoardUI({
             })}
           </div>
           <div className='d-flex flex-column'>
-            <Board playerIndex={playerIndex} />
+            <Board player={player} />
           </div>
           <div className={`${styles.boardCables}`} />
         </div>
@@ -203,14 +200,10 @@ function BoardUI({
 
 BoardUI.propTypes = {}
 
-function stateToProps(state, { playerIndex }) {
+function stateToProps(state) {
   return {
     start: 1,
-    pos: state.game.pos,
-    player: state.game.players[playerIndex],
-    prevPlayer: state.game.players[playerIndex - 1] ?? state.game.players[state.game.players.length - 1],
-    gameType: state.game.gameType,
-    whereIsPilar: state.game.whereIsPilar,
+    gameType: state.game.type,
 
     dictionary: {
       ...state.lang.dictionary.rigthUI,

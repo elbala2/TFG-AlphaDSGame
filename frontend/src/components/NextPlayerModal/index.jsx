@@ -13,14 +13,17 @@ import { bindActionCreators } from 'redux';
 
 function NexPlayerModal({
   isOpen,
+  dictionary,
+
   onClose,
   nextPlayer,
-  dictionary,
 }) {
   const { id } = useParams();
 
   function onSubmit() {
-    NextTurn(id).then(res => nextPlayer(res))
+    NextTurn(id).then(res => {
+      nextPlayer(res);
+    })
     onClose()
   }
 

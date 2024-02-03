@@ -13,6 +13,7 @@ const Card = ({
   card,
   onDiscard,
   dictionary,
+  className = '',
   ...other
 }) => {
   return (
@@ -20,7 +21,7 @@ const Card = ({
       {...other}
       id={card.id}
       type={card.type}
-      className={`tradeCard ${other.className ?? ''}`}
+      className={`gameCard ${className}`}
       cardselected={card.selected ? '' : undefined}
     >
       {!other.disabled && onDiscard && (

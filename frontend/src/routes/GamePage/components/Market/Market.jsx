@@ -26,8 +26,8 @@ const Market = ({
           {specialMarket.map((slab, i) => {
             return (
               slab.isRisk 
-                ? <RiskContainer key={i + 4} index={i + 4} slab={slab}/>
-                : <MarketContainer key={i + 4} disabled={riskNumber} index={i + 4} slab={slab}/>
+                ? <RiskContainer key={slab.id} risk={slab}/>
+                : <MarketContainer key={slab.id} disabled={riskNumber} slab={slab}/>
             );
           })}
         </div>

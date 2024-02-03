@@ -1,40 +1,41 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+import { useParams } from 'react-router-dom';
 
-import Button from '../../../components/UI/Button';
+import { acceptTrade, clearSelected } from '../../../stores/gameStore/actions';
+import { TradeCards } from '../../../utils/ApiConf';
+
 import Cards from '../../../components/Cards';
+import { PlayerContext } from '../../../components/PlayerProvider';
+import Card from '../../../components/Cards/Card';
+
+import Modal from '../../../components/UI/Modal';
+import Button from '../../../components/UI/Button';
 
 import mainStyles from '../Main.module.scss';
 import tradeStyles from './Styles/tradeModal.module.scss';
 import styles from './Styles/rigthUI.module.scss';
 
-import Modal from '../../../components/UI/Modal';
-import { bindActionCreators } from 'redux';
-import { acceptTrade, clearSelected } from '../../../stores/gameStore/actions';
-import Card from '../../../components/Cards/Card';
-import { TradeCards } from '../../../utils/ApiConf';
-import { useParams } from 'react-router-dom';
-
 function TradeUI({
   onCancel,
-  tradePlayers,
-  player,
+  players,
   dictionary,
 
   acceptTrade,
   clearSelected,
 }) {
   const { id } = useParams();
-  useEffect(() => {
-    clearSelected();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { player } = useContext(PlayerContext)
+  const tradePlayers = players.filter(p => p.id !== player.id)
+
   const [selectedPlayer, setSelectedPlayer] = useState();
   const [onTrade, setOnTrade] = useState(false);
 
   const selectedTradePlayer = tradePlayers.find(p => p.cards.find(c => c.selected))
+
   return (
     <div className={`${mainStyles.halfCard} col-lg-6`}>
       <div className={`${styles.boardUI}`}>
@@ -63,7 +64,7 @@ function TradeUI({
                 type={player.color}
                 onClick={(e) => {
                   if (selectedPlayer?.id === player.id) return;
-                  clearSelected();
+                  if (selectedPlayer?.id) clearSelected(selectedPlayer.id);
                   setSelectedPlayer(player);
                   e.stopPropagation();
                 }}
@@ -109,6 +110,7 @@ function TradeUI({
           <div className={`${tradeStyles.tradeCards} bgColor rounded-3`} type={player.color}>
             {player.cards.filter(c => c.selected).map(c => (
               <Card
+                disabled
                 key={c.id}
                 card={{
                   ...c,
@@ -126,6 +128,7 @@ function TradeUI({
           <div className={`${tradeStyles.tradeCards} bgColor rounded-3`} type={selectedTradePlayer?.color}>
             {selectedTradePlayer?.cards.filter(c => c.selected).map(c => (
               <Card
+                disabled
                 key={c.id}
                 card={{
                   ...c,
@@ -177,10 +180,9 @@ TradeUI.propTypes = {
   clearSelected: PropTypes.func.isRequired,
 }
 
-function mapStateToProps(state, { playerIndex }) {
+function mapStateToProps(state) {
   return ({
-    tradePlayers: state.game.players.filter((p, i) => i !== playerIndex),
-    player: state.game.players[playerIndex],
+    players: state.game.players,
 
     dictionary: {
       ...state.lang.dictionary.tradeModal,

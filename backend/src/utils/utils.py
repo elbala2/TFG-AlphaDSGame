@@ -13,7 +13,6 @@ def findIndex(array, object):
 
 def findIndexById(array, id):
   for i in range(len(array)):
-    print(array[i].id, id)
     if (array[i].id == id):
       return i
   return -1

@@ -49,7 +49,7 @@ def moveSlab(gameId, slabID):
   )
   GameService.updateGame(game)
   return toJSON({
-    'player': game.players[game.actualPlayer],
+    'player': game.getActualPlayer(),
     'normalMarket': game.normalMarket,
     'specialMarket': game.specialMarket,
   })
@@ -92,7 +92,7 @@ def discard(gameId, cardID):
   game.discard(cardID)
   GameService.updateGame(game)
   return toJSON({
-    'cards': game.players[game.actualPlayer].cards,
+    'cards': game.getActualPlayer().cards,
   })
 
 @base.route('/<gameId>/fix/<riskId>', methods=['PUT'])   

@@ -94,7 +94,7 @@ const homePage = {
 };
 
 const tradeModal = { // will be deleted
-  title: 'Please select which cards you want to trade',
+  title: (name = 'Please') => `${name} select which cards you want to trade`,
   onTradeAcceptQst: 'Do you want to accept the trade?',
   noPlayersToTrade: 'No players to trade',
 };

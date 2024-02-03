@@ -291,7 +291,7 @@ function stateToProps(state) {
       ...state.lang.dictionary.utils,
     },
 
-    gameType: state.game.gameType,
+    gameType: state.game.type,
   };
 }
 

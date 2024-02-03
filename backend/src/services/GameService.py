@@ -7,13 +7,9 @@ from src.models.slabs import dictToSlab
 
 from src.utils.json import toJSON, fromJSON
 
-from src.utils.GameConfig import (
-  MISSION_TYPE_WOLFS,
-)
-
 class GameService():
   def storeGame(game):
-    try:
+    # try:
       connection = connectMySQL()
       cursor = connection.cursor(buffered = True)
       cursor.execute(
@@ -34,14 +30,14 @@ class GameService():
         ]
       )
       connection.commit()
-    except Exception as error:
-      print(error)
-      return False
+    # except Exception as error:
+      # print(error)
+      # return False
 
-    return True
+    # return True
 
   def getGame(gameId):
-    try:
+    # try:
       connection = connectMySQL()
       cursor = connection.cursor(buffered = True)
       cursor.execute("select * from tfg.games where id = %s ;", [gameId])
@@ -81,7 +77,7 @@ class GameService():
       )
 
       return game
-    except Exception as error:
+    # except Exception as error:
       print(error)
 
   def updateGame(game):

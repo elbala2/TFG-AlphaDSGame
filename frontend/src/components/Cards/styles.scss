@@ -5,10 +5,21 @@
   justify-content: center;
 }
 
-.tradeCard{
+.gameCard{
   --height: var(--cardHeight);
   --width: var(--cardWidth);
-  
+
+  height: var(--height);
+  width: var(--width);
+
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border-radius: 14px;
+  justify-content: space-around;
+  border: calc(var(--width) * 0.05) solid #d8d8d8;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+
   &.medium {
     --height: var(--mediumCardHeight);
     --width: var(--mediumCardWidth);
@@ -19,17 +30,33 @@
     --width: var(--smallCardWidth);
   }
 
-  height: var(--height);
-  width: var(--width);
+  &.blocked {
+    opacity: 0.6;
+    cursor: default;
+  }
 
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  position: relative;
-  border-radius: 14px;
-  justify-content: space-around;
-  border: calc(var(--width) * 0.05) solid #d8d8d8;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  &:not([disabled]) {
+    cursor: pointer;
+    &:hover {
+      scale: 1.01;
+    }
+  }
+
+  &[cardselected] {
+    border-color: #747474;
+  }
+
+  &[type='compSci'] {
+    background-color: #ff9999;
+  }
+
+  &[type='math'] {
+    background-color: #99ff99;
+  }
+
+  &[type='domain'] {
+    background-color: rgb(153, 153, 255);
+  }
   
   &:hover .discardButton {
     display: block;
@@ -67,27 +94,6 @@
     &:hover {
       opacity: 1;
     }
-  }
-
-  &.blocked {
-    border-color: #decc7266;
-    cursor: default;
-  }
-
-  &[cardselected] {
-    border-color: #747474;
-  }
-
-  &[type='compSci'] {
-    background-color: #ff9999;
-  }
-
-  &[type='math'] {
-    background-color: #99ff99;
-  }
-
-  &[type='domain'] {
-    background-color: rgb(153, 153, 255);
   }
 }
 

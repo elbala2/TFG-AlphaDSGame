@@ -32,15 +32,17 @@ export default function gameReducer(state = initialState, action) {
       ...state,
     };
     
-    case SET_STATE:
+    case SET_STATE: {
       return {
         ...state,
         ...action.callbackRes,
       };
+    }
 
-    case CLEAR_CARDS_ACTION:
+    case CLEAR_CARDS_ACTION: {
       if (action.playerId) {
-        players[action.playerId].cards.forEach(card => card.selected = false)
+        const pIndex = players.findIndex((p, i) => p.id === action.playerId)
+        players[pIndex].cards.forEach(card => card.selected = false)
       } else {
         players.forEach(player => player.cards.forEach(card => card.selected = false))
       }
@@ -48,16 +50,17 @@ export default function gameReducer(state = initialState, action) {
         ...state,
         players: [...players],
       };
+    }
 
-    case CARD_SELECTED_ACTION:
-      const playerId = action.playerId;
-      const pIndex = players.findIndex((p, i) => playerId ? p.id === playerId : i === actualPlayer)
+    case CARD_SELECTED_ACTION: {
+      const pIndex = players.findIndex((p) => action.playerId ? p.id === action.playerId : p.id === actualPlayer)
       players[pIndex].cards[action.cardId].selected = !players[pIndex].cards[action.cardId].selected;
       players[pIndex] = { ...players[pIndex] };
       return {
         ...state,
         players: [...players],
       };
+    }
 
     case SELECT_SLAB:
       return {
@@ -65,18 +68,20 @@ export default function gameReducer(state = initialState, action) {
         selectedSlab: selectedSlab === action.id ? undefined : action.id, 
       };
 
-    case MOVER_ACTION:
-      players.splice(action.player.id, 1, action.player);
+    case MOVER_ACTION: {
+      const pIndex = players.findIndex(p => p.id === action.player.id)
+      players.splice(pIndex, 1, action.player);
       return {
         ...state,
         players: [...players],
         normalMarket: action.normalMarket,
         specialMarket: action.specialMarket,
       };
+    }
 
     case ROTATE_ACTION:
-      const id = action.id < 4 ? action.id : action.id - 4;
-      normalMarket[id].rotation = (normalMarket[id].rotation + action.dir) % 4;
+      const sIndex = normalMarket.findIndex(s => s.id === action.id);
+      normalMarket[sIndex].rotation = (normalMarket[sIndex].rotation + action.dir) % 4;
       return {
         ...state,
         normalMarket: [...normalMarket],
@@ -93,12 +98,14 @@ export default function gameReducer(state = initialState, action) {
         ...action.newState,
       };
 
-    case DISCARD:
-      players[actualPlayer].cards = action.cards;
+    case DISCARD: {
+      const pIndex = players.findIndex(p => p.id === actualPlayer);
+      players[pIndex].cards = action.cards;
       return {
         ...state,
         players,
       };
+    }
 
     case FIX:
       return {

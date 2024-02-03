@@ -13,12 +13,13 @@ import './styles.scss';
 
 
 const Cards = ({
-  player,
   descartable = false,
   blocked = [],
   selected = [],
   disabled,
-  className,
+  className = '',
+
+  player,
 
   setCardSelected,
   discard,
@@ -30,18 +31,21 @@ const Cards = ({
       if (selected.includes(card.id) && !card.selected) setCardSelected(player.id, index);
     })
   }, [player, selected, setCardSelected])
+
   
   return (
     <div className='cardscontainer'>
       {player.cards.map((card, index) => {
+        const isBlocked = blocked.includes(card.id);
+
         return (
           <Card
             key={card.id}
             card={card}
-            className={`${className} ${blocked.includes(card.id) ? 'blocked' : ''}`}
-            disabled={disabled}
+            className={`${className} ${isBlocked ? 'blocked' : ''}`}
+            disabled={disabled || isBlocked}
             onClick={() => {
-              if (disabled || blocked.includes(card.id) || selected.includes(card.id)) return;
+              if (disabled || isBlocked || selected.includes(card.id)) return;
               setCardSelected(player.id, index);
             }}
             onDiscard={descartable ? () => {
@@ -55,8 +59,6 @@ const Cards = ({
     </div>
   );
 };
-
-
 
 
 function stateToProps(state) {

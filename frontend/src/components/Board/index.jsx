@@ -13,8 +13,7 @@ import styles from './board.module.scss';
 import { MoveSlab } from '../../utils/ApiConf';
 
 function Board({
-  player: { board, way, cards },
-  playerIndex,
+  player: { id: playerId, board, way, cards },
   selectedSlab,
 
   normalMarket,
@@ -40,22 +39,17 @@ function Board({
   function renderSlab(slab, x, y) {
     if (!slab) {
       return (
-        <Droppable droppableId={`boardDrop${playerIndex}_${x}-${y}`} isDropDisabled={false}>
+        <Droppable droppableId={`${playerId}_boardDrop_${x}-${y}`} isDropDisabled={false}>
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}
               className={`h-100 w-100 ${selectedSlab ? styles.clickable : ''}`}
               onClick={() => {
-                let slabIndex = normalMarket.findIndex(s => s.id === selectedSlab);
-                if (slabIndex < 0) {
-                  slabIndex = specialMarket.findIndex(s => s.id === selectedSlab) + 4;
-                }
-
-                const slab = slabIndex < 4 ? normalMarket[slabIndex] : specialMarket[slabIndex - 4];
+                const slab = normalMarket.find(s => s.id === selectedSlab) ?? specialMarket.find(s => s.id === selectedSlab);
 
                 MoveSlab(
                   id,
-                  slabIndex,
+                  slab.id,
                   [x, y],
                   slab.rotation,
                   cards.filter(c => c.selected),
@@ -99,9 +93,8 @@ function Board({
 }
 Board.propTypes = {}
 
-function stateToProps(state, { playerIndex }) {
+function stateToProps(state) {
   return {
-    player: state.game.players[playerIndex],
     selectedSlab: state.game.selectedSlab,
     normalMarket: state.game.normalMarket,
     specialMarket: state.game.specialMarket,

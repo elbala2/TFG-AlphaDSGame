@@ -74,8 +74,8 @@ class Game():
     gameType = MISSION_TYPE_WOLFS,
     riskNumber = 0,
     nextBotAction = 0,
-    actualPlayer = 0,
-    whereIsPilar = 0,
+    actualPlayer = None,
+    whereIsPilar = None,
     finished = False,
     slabs = None,
     cards = None,
@@ -104,8 +104,6 @@ class Game():
     gameId = uuid.uuid4().__str__()
     riskNumber = 0
     nextBotAction = 0
-    actualPlayer = 0
-    whereIsPilar = 0
     finished = False
     slabs = genSlabs()
     cards = genCards()
@@ -140,6 +138,7 @@ class Game():
       )
       if i == 0:
         players[i].startWay()
+        actualPlayer = players[i].id
     cards = cards[16:]
 
     self.id = gameId
@@ -147,7 +146,7 @@ class Game():
     self.riskNumber = riskNumber
     self.nextBotAction = nextBotAction
     self.actualPlayer = actualPlayer
-    self.whereIsPilar = whereIsPilar
+    self.whereIsPilar = actualPlayer
     self.finished = finished
     self.slabs = slabs
     self.normalMarket = normalMarket
@@ -156,20 +155,14 @@ class Game():
     self.cards = cards
     
   def getActualPlayer(self):
-    return self.players[self.actualPlayer]
-    
-  def setConfig(self, gameType, players):
-    self.gameType = gameType
-    for i in range(4):
-      name, type = players[i].values()
-      self.players[i] = Player(i, name, self.players[i].cards, playerColors[i], type)
-      if i == 0:
-        self.players[i].startWay()
+    return findById(self.players, self.actualPlayer)
+  
+  def getPilarPlayer(self):
+    return findById(self.players, self.whereIsPilar)
+
 
   def distributeCards(self):
     for player in self.players:
-      self.cards += player.cards
-      player.cards = []
       player.hasBought = False
       x = 4 - len(player.cards)
       self.cards = self.cards[x:]
@@ -190,20 +183,33 @@ class Game():
         self.slabs.append(slab)
 
   def nextTurn(self):
-    if (self.actualPlayer == 3):
-      if (self.players[self.whereIsPilar].moveWay()):
-        self.whereIsPilar += 1
-        if self.whereIsPilar > 3:
-          self.finished = True
-        else:
-          self.players[self.whereIsPilar].startWay()
-  
-      self.distributeCards()
-      self.distributeSlabs()
-      
-    self.actualPlayer = (self.actualPlayer + 1) % 4
     self.nextBotAction = 0
+    pIndex = findIndexById(self.players, self.actualPlayer)
+      
+    if (pIndex == len(self.players) - 1):
+      self.actualPlayer = self.players[0].id
+    else:
+      self.actualPlayer = self.players[pIndex + 1].id
+
+    if (pIndex == 3):
+      self.startRound()
+    
     return True
+  
+  def startRound(self):
+    pIndex = findIndexById(self.players, self.whereIsPilar)
+    
+    if (self.players[pIndex].moveWay()):
+      if pIndex + 1 == len(self.players):
+        self.finished = True
+        return
+
+      self.whereIsPilar = self.players[pIndex + 1].id
+      self.players[pIndex + 1].startWay()
+
+    self.distributeCards()
+    self.distributeSlabs()
+    
     
   def moveSlab(self, slabId, destiny, rotation, cards):
     player = self.getActualPlayer()
@@ -212,7 +218,6 @@ class Game():
     
     market = self.normalMarket
     realOrigin = findIndexById(self.normalMarket, slabId)
-    print(realOrigin)
     if realOrigin == -1:
       market = self.specialMarket
       realOrigin = findIndexById(self.specialMarket, slabId)
@@ -250,45 +255,46 @@ class Game():
       if (index2 != -1):
         p1.cards.append(p2.cards.pop(index2))
 
-  def fix(self, index, cards):
+  def fix(self, riskId, cards):
     player = self.getActualPlayer()
-    risk = self.specialMarket[index]
+    rIndex = findIndexById(self.specialMarket, riskId)
+    risk = self.specialMarket[rIndex]
     if not risk.isRisk:
       return
     for i in range(len(cards)):
-      index1 = findIndex(player.cards, cards[i])
-      if (index1 != -1):
-        self.cards.append(player.cards.pop(index1))
+      cIndex = findIndex(player.cards, cards[i])
+      if (cIndex != -1):
+        self.cards.append(player.cards.pop(cIndex))
+
     player.hasBought = True
     player.points += risk.points
-    self.specialMarket.pop(index)
+    self.specialMarket.pop(rIndex)
     self.riskNumber -= 1
 
   def discard(self, cardID):
-    index = findIndexById(self.getActualPlayer().cards, cardID)
-    if (index != -1):
-      self.cards.append(self.getActualPlayer().cards.pop(index))
+    player = self.getActualPlayer()
+    cIndex = findIndexById(player.cards, cardID)
+    if (cIndex != -1):
+      self.cards.append(player.cards.pop(cIndex))
 
   def botAction(self):
     done = False
-    bot = Bot()
+    bot = Bot(self)
     actions = [
       bot.trade,
       bot.resolveRisks,
       bot.buyPlaceSlab,
       bot.computeCards,
-      Game.nextTurn,
+      self.nextTurn,
     ]
     for botActionIndex in range(self.nextBotAction, len(actions)):
-      done = actions[botActionIndex](self)
+      done = actions[botActionIndex]()
       if done != False:
         self.nextBotAction = (botActionIndex + 1) % 5
         break
     return done
 
-  def canRiskBeSolved(self, index):
-    risk = self.specialMarket[index]
-
+  def canRiskBeSolved(self, risk):
     cost = risk.costs
     for player in self.players:
       for card in player.cards:
@@ -298,11 +304,7 @@ class Game():
             return True
     return False
 
-  def canSlabBeBought(self, index):
-    if index > 3:
-      slab = self.specialMarket[index - 4]
-    else:
-      slab = self.normalMarket[index]
+  def canSlabBeBought(self, slab):
 
     costs = slab.costs.copy()
     cardTypesKeys = list(cardTypes.keys())

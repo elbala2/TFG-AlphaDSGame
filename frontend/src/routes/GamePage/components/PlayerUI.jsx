@@ -1,47 +1,46 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { connect } from 'react-redux';
 
-import LeftPlayerUI from './LeftPlayerUI';
+import { PlayerContext } from '../../../components/PlayerProvider';
 
-import styles from '../Main.module.scss';
+import LeftPlayerUI from './LeftPlayerUI';
 import BoardUI from './BoardUI';
 import TradeUI from './TradeUI';
 
+import styles from '../Main.module.scss';
+
 const PlayerUI = ({
-  playerIndex,
-  handleNextPlayer,
-  player,
   className,
+  handleNextPlayer,
 }) => {
+  const { player } = useContext(PlayerContext)
+
   const [tradeOpen, setTradeOpen] = useState(false);
 
-  if (!player) return '';
+  useEffect(() => {
+    setTradeOpen(false);
+  }, [player.id]);
+
+  if (!player.id) return '';
 
   return (
     <div className={`bgColor viewPage d-lg-flex px-lg-5 ${styles.mainCard} ${className ?? ''}`} type={player.color}>
       <LeftPlayerUI
-        playerIndex={playerIndex}
         handleNextPlayer={handleNextPlayer}
         handleTrade={() => setTradeOpen(prevstate => !prevstate)}
       />
       {tradeOpen ? (
-        <TradeUI
-          playerIndex={playerIndex}
-          onCancel={() => setTradeOpen(false)}
-        />
+        <TradeUI onCancel={() => setTradeOpen(false)} />
       ) : (
-        <BoardUI
-          playerIndex={playerIndex}
-        />
+        <BoardUI />
       )}
     </div>
   );
 };
 
-function stateToProps(state, { playerIndex }) {
+function stateToProps(state) {
   return {
-    player: state.game.players[playerIndex],
   };
 }
 

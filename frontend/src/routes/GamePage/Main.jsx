@@ -13,7 +13,7 @@ import PlayerUI from './components/PlayerUI';
 import HeaderAndFooter from '../../components/HeaderAndFooter';
 import NexPlayerModal from '../../components/NextPlayerModal';
 import SuccessModal from '../../components/SuccessModal';
-import DragAndDropProvider from '../../components/DragAndDropProvider';
+import PlayerProvider from '../../components/PlayerProvider';
 import Modal from '../../components/UI/Modal';
 
 const GamePage = ({
@@ -26,7 +26,7 @@ const GamePage = ({
   const navigate = useNavigate();
 
   const [nextPlayerModalOpen, setNextPlayerModalOpen] = useState(false);
-  const [previousPlayerIndex, setPreviousPlayerIndex] = useState(actualPlayer);
+  const [previousPlayerId, setPreviousPlayerId] = useState();
   const [openRiskInfo, setOpenRiskInfo] = useState(true);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const GamePage = ({
   }, [riskNumber])
 
   useEffect(() => {
-    setTimeout(() => setPreviousPlayerIndex(actualPlayer), 500)
+    setTimeout(() => setPreviousPlayerId(actualPlayer), 500)
   }, [actualPlayer])
 
   useEffect(() => {
@@ -50,39 +50,39 @@ const GamePage = ({
   }, [setState, id, navigate]);
   
   
-  const onNextPlayer = previousPlayerIndex !== actualPlayer; 
+  const onNextPlayer = previousPlayerId !== actualPlayer; 
 
   return (
-    <DragAndDropProvider>
-      <HeaderAndFooter>
-        {onNextPlayer && previousPlayerIndex >= 0 && (
+    <HeaderAndFooter>
+      {onNextPlayer && previousPlayerId && (
+        <PlayerProvider playerId={previousPlayerId}>
           <PlayerUI
-            playerIndex={previousPlayerIndex}
             handleNextPlayer={() => setNextPlayerModalOpen(true)}
             className='playerOut'
           />
-        )}
+        </PlayerProvider>
+      )}
+      <PlayerProvider playerId={actualPlayer}>
         <PlayerUI
-          playerIndex={actualPlayer}
           handleNextPlayer={() => setNextPlayerModalOpen(true)}
           className={onNextPlayer ? 'playerIn' : ''}
         />
+      </PlayerProvider>
 
-      <Modal
-        isOpen={openRiskInfo && !!riskNumber}
-        onClose={() => setOpenRiskInfo(false)}
-        title={dictionary.importantInfo}
-      >
-        <p className='text-danger riskMsg'>{dictionary.riskMsg}</p>
-      </Modal>
-        <NexPlayerModal
-          isOpen={nextPlayerModalOpen}
-          onClose={() => setNextPlayerModalOpen(p => !p)}
-        />
-        <TradeBotModal />
-        <SuccessModal />
-      </HeaderAndFooter>
-    </DragAndDropProvider>
+    <Modal
+      isOpen={openRiskInfo && !!riskNumber}
+      onClose={() => setOpenRiskInfo(false)}
+      title={dictionary.importantInfo}
+    >
+      <p className='text-danger riskMsg'>{dictionary.riskMsg}</p>
+    </Modal>
+      <NexPlayerModal
+        isOpen={nextPlayerModalOpen}
+        onClose={() => setNextPlayerModalOpen(p => !p)}
+      />
+      <TradeBotModal />
+      <SuccessModal />
+    </HeaderAndFooter>
   );
 };
 

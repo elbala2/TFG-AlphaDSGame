@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -10,23 +10,24 @@ import Tooltip from '../../../../components/UI/Tooltip';
 
 import { getSlabImg } from '../../../../utils/GetSlabImg';
 import { bindActionCreators } from 'redux';
+import { PlayerContext } from '../../../../components/PlayerProvider';
 
 const RiskContainer = ({
-  slab,
-  index,
-  cards,
-
+  risk,
   fix,
   dictionary,
 }) => {
   const { id } = useParams();
+  const { player } = useContext(PlayerContext)
 
   const costsRef = useRef();
 
-  const { costs, type, needed } = slab;
-  const canbuy = cards.filter(f => f.subType === needed && f.selected).length >= costs;
+  const { id: riskId, costs, type, needed } = risk;
+
+  const canbuy = player.cards.filter(f => f.subType === needed && f.selected).length >= costs;
+
   return (
-    <div className='marketContainer' key={index}>
+    <div className='marketContainer' key={riskId}>
       <div className='riskContainer' disabled={!canbuy}>
         <h6 className='title'>{dictionary.risks.types[type]}</h6>
           <p
@@ -41,7 +42,7 @@ const RiskContainer = ({
         <img
           alt={`img`}
           className='riskImg'
-          src={getSlabImg(slab)}
+          src={getSlabImg(risk)}
           draggable={false}
         />
       </div>
@@ -49,7 +50,7 @@ const RiskContainer = ({
         disabled={!canbuy}
         className=''
         variants='primary outlined'
-        onClick={() => fixRisk(id, index - 4, cards.filter(f => f.selected)).then((calbackRes) => fix(calbackRes))}
+        onClick={() => fixRisk(id, riskId, player.cards.filter(f => f.selected)).then((calbackRes) => fix(calbackRes))}
       >
         {dictionary.fix}
       </Button>
@@ -57,10 +58,8 @@ const RiskContainer = ({
   );
 }
 
-function stateToProps(state, { playerIndex }) {
-  const player = state.game.players[state.game.actualPlayer];
+function stateToProps(state,) {
   return {
-    cards: player.cards,
     dictionary: {
       risks: state.lang.dictionary.risks,
       ...state.lang.dictionary.utils,

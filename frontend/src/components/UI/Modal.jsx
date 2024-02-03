@@ -20,8 +20,8 @@ function Modal({
         className={`${styles.content} ${fullScreen ? styles.fullScreen : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className='d-flex p-2'>
-          <h4 className='flex-fill ps-2 m-0'>{title}</h4>
+        <div className='d-flex align-items-center p-2'>
+          <h4 className='flex-fill ps-2 pt-1 m-0'>{title}</h4>
           <Button variants='secondary outlined' className='p-0 border-0' onClick={onClose}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" style={{ height: '30px', width: '' }}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
