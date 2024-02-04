@@ -29,7 +29,8 @@ function LeftPlayerUI({
   const { id } = useParams();
   const { player } = useContext(PlayerContext)
 
-  const alertRef = useRef()
+  const alertBotRef = useRef()
+  const alertPlayerRef = useRef()
 
   function handleBotNextAction() {
     getBotAction(id).then(res => {
@@ -50,12 +51,12 @@ function LeftPlayerUI({
           <div className='d-flex align-items-center'>
             {whereIsPilar === player.id && (
               <>
-                <div className='alertCircle shadow bg-warning me-3' ref={alertRef}>
+                <div className='alertCircle shadow bg-warning me-3' ref={alertBotRef}>
                   <svg className='text-white' strokeWidth={2} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height={24} width={24}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                   </svg>
                 </div>
-                <Tooltip parentRef={alertRef} className='px-3 py-2'>
+                <Tooltip parentRef={alertBotRef} className='px-3 py-2'>
                   {dictionary.dataInWay}
                 </Tooltip>
               </>
@@ -67,7 +68,19 @@ function LeftPlayerUI({
             </Button>
           </div>
         ) : (
-          <div>
+          <div className='d-flex align-items-center'>
+            {player.hasBought && (
+              <>
+                <div className='alertCircle shadow bg-warning' ref={alertPlayerRef}>
+                  <svg className='text-white' strokeWidth={2} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height={24} width={24}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <Tooltip parentRef={alertPlayerRef} className='px-3 py-2'>
+                  {dictionary.cantBuy}
+                </Tooltip>
+              </>
+            )}
             <Button
               className='mx-2'
               onClick={() => handleTrade()}

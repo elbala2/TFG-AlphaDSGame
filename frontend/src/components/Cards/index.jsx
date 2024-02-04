@@ -37,10 +37,9 @@ const Cards = ({
     <div className='cardscontainer'>
       {player.cards.map((card, index) => {
         const isBlocked = blocked.includes(card.id);
-
         return (
           <Card
-            key={card.id}
+            key={card.id ?? index}
             card={card}
             className={`${className} ${isBlocked ? 'blocked' : ''}`}
             disabled={disabled || isBlocked}

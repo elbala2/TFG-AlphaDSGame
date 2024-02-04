@@ -92,6 +92,7 @@ const homePage = {
 
 const leftUI = {
   dataInWay: 'El dato esta en tu camino de datos, pierdes tu turno',
+  cantBuy: 'No puedes comprar mas componentes',
 };
 
 const tradeModal = { // will be deleted

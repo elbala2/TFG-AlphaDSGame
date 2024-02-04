@@ -1,6 +1,6 @@
 const ApiCallBack = async (type, url, params) => {
-  return await (
-    await fetch(
+  try {
+    return fetch(
       window.BACK_URL + url,
       {
         mode: 'cors',
@@ -12,8 +12,19 @@ const ApiCallBack = async (type, url, params) => {
         },
         body: params ? JSON.stringify(params) : undefined,
       },
-    )
-  ).json()
+    ).then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+
+      return response.text().then((err) => {
+        alert(err);
+        throw new Error(err);
+      })
+    })
+  } catch (error) {
+    alert(error);
+  }
 }
 
 export async function createGame(config = undefined) {

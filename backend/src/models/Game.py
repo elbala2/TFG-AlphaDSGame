@@ -165,8 +165,8 @@ class Game():
     for player in self.players:
       player.hasBought = False
       x = 4 - len(player.cards)
-      self.cards = self.cards[x:]
       player.cards += self.cards[:x]
+      self.cards = self.cards[x:]
 
   def distributeSlabs(self):
     self.slabs += self.normalMarket

@@ -2,7 +2,7 @@ import uuid
 
 from src.models.Cards import dictToCard
 from src.models.slabs import *
-from src.utils.utils import indexOf, apply
+from src.utils.utils import findIndexById, apply
 
 from src.utils.GameConfig import (
   playerColors,
@@ -52,26 +52,27 @@ class Player:
   def buy(self, slab, cards):
     costs = slab.costs.copy()
 
-    if not self.canBuySlab(cards, costs, slab.type):
+    if not self.canBuySlab(self.cards, costs, slab.type):
       return []
 
-    i = len(cards) - 1
+    i = 0
     deletedCards = []
-    playerCards = self.cards.copy()
-    while (i >= 0 and costs[0] + costs[1] + costs[2] > 0):
-      index = indexOf(self.cards, cards[i])
-      if index == -1:
-        raise Exception('Card not found')
-      cardType = self.cards[index].type
+    cardTypesKeys = list(cardTypes.keys())
+    
+    while (i < len(cards) and costs[0] + costs[1] + costs[2] > 0):
+      card = cards[i]
+      cIndex = findIndexById(self.cards, card.id)
 
-      cardTypesKeys = list(cardTypes.keys())
+      if cIndex == -1:
+        raise Exception('Card not found')
+
       for j in range(len(cardTypesKeys)):
-        if (costs[j] > 0 and cardType == cardTypesKeys[j]):
-          deletedCards += [playerCards.pop(index)]
+
+        if (costs[j] > 0 and card.type == cardTypesKeys[j]):
+          deletedCards += [self.cards.pop(cIndex)]
           costs[j] -= 1
 
-      i -= 1
-    self.cards = playerCards
+      i += 1
     return deletedCards
   
   def rateSteps(self, steps):

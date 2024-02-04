@@ -66,6 +66,7 @@ const instructionsModal = {
 
 const leftUI = {
   dataInWay: 'The data is in your data way, you lose your turn',
+  cantBuy: 'You can\'t buy more components',
 };
 
 const homePage = {

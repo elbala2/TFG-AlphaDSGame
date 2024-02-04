@@ -41,13 +41,17 @@ def moveSlab(gameId, slabID):
   cards = [dictToCard(c) for c in list(filter(lambda f: f['selected'] == True, params['cards']))]
 
   game = GameService.getGame(gameId)
-  game.moveSlab(
+  hecho = game.moveSlab(
     slabID,
     destiny,
     rotation,
     cards,
   )
   GameService.updateGame(game)
+
+  if not hecho:
+    return 'Slab can\'t be placed', 400
+
   return toJSON({
     'player': game.getActualPlayer(),
     'normalMarket': game.normalMarket,
