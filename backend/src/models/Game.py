@@ -156,10 +156,6 @@ class Game():
     
   def getActualPlayer(self):
     return findById(self.players, self.actualPlayer)
-  
-  def getPilarPlayer(self):
-    return findById(self.players, self.whereIsPilar)
-
 
   def distributeCards(self):
     for player in self.players:
