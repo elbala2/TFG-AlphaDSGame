@@ -46,19 +46,46 @@ class Player:
       self.board = [[None for i in range(4)] for i in range(4)]
       self.board[1][0] = Slab(links=[1, 1, 1, 1], slabType='Start_' + color)
 
+
   def startWay(self):
     self.way = [[0, 1]]
+
+
+  def moveWay(self):
+    if self.way[-1][x] == 2 and self.way[-1][y] == 0:
+      return True
+
+    nextSteps = self.getBestWay(self.way)
+    if len(nextSteps) > len(self.way):
+      self.way += [nextSteps[len(self.way)]]
+    return False
+
+
+  def canSolveRisk(self, risk):
+    requiredCardsNeeded = list(filter(lambda f: risk.costIndexNeeded(f) != -1, self.cards))
+    return len(requiredCardsNeeded) >= risk.costs
+
+
+  def canBuySlab(self, cards, costs, slabColor = ''):
+    if playerColors.__contains__(slabColor) and slabColor != self.color: return False
+    if cards == None:
+      cards = self.cards
+    domainList = list(filter(lambda f: f.type == 'domain', cards))
+    computerScienceList = list(filter(lambda f: f.type == 'compSci', cards))
+    mathematicsList = list(filter(lambda f: f.type == 'math', cards))
+    return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
+
 
   def buy(self, slab, cards):
     costs = slab.costs.copy()
 
     if not self.canBuySlab(self.cards, costs, slab.type):
-      return []
+      raise Exception('Slab not bought')
 
     i = 0
     deletedCards = []
     cardTypesKeys = list(cardTypes.keys())
-    
+
     while (i < len(cards) and costs[0] + costs[1] + costs[2] > 0):
       card = cards[i]
       cIndex = findIndexById(self.cards, card.id)
@@ -73,67 +100,9 @@ class Player:
           costs[j] -= 1
 
       i += 1
+
     return deletedCards
-  
-  def rateSteps(self, steps):
-    mark = len(steps) * 2
-    lastStep = steps[-1]
-    if (lastStep[x] != 2 or lastStep[y] != 0):
-      mark += 20
-      mark += (abs(2 - lastStep[x]) + abs(0 - lastStep[y])) * 3
-    return mark
-  
-    
-  def getNextOpt(self, steps):
-    lastStep = steps[-1]
-    board = self.board
-    lastSlab = board[lastStep[y]][lastStep[x]]
-    lastSlabLinks = lastSlab.applyRotation() 
-    res = []
 
-    for direction in rotationOrder: 
-      vector = positionVectors[direction]
-      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
-      if lastSlabLinks[direction] \
-        and 0 <= lastStep[x] + vector[x] < 3 and 0 <= lastStep[y] + vector[y] < 3 \
-        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]] is not None \
-        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]].applyRotation()[compDirection] \
-        and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + vector[x] and curr[y] == lastStep[y] + vector[y]), False):
-          res.append([lastStep[x] + vector[x], lastStep[y] + vector[y]])
-
-    return res
-    
-
-  def getBestWay(self, steps):
-    lastStep = steps[-1]
-
-    if lastStep[x] == 2 and lastStep[y] == 0:
-      return steps
-
-    nextOpts = self.getNextOpt(steps)
-    if len(nextOpts) == 0 :
-      return steps
-    
-    bestWay = steps
-    bestWayMark = self.rateSteps(bestWay)
-
-    for nextOpt in nextOpts:
-      wayCandidate = self.getBestWay(steps + [nextOpt])
-      wayCandidateMark = self.rateSteps(wayCandidate)
-
-      if bestWayMark > wayCandidateMark:
-        bestWay = wayCandidate
-        bestWayMark = wayCandidateMark
-    return bestWay
-  
-  def moveWay(self):
-    if self.way[-1][x] == 2 and self.way[-1][y] == 0:
-      return True
-
-    nextSteps = self.getBestWay(self.way)
-    if len(nextSteps) > len(self.way):
-      self.way += [nextSteps[len(self.way)]]
-    return False
 
   def whereCanBePlace(self, slab, destiny, rotation = 0):
     slabLinks = slab.getRotatedLinks(rotation)
@@ -153,6 +122,7 @@ class Player:
 
     return 0
 
+
   def putSlab(self, slab, destiny, rotation):
     if (destiny == None or self.board[destiny[y]][destiny[x]] != None):
       return False
@@ -168,18 +138,58 @@ class Player:
     self.hasBought = True
     return True
 
-  def canBuySlab(self, cards, costs, slabColor = ''):
-    if playerColors.__contains__(slabColor) and slabColor != self.color: return False
-    if cards == None:
-      cards = self.cards
-    domainList = list(filter(lambda f: f.type == 'domain', cards))
-    computerScienceList = list(filter(lambda f: f.type == 'compSci', cards))
-    mathematicsList = list(filter(lambda f: f.type == 'math', cards))
-    return len(domainList) >= costs[0] and len(computerScienceList) >= costs[1] and len(mathematicsList) >= costs[2]
 
-  def canSolveRisk(self, risk):
-    requiredCardsNeeded = list(filter(lambda f: risk.costIndexNeeded(f) != -1, self.cards))
-    return len(requiredCardsNeeded) >= risk.costs
+  def rateSteps(self, steps):
+    mark = len(steps) * 2
+    lastStep = steps[-1]
+    if (lastStep[x] != 2 or lastStep[y] != 0):
+      mark += 20
+      mark += (abs(2 - lastStep[x]) + abs(0 - lastStep[y])) * 3
+    return mark
+
+
+  def getNextOpt(self, steps):
+    lastStep = steps[-1]
+    board = self.board
+    lastSlab = board[lastStep[y]][lastStep[x]]
+    lastSlabLinks = lastSlab.applyRotation() 
+    res = []
+
+    for direction in rotationOrder: 
+      vector = positionVectors[direction]
+      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
+      if lastSlabLinks[direction] \
+        and 0 <= lastStep[x] + vector[x] < 3 and 0 <= lastStep[y] + vector[y] < 3 \
+        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]] is not None \
+        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]].applyRotation()[compDirection] \
+        and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + vector[x] and curr[y] == lastStep[y] + vector[y]), False):
+          res.append([lastStep[x] + vector[x], lastStep[y] + vector[y]])
+
+    return res
+
+
+  def getBestWay(self, steps):
+    lastStep = steps[-1]
+
+    if lastStep[x] == 2 and lastStep[y] == 0:
+      return steps
+
+    nextOpts = self.getNextOpt(steps)
+    if len(nextOpts) == 0 :
+      return steps
+
+    bestWay = steps
+    bestWayMark = self.rateSteps(bestWay)
+
+    for nextOpt in nextOpts:
+      wayCandidate = self.getBestWay(steps + [nextOpt])
+      wayCandidateMark = self.rateSteps(wayCandidate)
+
+      if bestWayMark > wayCandidateMark:
+        bestWay = wayCandidate
+        bestWayMark = wayCandidateMark
+    return bestWay
+
 
   def getCloseLinks(self, coords, movement):
     link = None
@@ -190,6 +200,7 @@ class Player:
       if slab != None:
         link = slab.applyRotation()
     return link
+
 
   def getPositionPlaces(self, slab, coords):
     if self.board[coords[y]][coords[x]] != None:
@@ -213,8 +224,9 @@ class Player:
 
       if isValid and (coords[x] != 2 or coords[y] != 0 or (slabLinks[up] and coords[x] == 2 and coords[y] == 0)):
         res += [{ 'pos': coords, 'rotation': rotation }]
-    
+
     return res
+
 
   def getPossiblePlaces(self, slab):
     res = []
@@ -222,6 +234,7 @@ class Player:
       for x1 in range(4):
         res += self.getPositionPlaces(slab, [x1, y1])
     return res
+
 
   def getCards(self, slab):
     res = []
@@ -235,6 +248,7 @@ class Player:
 
     return res
 
+
   def getRiskCards(self, risk):
     res = []
     costs = risk.costs
@@ -243,7 +257,6 @@ class Player:
         res += [card]
         costs -= 1
     return res
-
 
 
 def dictToPlayer(dict):

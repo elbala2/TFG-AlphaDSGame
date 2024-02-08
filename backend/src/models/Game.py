@@ -100,6 +100,7 @@ class Game():
     self.players = players
     self.cards = cards
 
+
   def createGame(self, gameType, playerConfig):
     gameId = uuid.uuid4().__str__()
     riskNumber = 0
@@ -153,9 +154,35 @@ class Game():
     self.specialMarket = specialMarket
     self.players = players
     self.cards = cards
-    
+
+
   def getActualPlayer(self):
     return findById(self.players, self.actualPlayer)
+
+
+  def canRiskBeSolved(self, risk):
+    cost = risk.costs
+    for player in self.players:
+      for card in player.cards:
+        if cost != 0 and risk.costIndexNeeded(card) != -1:
+          cost -= 1
+          if cost == 0:
+            return True
+    return False
+
+
+  def canSlabBeBought(self, slab):
+    costs = slab.costs.copy()
+    cardTypesKeys = list(cardTypes.keys())
+    for player in self.players:
+      for card in player.cards:
+        for i in range(len(cardTypesKeys)):
+          if costs[i] != 0 and card.type == cardTypesKeys[i]:
+            costs[i] -= 1
+          if sum(costs) == 0:
+            return True
+    return False
+
 
   def distributeCards(self):
     for player in self.players:
@@ -163,6 +190,7 @@ class Game():
       x = 4 - len(player.cards)
       player.cards += self.cards[:x]
       self.cards = self.cards[x:]
+
 
   def distributeSlabs(self):
     self.slabs += self.normalMarket
@@ -178,20 +206,7 @@ class Game():
       else:
         self.slabs.append(slab)
 
-  def nextTurn(self):
-    self.nextBotAction = 0
-    pIndex = findIndexById(self.players, self.actualPlayer)
-      
-    if (pIndex == len(self.players) - 1):
-      self.actualPlayer = self.players[0].id
-    else:
-      self.actualPlayer = self.players[pIndex + 1].id
 
-    if (pIndex == 3):
-      self.startRound()
-    
-    return True
-  
   def startRound(self):
     pIndex = findIndexById(self.players, self.whereIsPilar)
     
@@ -205,8 +220,23 @@ class Game():
 
     self.distributeCards()
     self.distributeSlabs()
+
+
+  def nextTurn(self):
+    self.nextBotAction = 0
+    pIndex = findIndexById(self.players, self.actualPlayer)
+      
+    if (pIndex == len(self.players) - 1):
+      self.actualPlayer = self.players[0].id
+    else:
+      self.actualPlayer = self.players[pIndex + 1].id
+
+    if (pIndex == 3):
+      self.startRound()
     
-    
+    return True
+
+
   def moveSlab(self, slabId, destiny, rotation, cards):
     player = self.getActualPlayer()
     if player.hasBought:
@@ -234,7 +264,8 @@ class Game():
     else:
       player.cards += playerCards
       return False
-    
+
+
   def tradeCards(self, player1ID, cards1, player2ID, cards2):
     if (len(cards1) != len(cards2)):
       raise Exception('The trade must be equivalent')
@@ -250,6 +281,7 @@ class Game():
       index2 = findIndex(p2.cards, cards2[i])
       if (index2 != -1):
         p1.cards.append(p2.cards.pop(index2))
+
 
   def fix(self, riskId, cards):
     player = self.getActualPlayer()
@@ -267,11 +299,13 @@ class Game():
     self.specialMarket.pop(rIndex)
     self.riskNumber -= 1
 
+
   def discard(self, cardID):
     player = self.getActualPlayer()
     cIndex = findIndexById(player.cards, cardID)
     if (cIndex != -1):
       self.cards.append(player.cards.pop(cIndex))
+
 
   def botAction(self):
     done = False
@@ -290,25 +324,3 @@ class Game():
         break
     return done
 
-  def canRiskBeSolved(self, risk):
-    cost = risk.costs
-    for player in self.players:
-      for card in player.cards:
-        if cost != 0 and risk.costIndexNeeded(card) != -1:
-          cost -= 1
-          if cost == 0:
-            return True
-    return False
-
-  def canSlabBeBought(self, slab):
-
-    costs = slab.costs.copy()
-    cardTypesKeys = list(cardTypes.keys())
-    for player in self.players:
-      for card in player.cards:
-        for i in range(len(cardTypesKeys)):
-          if costs[i] != 0 and card.type == cardTypesKeys[i]:
-            costs[i] -= 1
-          if sum(costs) == 0:
-            return True
-    return False

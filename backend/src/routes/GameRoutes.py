@@ -29,7 +29,7 @@ def getGameEndpoint(gameId):
   game = GameService.getGame(gameId)
   return toJSON(game)
 
-@base.route('/<gameId>/slabs/<slabID>/move', methods=['PUT'])   
+@base.route('/<gameId>/slabs/<slabID>/move', methods=['PUT'])
 def moveSlab(gameId, slabID):
   params = request.get_json()
 
