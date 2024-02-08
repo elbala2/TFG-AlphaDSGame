@@ -237,6 +237,40 @@ class Game():
     return True
 
 
+  def tradeCards(self, player1ID, cards1, player2ID, cards2):
+    if (len(cards1) != len(cards2)):
+      raise Exception('The trade must be equivalent')
+    
+    p1 = findById(self.players, player1ID)
+    p2 = findById(self.players, player2ID)
+
+    for i in range(len(cards1)):
+      index1 = findIndex(p1.cards, cards1[i])
+      if (index1 != -1):
+        p2.cards.append(p1.cards.pop(index1))
+        
+      index2 = findIndex(p2.cards, cards2[i])
+      if (index2 != -1):
+        p1.cards.append(p2.cards.pop(index2))
+
+
+  def fix(self, riskId, cards):
+    player = self.getActualPlayer()
+    rIndex = findIndexById(self.specialMarket, riskId)
+    risk = self.specialMarket[rIndex]
+    if not risk.isRisk:
+      raise Exception('Slab can\'t be fixed')
+    for i in range(len(cards)):
+      cIndex = findIndex(player.cards, cards[i])
+      if (cIndex != -1):
+        self.cards.append(player.cards.pop(cIndex))
+
+    player.hasBought = True
+    player.points += risk.points
+    self.specialMarket.pop(rIndex)
+    self.riskNumber -= 1
+
+
   def moveSlab(self, slabId, destiny, rotation, cards):
     player = self.getActualPlayer()
     if player.hasBought:
@@ -264,40 +298,6 @@ class Game():
     else:
       player.cards += playerCards
       return False
-
-
-  def tradeCards(self, player1ID, cards1, player2ID, cards2):
-    if (len(cards1) != len(cards2)):
-      raise Exception('The trade must be equivalent')
-    
-    p1 = findById(self.players, player1ID)
-    p2 = findById(self.players, player2ID)
-
-    for i in range(len(cards1)):
-      index1 = findIndex(p1.cards, cards1[i])
-      if (index1 != -1):
-        p2.cards.append(p1.cards.pop(index1))
-        
-      index2 = findIndex(p2.cards, cards2[i])
-      if (index2 != -1):
-        p1.cards.append(p2.cards.pop(index2))
-
-
-  def fix(self, riskId, cards):
-    player = self.getActualPlayer()
-    rIndex = findIndexById(self.specialMarket, riskId)
-    risk = self.specialMarket[rIndex]
-    if not risk.isRisk:
-      return
-    for i in range(len(cards)):
-      cIndex = findIndex(player.cards, cards[i])
-      if (cIndex != -1):
-        self.cards.append(player.cards.pop(cIndex))
-
-    player.hasBought = True
-    player.points += risk.points
-    self.specialMarket.pop(rIndex)
-    self.riskNumber -= 1
 
 
   def discard(self, cardID):
