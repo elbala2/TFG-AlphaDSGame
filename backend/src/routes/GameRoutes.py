@@ -90,10 +90,10 @@ def tradeCards(gameId):
   GameService.updateGame(game)
   return toJSON({ 'players': game.players })
 
-@base.route('/<gameId>/cards/<cardID>/discard', methods=['PUT'])   
-def discard(gameId, cardID):
+@base.route('/<gameId>/cards/<cardId>/discard', methods=['PUT'])   
+def discard(gameId, cardId):
   game = GameService.getGame(gameId)
-  game.discard(cardID)
+  game.discard(cardId)
   GameService.updateGame(game)
   return toJSON({
     'cards': game.getActualPlayer().cards,
