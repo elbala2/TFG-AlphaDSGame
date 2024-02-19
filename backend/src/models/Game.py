@@ -185,6 +185,7 @@ class Game():
 
 
   def distributeCards(self):
+    random.shuffle(self.cards)
     for player in self.players:
       player.hasBought = False
       x = 4 - len(player.cards)
@@ -195,6 +196,7 @@ class Game():
   def distributeSlabs(self):
     self.slabs += self.normalMarket
     self.normalMarket = []
+    random.shuffle(self.slabs)
     while (len(self.normalMarket) < 4):
       slab = self.slabs.pop(0)
       if (not slab.isSpecial):
