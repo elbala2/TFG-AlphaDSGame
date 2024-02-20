@@ -51,6 +51,58 @@ class Player:
     self.way = [[0, 1]]
 
 
+  def rateSteps(self, steps):
+    mark = len(steps) * 2
+    lastStep = steps[-1]
+    if (lastStep[x] != 2 or lastStep[y] != 0):
+      mark += 20
+      mark += (abs(2 - lastStep[x]) + abs(0 - lastStep[y])) * 3
+    return mark
+
+
+  def getNextOpt(self, steps):
+    lastStep = steps[-1]
+    board = self.board
+    lastSlab = board[lastStep[y]][lastStep[x]]
+    lastSlabLinks = lastSlab.applyRotation() 
+    res = []
+
+    for direction in rotationOrder: 
+      vector = positionVectors[direction]
+      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
+      if lastSlabLinks[direction] \
+        and 0 <= lastStep[x] + vector[x] < 3 and 0 <= lastStep[y] + vector[y] < 3 \
+        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]] is not None \
+        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]].applyRotation()[compDirection] \
+        and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + vector[x] and curr[y] == lastStep[y] + vector[y]), False):
+          res.append([lastStep[x] + vector[x], lastStep[y] + vector[y]])
+
+    return res
+
+
+  def getBestWay(self, steps):
+    lastStep = steps[-1]
+
+    if lastStep[x] == 2 and lastStep[y] == 0:
+      return steps
+
+    nextOpts = self.getNextOpt(steps)
+    if len(nextOpts) == 0 :
+      return steps
+
+    bestWay = steps
+    bestWayMark = self.rateSteps(bestWay)
+
+    for nextOpt in nextOpts:
+      wayCandidate = self.getBestWay(steps + [nextOpt])
+      wayCandidateMark = self.rateSteps(wayCandidate)
+
+      if bestWayMark > wayCandidateMark:
+        bestWay = wayCandidate
+        bestWayMark = wayCandidateMark
+    return bestWay
+
+
   def moveWay(self):
     if self.way[-1][x] == 2 and self.way[-1][y] == 0:
       return True
@@ -108,8 +160,11 @@ class Player:
     slabLinks = slab.getRotatedLinks(rotation)
 
     done = True
-    if (destiny[x] == 0 and destiny[y] == 2):
-      done = slabLinks[up] == 1
+    if (destiny[x] == 2 and destiny[y] == 0):
+      if slabLinks[up] == 1:
+        return 1
+      else:
+        return 0
 
     for direction in rotationOrder: 
       vector = positionVectors[direction]
@@ -137,58 +192,6 @@ class Player:
     self.points += slab.points
     self.hasBought = True
     return True
-
-
-  def rateSteps(self, steps):
-    mark = len(steps) * 2
-    lastStep = steps[-1]
-    if (lastStep[x] != 2 or lastStep[y] != 0):
-      mark += 20
-      mark += (abs(2 - lastStep[x]) + abs(0 - lastStep[y])) * 3
-    return mark
-
-
-  def getNextOpt(self, steps):
-    lastStep = steps[-1]
-    board = self.board
-    lastSlab = board[lastStep[y]][lastStep[x]]
-    lastSlabLinks = lastSlab.applyRotation() 
-    res = []
-
-    for direction in rotationOrder: 
-      vector = positionVectors[direction]
-      compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
-      if lastSlabLinks[direction] \
-        and 0 <= lastStep[x] + vector[x] < 3 and 0 <= lastStep[y] + vector[y] < 3 \
-        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]] is not None \
-        and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]].applyRotation()[compDirection] \
-        and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + vector[x] and curr[y] == lastStep[y] + vector[y]), False):
-          res.append([lastStep[x] + vector[x], lastStep[y] + vector[y]])
-
-    return res
-
-
-  def getBestWay(self, steps):
-    lastStep = steps[-1]
-
-    if lastStep[x] == 2 and lastStep[y] == 0:
-      return steps
-
-    nextOpts = self.getNextOpt(steps)
-    if len(nextOpts) == 0 :
-      return steps
-
-    bestWay = steps
-    bestWayMark = self.rateSteps(bestWay)
-
-    for nextOpt in nextOpts:
-      wayCandidate = self.getBestWay(steps + [nextOpt])
-      wayCandidateMark = self.rateSteps(wayCandidate)
-
-      if bestWayMark > wayCandidateMark:
-        bestWay = wayCandidate
-        bestWayMark = wayCandidateMark
-    return bestWay
 
 
   def getCloseLinks(self, coords, movement):
