@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -21,6 +21,7 @@ import Button from '../../components/UI/Button';
 import PlayerInput from './PlayerInput';
 
 import styles from './styles/HomePage.module.scss';
+import { cloneDeep } from 'lodash';
 
 const HomePage = ({
   dictionary,
@@ -38,14 +39,11 @@ const HomePage = ({
     ]
   });
 
-  const handleChangePlayer = (player, i) => {
+  function handleChangePlayer(key, value, i) {
     setConfig((c) => {
-      const newPlayers = [...c.players];
-      newPlayers[i] = player;
-      return {
-        ...c,
-        players: newPlayers,
-      };
+      const newConfig = cloneDeep(c);
+      newConfig.players[i][key] = value;
+      return newConfig;
     });
   };
 
@@ -125,10 +123,10 @@ const HomePage = ({
           <div className={styles.playerButtonsContainer}>
             {config.players.map((player, index) => (
               <PlayerInput
-                key={player.name}
+                key={playerColors[index]}
                 color={playerColors[index]}
                 player={player}
-                setPlayer={(p) => handleChangePlayer(p, index)}
+                onChange={(key, value) => handleChangePlayer(key, value, index)}
               />
             ))}
           </div>
