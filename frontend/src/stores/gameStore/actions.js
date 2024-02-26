@@ -36,11 +36,12 @@ export const rotate = (marketId, dir) => {
   }
 }
 
-export const setCardSelected = (playerId, id) => {
+export const setCardSelected = (playerId, id, value) => {
   return {
     type: CARD_SELECTED_ACTION,
     cardId: id,
     playerId,
+    value,
   }
 }
 

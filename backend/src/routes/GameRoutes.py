@@ -126,20 +126,18 @@ def bot_moves(gameId):
     return toJSON(hecho)
   return toJSON(game)
 
-@base.route('/<gameId>/bot/<playerId>/process-offer', methods=['GET'])
+@base.route('/<gameId>/bot/<playerId>/process-offer', methods=['PUT'])
 def bot_process_offer(gameId, playerId):
   params = request.get_json()
 
   if (not params):
     raise Exception('destiny, rotation and cards required')
-
-  blockedCards = [dictToCard(c) for c in params['blockedCards']];
-  requestedCards = [dictToCard(c) for c in params['requestedCards']];
-
+  
   game = GameService.getGame(gameId)
   res = game.processOffer(playerId, {
-    'blockedCards': blockedCards,
-    'requestedCards': requestedCards,
+    'blockedCards': params['blockedCards'],
+    'requestedCards': params['requestedCards'],
+    'slab': params['slab'],
   })
   GameService.updateGame(game)
 

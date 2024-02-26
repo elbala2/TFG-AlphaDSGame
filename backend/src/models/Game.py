@@ -3,7 +3,7 @@ import uuid
 import random
 import copy
 
-from src.models.Cards import Card
+from src.models.Cards import Card, dictToCard
 from src.models.slabs import *
 from src.models.Player import Player
 from src.models.bots import Bot
@@ -330,7 +330,15 @@ class Game():
     bot = Bot(self)
 
     actualPlayer = self.getActualPlayer()
+    tradePlayer = findById(self.players, playerId)
+
+    blockedCards = [findById(actualPlayer.cards, cId) for cId in offer['blockedCards']];
+    requestedCards = [findById(tradePlayer.cards, cId) for cId in offer['requestedCards']];
+
+    slab = dictToSlab(offer['slab'])
+
+    actualPlayer = self.getActualPlayer()
     botPlayer = findById(self.players, playerId)
 
-    return bot.processOffer(actualPlayer, botPlayer, offer)
+    return bot.processOffer(actualPlayer, botPlayer, blockedCards, requestedCards, slab)
 

@@ -1,5 +1,5 @@
 const ApiCallBack = async (type, url, params) => {
-  try {
+  // try {
     return fetch(
       window.BACK_URL + url,
       {
@@ -22,9 +22,9 @@ const ApiCallBack = async (type, url, params) => {
         throw new Error(err);
       })
     })
-  } catch (error) {
-    alert(error);
-  }
+  // } catch (error) {
+  //   alert(error);
+  // }
 }
 
 export async function createGame(config = undefined) {
@@ -63,4 +63,13 @@ export function fixRisk(id, riskID, cards) {
 
 export function getBotAction(id) {
   return ApiCallBack('GET', `/game/${id}/bot/action`)
+}
+
+export function TradeBotCards(id, playerId, blockedCards, requestedCards, slab) {
+  return ApiCallBack('PUT', `/game/${id}/bot/${playerId}/process-offer`,
+  {
+    blockedCards,
+    requestedCards, 
+    slab,
+  });
 }

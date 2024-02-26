@@ -238,27 +238,51 @@ class Bot:
       'action': 'trade',
       'cardConfig': cardConfigurations,
     }
+  
+  def getRandomCards(self, player, excludedCards, number):
+    res = []
+    i = 0
+    cards = player.cards.copy()
+    while len(res) < number and i < len(player.cards): 
+      card = cards[i]
+      i += 1
+      if findIndexById(excludedCards, card.id) == -1:
+        res.append(card)
 
-  def processOffer(self, actualPlayer, botPlayer, offer):
+    return res
+
+  def processOffer(self, actualPlayer, botPlayer, blockedCards, requestedCards, slab):
     self.player = botPlayer
+
+    posibleCards = list(filter(lambda c: findIndex(blockedCards, c) == -1, actualPlayer.cards))
     
     cardConfigurations = self.getPreferredCards()
-    firstSlabOption = cardConfigurations[0]
 
-    playerOption = findByFunc(firstSlabOption, lambda opt: opt['needed']['playerId'] == actualPlayer.id)
+    if len(requestedCards) > len(posibleCards):
+      return {
+        'status': 'DENIED',
+      }
 
-    posibleCards = list(filter(lambda c: findIndex(offer['blockedCards'], c) != -1, actualPlayer.cards))
+    firstSlabOption = findByFunc(cardConfigurations, lambda c, i, arr: c['slab'].id != slab.id);
+
+    if not firstSlabOption \
+      or findIndex(self.game.players, actualPlayer) > findIndex(self.game.players, botPlayer):
+      return {
+        'status': 'ACCEPTED',
+        'selected': self.getRandomCards(actualPlayer, blockedCards, len(requestedCards))
+      }
+
+    playerOption = findByFunc(firstSlabOption['needed'], lambda opt, i, arr: opt['playerId'] == actualPlayer.id and len(opt['cardIds']) <= len(requestedCards))
 
     if playerOption == None \
-    or len(playerOption['needed']['cardIds']) > len(posibleCards) \
-    or apply(playerOption['needed']['cardIds'], lambda prev, cId: prev or findIndexById(offer['blockedCards'], cId) != -1, False) \
-    or apply(firstSlabOption['blockedIds'], lambda prev, cId: prev or findIndexById(offer['requestedCards'], cId) != -1, False):  
+    or apply(playerOption['cardIds'], lambda prev, cId: prev or findIndexById(blockedCards, cId) != -1, False) \
+    or (not slab.isRisk and apply(firstSlabOption['blockedIds'], lambda prev, cId: prev or findIndexById(requestedCards, cId) != -1, False)):  
       return {
         'status': 'DENIED',
       }
 
     return {
-      'status': 'ACEPTED',
-      'offerBack': firstSlabOption,
+      'status': 'ACCEPTED',
+      'selected': playerOption['cardIds'],
     }
 

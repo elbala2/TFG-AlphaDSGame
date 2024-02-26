@@ -98,6 +98,9 @@ const tradeModal = { // will be deleted
   title: (name = 'Please') => `${name} select which cards you want to trade`,
   onTradeAcceptQst: 'Do you want to accept the trade?',
   noPlayersToTrade: 'No players to trade',
+  processOffer: 'Process offer',
+  offerAccepted: 'Offer accepted',
+  offerDenied: 'Offer denied',
 };
 
 const rigthUI = {

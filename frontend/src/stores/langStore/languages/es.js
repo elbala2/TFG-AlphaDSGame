@@ -99,6 +99,9 @@ const tradeModal = { // will be deleted
   title: (name = 'Por favor,') => ` ${name} seleccione las cartas que quiere intercambiar`,
   onTradeAcceptQst: '¿Quieres aceptar el siguiente intercambio?',
   noPlayersToTrade: 'No hay jugadores con los que intercambiar',
+  processOffer: 'Procesar oferta',
+  offerAccepted: 'Oferta aceptada',
+  offerDenied: 'Oferta denegada',
 };
 
 const rigthUI = {

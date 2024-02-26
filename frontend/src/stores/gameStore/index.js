@@ -54,7 +54,8 @@ export default function gameReducer(state = initialState, action) {
 
     case CARD_SELECTED_ACTION: {
       const pIndex = players.findIndex((p) => action.playerId ? p.id === action.playerId : p.id === actualPlayer)
-      players[pIndex].cards[action.cardId].selected = !players[pIndex].cards[action.cardId].selected;
+      const cIndex = players[pIndex].cards.findIndex(c => c.id === action.cardId)
+      players[pIndex].cards[cIndex].selected = action.value ?? !players[pIndex].cards[cIndex].selected;
       players[pIndex] = { ...players[pIndex] };
       return {
         ...state,

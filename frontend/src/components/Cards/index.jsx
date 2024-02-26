@@ -27,10 +27,11 @@ const Cards = ({
   const { id } = useParams();
 
   useEffect(() => {
-    player.cards.forEach((card, index) => {
-      if (selected.includes(card.id) && !card.selected) setCardSelected(player.id, index);
+    player.cards.forEach((card) => {
+      if (selected.includes(card.id) && !card.selected) setCardSelected(player.id, card.id, true);
     })
-  }, [player, selected, setCardSelected])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected])
 
   
   return (
@@ -39,13 +40,13 @@ const Cards = ({
         const isBlocked = blocked.includes(card.id);
         return (
           <Card
-            key={card.id ?? index}
+            key={`${id}_${card.id ?? index}`}
             card={card}
             className={`${className} ${isBlocked ? 'blocked' : ''}`}
             disabled={disabled || isBlocked}
             onClick={() => {
               if (disabled || isBlocked || selected.includes(card.id)) return;
-              setCardSelected(player.id, index);
+              setCardSelected(player.id, card.id);
             }}
             onDiscard={descartable ? () => {
               Discard(id, card).then((res) => {
