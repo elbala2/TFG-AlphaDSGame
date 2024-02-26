@@ -125,3 +125,22 @@ def bot_moves(gameId):
   if hecho != True:
     return toJSON(hecho)
   return toJSON(game)
+
+@base.route('/<gameId>/bot/<playerId>/process-offer', methods=['GET'])
+def bot_process_offer(gameId, playerId):
+  params = request.get_json()
+
+  if (not params):
+    raise Exception('destiny, rotation and cards required')
+
+  blockedCards = [dictToCard(c) for c in params['blockedCards']];
+  requestedCards = [dictToCard(c) for c in params['requestedCards']];
+
+  game = GameService.getGame(gameId)
+  res = game.processOffer(playerId, {
+    'blockedCards': blockedCards,
+    'requestedCards': requestedCards,
+  })
+  GameService.updateGame(game)
+
+  return toJSON(res)

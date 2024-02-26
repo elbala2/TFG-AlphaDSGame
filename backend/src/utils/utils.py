@@ -23,6 +23,12 @@ def findById(array, id):
       return array[i]
   return None
 
+def findByFunc(array, function):
+  for i in range(len(array)):
+    if function(array[i], i, array):
+      return array[i]
+  return None
+
 def apply(listA, function, default):
   defaultAux = default
   for x in listA:

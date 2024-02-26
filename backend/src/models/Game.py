@@ -326,3 +326,11 @@ class Game():
         break
     return done
 
+  def processOffer(self, playerId, offer):
+    bot = Bot(self)
+
+    actualPlayer = self.getActualPlayer()
+    botPlayer = findById(self.players, playerId)
+
+    return bot.processOffer(actualPlayer, botPlayer, offer)
+

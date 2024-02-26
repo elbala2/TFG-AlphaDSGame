@@ -1,6 +1,6 @@
 from src.models.slabs import *
 
-from src.utils.utils import findIndexById
+from src.utils.utils import findIndexById, findIndex, findByFunc, apply
 from src.utils.GameConfig import (
   playerColors,
   cardTypes,
@@ -13,22 +13,21 @@ from src.utils.GameConfig import (
 class Bot:
   def __init__(self, game):
     self.game = game
+    self.player = self.game.getActualPlayer()
 
   def getRiskToResolve(self):
-    bot = self.game.getActualPlayer()
     res = []
     if not self.game.riskNumber:
       return []
     for specialItems in self.game.specialMarket:
-      if specialItems.isRisk and bot.canSolveRisk(specialItems):
+      if specialItems.isRisk and self.player.canSolveRisk(specialItems):
         res += [{
           'targetRiskId': specialItems.id,
-          'cards': bot.getRiskCards(specialItems),
+          'cards': self.player.getRiskCards(specialItems),
         }]
     return res
 
   def resolveRisks(self):
-    bot = self.game.getActualPlayer()
     riskToResolve = self.getRiskToResolve()
     if len(riskToResolve) == 0:
       return False
@@ -36,7 +35,7 @@ class Bot:
     while (len(riskToResolve) != 0):
       targetRiskId, cards = riskToResolve.pop(0).values()
       riskIndex = findIndexById(self.game.specialMarket, targetRiskId)
-      if bot.canSolveRisk(self.game.specialMarket[riskIndex]):
+      if self.player.canSolveRisk(self.game.specialMarket[riskIndex]):
         done = True
         self.game.fix(targetRiskId, cards)
     return done
@@ -75,12 +74,11 @@ class Bot:
     return mark
 
   def computeSlab(self, slab):
-    bot = self.game.getActualPlayer()
     best = None
-    if bot.canBuySlab(None, slab.costs, slab.type):
-      cards = bot.getCards(slab)
-      for place in bot.getPossiblePlaces(slab):
-        mark = self.getMark(slab, place, bot.board)
+    if self.player.canBuySlab(None, slab.costs, slab.type):
+      cards = self.player.getCards(slab)
+      for place in self.player.getPossiblePlaces(slab):
+        mark = self.getMark(slab, place, self.player.board)
         if best == None or mark < best['mark']:
           best = {
             'targetSlabId': slab.id,
@@ -92,8 +90,6 @@ class Bot:
     return best
 
   def getPossibleSlabsToBuy(self):
-    actualPlayer = self.game.getActualPlayer()
-
     best = None
     for slabIndex in range(len(self.game.normalMarket)):
       slab = self.game.normalMarket[slabIndex]
@@ -103,7 +99,7 @@ class Bot:
 
     for slabIndex in range(4, len(self.game.specialMarket) + 4):
       slab = self.game.specialMarket[slabIndex - 4]
-      if not slab.isRisk and slab.type == actualPlayer.color:
+      if not slab.isRisk and slab.type == self.player.color:
         opt = self.computeSlab(slab)
         if opt != None and (best == None or opt['mark'] < best['mark']):
           best = opt
@@ -120,14 +116,13 @@ class Bot:
     return self.game.moveSlab(targetSlabId, [pos[x], pos[y]], rotation, cards)
 
   def computeCards(self):
-    bot = self.game.getActualPlayer()
     cardIds = []
     types = [0,0,0]
-    if len(bot.cards) != 4: return False
+    if len(self.player.cards) != 4: return False
 
     if self.game.riskNumber:
       risks = list(filter(lambda slab: slab.isRisk, self.game.specialMarket))
-    for card in bot.cards:
+    for card in self.player.cards:
       if self.game.riskNumber:
         needed = False
         for risk in risks:
@@ -150,24 +145,23 @@ class Bot:
     return len(cardIds) != 0
 
   def getCardsConfig(self, slab):
-    bot = self.game.getActualPlayer()
     blockedIds = []
     if slab.isRisk:
       costs = [slab.costs]
     else:
       costs = slab.costs.copy()
 
-    for card in bot.cards:
+    for card in self.player.cards:
       costNeed = slab.costIndexNeeded(card)
       if costNeed != -1 and costs[costNeed]:
         blockedIds += [card.id]
         costs[costNeed] -= 1
-    if sum(costs) == 0 or len(blockedIds) == len(bot.cards):
+    if sum(costs) == 0 or len(blockedIds) == len(self.player.cards):
       return []
     else:
       needed = []
       for player in self.game.players:
-        if player.id != bot.id:
+        if player.id != self.player.id:
           costsCopy = costs.copy() 
           cardIds = []
           for card in player.cards:
@@ -199,21 +193,18 @@ class Bot:
     return res
   
   def getBestSlabMark(self, slab):
-    bot = self.game.getActualPlayer()
-    if bot.canBuySlab(None, slab.costs, slab.type):
+    if self.player.canBuySlab(None, slab.costs, slab.type):
       return 0
     best = 999
-    for place in bot.getPossiblePlaces(slab):
-      best = min(self.getMark(slab, place, bot.board), best)
+    for place in self.player.getPossiblePlaces(slab):
+      best = min(self.getMark(slab, place, self.player.board), best)
     return best
 
   def getPreferredSlabCards(self):
-    bot = self.game.getActualPlayer()
-
     res = []
     for specialSlab in self.game.specialMarket:
-      if not specialSlab.isRisk and bot.color == specialSlab.type and self.game.canSlabBeBought(specialSlab):
-        if bot.canBuySlab(None, specialSlab.costs, specialSlab.type):
+      if not specialSlab.isRisk and self.player.color == specialSlab.type and self.game.canSlabBeBought(specialSlab):
+        if self.player.canBuySlab(None, specialSlab.costs, specialSlab.type):
           return []
         res += self.getCardsConfig(specialSlab)
 
@@ -224,7 +215,7 @@ class Bot:
 
     for slab in slabs:
       mark = self.getBestSlabMark(slab) == 0
-      if mark <= best and bot.canBuySlab(None, slab.costs, slab.type):
+      if mark <= best and self.player.canBuySlab(None, slab.costs, slab.type):
         return []
       else:
         res += self.getCardsConfig(slab)
@@ -247,3 +238,27 @@ class Bot:
       'action': 'trade',
       'cardConfig': cardConfigurations,
     }
+
+  def processOffer(self, actualPlayer, botPlayer, offer):
+    self.player = botPlayer
+    
+    cardConfigurations = self.getPreferredCards()
+    firstSlabOption = cardConfigurations[0]
+
+    playerOption = findByFunc(firstSlabOption, lambda opt: opt['needed']['playerId'] == actualPlayer.id)
+
+    posibleCards = list(filter(lambda c: findIndex(offer['blockedCards'], c) != -1, actualPlayer.cards))
+
+    if playerOption == None \
+    or len(playerOption['needed']['cardIds']) > len(posibleCards) \
+    or apply(playerOption['needed']['cardIds'], lambda prev, cId: prev or findIndexById(offer['blockedCards'], cId) != -1, False) \
+    or apply(firstSlabOption['blockedIds'], lambda prev, cId: prev or findIndexById(offer['requestedCards'], cId) != -1, False):  
+      return {
+        'status': 'DENIED',
+      }
+
+    return {
+      'status': 'ACEPTED',
+      'offerBack': firstSlabOption,
+    }
+
