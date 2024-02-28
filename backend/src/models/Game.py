@@ -337,8 +337,16 @@ class Game():
 
     slab = dictToSlab(offer['slab'])
 
-    actualPlayer = self.getActualPlayer()
-    botPlayer = findById(self.players, playerId)
+    return bot.processOffer(actualPlayer, tradePlayer, blockedCards, requestedCards, slab)
 
-    return bot.processOffer(actualPlayer, botPlayer, blockedCards, requestedCards, slab)
+  def askOffer(self, playerId, offer):
+    bot = Bot(self)
+
+    actualPlayer = self.getActualPlayer()
+    tradePlayer = findById(self.players, playerId)
+
+    actualPlayerCards = [dictToCard(c) for c in offer['cards1']];
+    tradePlayerCards = [dictToCard(c) for c in offer['cards2']];
+
+    return bot.askOffer(actualPlayer, tradePlayer, actualPlayerCards, tradePlayerCards)
 

@@ -131,13 +131,30 @@ def bot_process_offer(gameId, playerId):
   params = request.get_json()
 
   if (not params):
-    raise Exception('destiny, rotation and cards required')
+    raise Exception('empty offer are not valid')
   
   game = GameService.getGame(gameId)
   res = game.processOffer(playerId, {
     'blockedCards': params['blockedCards'],
     'requestedCards': params['requestedCards'],
     'slab': params['slab'],
+  })
+  GameService.updateGame(game)
+
+  return toJSON(res)
+
+
+@base.route('/<gameId>/bot/<playerId>/ask-offer', methods=['PUT'])
+def bot_ask_offer(gameId, playerId):
+  params = request.get_json()
+
+  if (not params):
+    raise Exception('empty offer are not valid')
+  
+  game = GameService.getGame(gameId)
+  res = game.askOffer(playerId, {
+    'cards1': params['cards1'],
+    'cards2': params['cards2'],
   })
   GameService.updateGame(game)
 

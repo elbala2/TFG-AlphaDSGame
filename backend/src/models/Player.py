@@ -2,7 +2,7 @@ import uuid
 
 from src.models.Cards import dictToCard
 from src.models.slabs import *
-from src.utils.utils import findIndexById, apply
+from src.utils.utils import findIndexById, apply, findByFunc
 
 from src.utils.GameConfig import (
   playerColors,
@@ -71,10 +71,10 @@ class Player:
       vector = positionVectors[direction]
       compDirection = (direction + (len(rotationOrder) // 2)) % len(rotationOrder)
       if lastSlabLinks[direction] \
-        and 0 <= lastStep[x] + vector[x] < 3 and 0 <= lastStep[y] + vector[y] < 3 \
+        and 0 <= lastStep[x] + vector[x] <= 3 and 0 <= lastStep[y] + vector[y] <= 3 \
         and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]] is not None \
         and board[lastStep[y] + vector[y]][lastStep[x] + vector[x]].applyRotation()[compDirection] \
-        and not apply(steps, lambda prev, curr: prev or (curr[x] == lastStep[x] + vector[x] and curr[y] == lastStep[y] + vector[y]), False):
+        and findByFunc(steps, lambda opt, i, li: (opt[x] == lastStep[x] + vector[x] and opt[y] == lastStep[y] + vector[y])) is None:
           res.append([lastStep[x] + vector[x], lastStep[y] + vector[y]])
 
     return res
@@ -97,9 +97,10 @@ class Player:
       wayCandidate = self.getBestWay(steps + [nextOpt])
       wayCandidateMark = self.rateSteps(wayCandidate)
 
-      if bestWayMark > wayCandidateMark:
+      if bestWayMark == None or bestWayMark > wayCandidateMark:
         bestWay = wayCandidate
         bestWayMark = wayCandidateMark
+
     return bestWay
 
 

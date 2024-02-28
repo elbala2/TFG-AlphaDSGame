@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { acceptTrade, clearCardConfig, setCardConfig, clearSelected, selectSlab, setCardSelected } from '../../stores/gameStore/actions';
-
+import { acceptTrade, clearCardConfig, setCardConfig, clearSelected, setCardSelected } from '../../stores/gameStore/actions';
 
 import styles from './tradeModal.module.scss';
 import { TradeBotCards, TradeCards } from '../../utils/ApiConf';
@@ -23,6 +22,7 @@ const TradeBotModal = ({
   actualPlayer,
   selectSlab,
   dictionary,
+  whereIsPilar,
 }) => {
   const { id } = useParams();
   const [step, setStep] = useState(0);
@@ -114,7 +114,22 @@ const TradeBotModal = ({
         </div>
         <div className='d-flex align-items-center pt-3'>
           <div className='flex-fill' />
-          {tradePlayer.type === 0 ? (
+          {(tradePlayer.type === 1 || whereIsPilar === tradePlayer.id) ? (
+            <>
+              {offerStatus && (
+                <p className='mx-3 my-0'>
+                  {offerStatus === 'ACCEPTED' ? dictionary.offerAccepted : dictionary.offerDenied }
+                </p>
+              )}
+              <Button
+                variants='primary'
+                onClick={handleTradeBot}
+                disabled={!!offerStatus}
+              >
+                {dictionary.processOffer}
+              </Button>
+            </>
+          ) : (
             <>
               <Button
                 variants='outlined secondary'
@@ -134,20 +149,6 @@ const TradeBotModal = ({
                 {dictionary.accept}
               </Button>
             </>
-          ) : (
-            <>
-              {offerStatus && (
-                <p className='mx-3 my-0'>
-                  {offerStatus === 'ACCEPTED' ? dictionary.offerAccepted : dictionary.offerDenied }
-                </p>
-              )}
-              <Button
-                variants='primary'
-                onClick={handleTradeBot}
-              >
-                {dictionary.processOffer}
-              </Button>
-            </>
           )}
         </div>
       </div>
@@ -162,6 +163,7 @@ function stateToProps(state) {
       ...state.lang.dictionary.utils,
     },
 
+    whereIsPilar: state.game.whereIsPilar,
     players: [...state.game.players],
     actualPlayer: state.game.actualPlayer,
     cardConfig: state.game.cardConfig,

@@ -73,3 +73,11 @@ export function TradeBotCards(id, playerId, blockedCards, requestedCards, slab) 
     slab,
   });
 }
+
+export function AskTradeCards(id, player1, tradePlayer) {
+  return ApiCallBack('PUT', `/game/${id}/bot/${tradePlayer.id}/ask-offer`,
+  {
+    cards1: player1.cards.filter(f => f.selected),
+    cards2: tradePlayer.cards.filter(f => f.selected),
+  });
+}

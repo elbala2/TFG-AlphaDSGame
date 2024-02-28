@@ -73,10 +73,14 @@ class Bot:
       mark += self.dirMark(links[direction] == 1, [pos[x] + vector[x], pos[y] + vector[y]], compDirection, board)
     return mark
 
-  def computeSlab(self, slab):
+  def computeSlab(self, slab, specificCards):
     best = None
     if self.player.canBuySlab(None, slab.costs, slab.type):
-      cards = self.player.getCards(slab)
+      if specificCards != None:
+        cards = specificCards
+      else:
+        cards = self.player.getCards(slab)
+
       for place in self.player.getPossiblePlaces(slab):
         mark = self.getMark(slab, place, self.player.board)
         if best == None or mark < best['mark']:
@@ -89,18 +93,18 @@ class Bot:
           }
     return best
 
-  def getPossibleSlabsToBuy(self):
+  def getPossibleSlabsToBuy(self, cards = None):
     best = None
     for slabIndex in range(len(self.game.normalMarket)):
       slab = self.game.normalMarket[slabIndex]
-      opt = self.computeSlab(slab)
+      opt = self.computeSlab(slab, cards)
       if opt != None and (best == None or opt['mark'] < best['mark']):
         best = opt
 
     for slabIndex in range(4, len(self.game.specialMarket) + 4):
       slab = self.game.specialMarket[slabIndex - 4]
       if not slab.isRisk and slab.type == self.player.color:
-        opt = self.computeSlab(slab)
+        opt = self.computeSlab(slab, cards)
         if opt != None and (best == None or opt['mark'] < best['mark']):
           best = opt
       
@@ -284,5 +288,22 @@ class Bot:
     return {
       'status': 'ACCEPTED',
       'selected': playerOption['cardIds'],
+    }
+    
+  def askOffer(self, actualPlayer, tradePlayer, actualPlayerCards, tradePlayerCards):
+    self.player = tradePlayer
+    
+    slabToBuy = self.getPossibleSlabsToBuy()
+    tradeSlabToBuy = self.getPossibleSlabsToBuy(list(filter(lambda c: findIndexById(tradePlayerCards, c) == -1, self.player.cards)) + actualPlayerCards)
+
+    if findIndex(self.game.players, actualPlayer) > findIndex(self.game.players, tradePlayer) \
+      or slabToBuy == None \
+      or slabToBuy != None and tradeSlabToBuy != None and slabToBuy['mark'] <= tradeSlabToBuy['mark']:
+      return {
+        'status': 'ACCEPTED',
+      }
+
+    return {
+      'status': 'DENIED',
     }
 

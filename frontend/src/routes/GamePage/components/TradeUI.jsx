@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { useParams } from 'react-router-dom';
 
 import { acceptTrade, clearSelected } from '../../../stores/gameStore/actions';
-import { TradeCards } from '../../../utils/ApiConf';
+import { AskTradeCards, TradeCards } from '../../../utils/ApiConf';
 
 import Cards from '../../../components/Cards';
 import { PlayerContext } from '../../../components/PlayerProvider';
@@ -23,6 +23,7 @@ function TradeUI({
   onCancel,
   players,
   dictionary,
+  whereIsPilar,
 
   acceptTrade,
   clearSelected,
@@ -32,9 +33,41 @@ function TradeUI({
   const tradePlayers = players.filter(p => p.id !== player.id)
 
   const [selectedPlayer, setSelectedPlayer] = useState();
+  const [offerStatus, setOfferStatus] = useState();
   const [onTrade, setOnTrade] = useState(false);
 
   const selectedTradePlayer = tradePlayers.find(p => p.cards.find(c => c.selected))
+
+  function handleCloseModal() {
+    setOnTrade(false);
+    setOfferStatus();
+  }
+
+  function handleTrade() {
+    TradeCards(id, player, selectedTradePlayer)
+      .then((res) => {
+        acceptTrade(res);
+        clearSelected();
+        setOnTrade(false);
+        onCancel();
+      })
+  }
+
+  async function handleTradeBot() {
+    await AskTradeCards(id, player, selectedTradePlayer)
+      .then((res) => {
+        setOfferStatus(res.status);
+        setTimeout(() => {
+          if (res.status === 'ACCEPTED') {
+            handleTrade();
+          } else {
+            handleCloseModal();
+            clearSelected();
+            onCancel();
+          }
+        }, 1500)
+      })
+  }
 
   return (
     <div className={`${mainStyles.halfCard} col-lg-6`}>
@@ -102,7 +135,7 @@ function TradeUI({
       </div>
       <Modal
         isOpen={onTrade}
-        onClose={() => setOnTrade(false)}
+        onClose={handleCloseModal}
         title={dictionary.trade}
       >
         <p>{dictionary.onTradeAcceptQst}</p>
@@ -139,31 +172,41 @@ function TradeUI({
             ))}
           </div>
         </div>
-        <div className='d-flex pt-3'>
+        <div className='d-flex align-items-center pt-3'>
           <div className='flex-fill' />
-          <Button
-            variants='secondary'
-            className='me-3'
-            onClick={() => {
-              setOnTrade(false);
-              onCancel();
-            }}
-          >
-            {dictionary.cancel}
-          </Button>
-          <Button
-            onClick={() => {
-              TradeCards(id, player, selectedTradePlayer)
-                .then((res) => {
-                  acceptTrade(res);
-                  clearSelected();
-                  setOnTrade(false);
+          {(selectedTradePlayer?.type === 1 || whereIsPilar === selectedTradePlayer?.id) ? (
+            <>
+              {offerStatus && (
+                <p className='mx-3 my-0'>
+                  {offerStatus === 'ACCEPTED' ? dictionary.offerAccepted : dictionary.offerDenied }
+                </p>
+              )}
+              <Button
+                disabled={!!offerStatus}
+                onClick={handleTradeBot}
+              >
+                {dictionary.processOffer}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                variants='secondary'
+                className='me-3'
+                onClick={() => {
                   onCancel();
-                })
-            }}
-          >
-            {dictionary.accept}
-          </Button>
+                  handleCloseModal();
+                }}
+              >
+                {dictionary.cancel}
+              </Button>
+              <Button
+                onClick={handleTrade}
+              >
+                {dictionary.accept}
+              </Button>
+            </>
+          )}
         </div>
       </Modal>
     </div>
@@ -172,6 +215,7 @@ function TradeUI({
 
 TradeUI.propTypes = {
   onCancel: PropTypes.func.isRequired,
+  whereIsPilar: PropTypes.string.isRequired,
   tradePlayers: PropTypes.array.isRequired,
   player: PropTypes.object.isRequired,
   dictionary: PropTypes.object.isRequired,
@@ -183,6 +227,7 @@ TradeUI.propTypes = {
 function mapStateToProps(state) {
   return ({
     players: state.game.players,
+    whereIsPilar: state.game.whereIsPilar,
 
     dictionary: {
       ...state.lang.dictionary.tradeModal,
