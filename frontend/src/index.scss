@@ -1,0 +1,146 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#draggedImg {
+  opacity: 1;
+}
+
+:root {
+  --primary: #016a26;
+  --secondary: #8d0303;
+  --danger: #8d0303;
+  --dangerAccentColor: #cb8b02;
+  --warningColor: #cb8b02;
+  --accentColor: #fcfcfc;
+
+  --slabSize: 10rem;
+  --marketSlabSize: 8rem;
+  --marketBGColor: #016a25;
+  --darkerMarketBGColor: #004016;
+  --riskBGColor: #d9dad9;
+
+  --cardHeight: 330px;
+  --cardWidth: 190px;
+
+  --mediumCardHeight: 250px;
+  --mediumCardWidth: 140px;
+  
+  --smallCardHeight: 200px;
+  --smallCardWidth: 120px;
+
+  --playerRed: #ff9999b3;
+  --playerGreen: #99ff99b3;
+  --playerBlue: #9999ffb3;
+  --playerYellow: #fff099b3;
+
+  --bgGreen: #9eef65;
+  --bgLigthGrey: #d9d9d99c;
+  --bgGrey: #b3b3b39c;
+
+  --maxHeigth: 91vh;
+}
+
+.alertCircle {
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+#modal {
+  position: fixed;
+  top: 0px;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.w-max {
+  width: max-content;
+}
+
+.bgColor {
+  &[type='RED'] {
+    background-color: var(--playerRed);
+  }
+  &[type='GREEN']  {
+    background-color: var(--playerGreen);
+  }
+  &[type='BLUE'] {
+    background-color: var(--playerBlue);
+  }
+  &[type='YELLOW']  {
+    background-color: var(--playerYellow);
+  }
+}
+
+.viewPage {
+  height: var(--maxHeigth);
+}
+
+.playerIn {
+  position: absolute;
+  
+  animation-name: in;
+  animation-delay: 0s;
+  animation-duration: 0.5s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+}
+
+.playerOut {
+  position: absolute;
+
+  animation-name: out;
+  animation-delay: 0s;
+  animation-duration: 0.5s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+}
+
+@keyframes out {
+  0% {
+    top: 0%;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes in {
+  0% {
+    top: -100%;
+  }
+
+  100% {
+    top: 0%;
+  }
+}
+
+.scale {
+  @for $i from 1 through 100 {
+    &-#{$i} {
+      width: auto;
+      height: calc(#{$i}px * 5);
+    }
+  }
+}
+
+.svg-shadow-md {
+  filter: drop-shadow(0 .5rem 1rem rgba(0,0,0,.15));
+}

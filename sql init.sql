@@ -1,14 +1,20 @@
-drop database tfg;
-
+drop database if EXISTS tfg;
 create database tfg;
 
-drop table tfg.games;
-
+drop table if EXISTS tfg.games;
 create table tfg.Games (
-  gameId int primary key not null AUTO_INCREMENT,
-  gameState blob
+  id VARCHAR(40) primary key not null,
+  type VARCHAR(40) not NULL,
+  riskNumber int not NULL,
+  nextBotAction int not NULL,
+  actualPlayer VARCHAR(40) not NULL,
+  whereIsPilar VARCHAR(40) not NULL,
+  finished BOOLEAN not NULL,
+  slabs JSON not NULL,
+  normalMarket JSON not NULL,
+  specialMarket JSON not NULL,
+  players JSON not NULL,
+  cards JSON not NULL
 );
-
-ALTER TABLE tfg.Games AUTO_INCREMENT = 1;
 
 select * from tfg.Games;
