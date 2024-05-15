@@ -13,7 +13,7 @@ class GameService():
       connection = connectMySQL()
       cursor = connection.cursor(buffered = True)
       cursor.execute(
-        'insert into tfg.Games values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);',
+        'insert into tfg.games values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);',
         [
           game.id,
           game.type,

@@ -1,16 +1,12 @@
 # Requirements
 - node 18
-- all react packages
-- python
-- virtualenv 'pip install virtualenv'
-- flask 'pip install Flask'
-- flask cors 'pip install -U flask-cors'
-- pip install python-dotenv
-- pip install python-decouple
-- mysql-connector 'pip install mysql-connector-python'
 
-    \sql
-    \connect root@localhost
+- use 'pip install virtualenv flask flask-cors python-dotenv python-decouple mysql-connector-python' to install all python dependencies
 
-
-.\venv\Scripts\activate
+### It is necesary to create a .env file inside the folder called 'backend'
+This file must have this variables declared:
+FRONT_URLS=""
+DB_HOST=""
+DB_USER=""
+DB_PASSWORD=""
+DB_NAME=""

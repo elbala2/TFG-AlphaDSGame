@@ -2,7 +2,7 @@ drop database if EXISTS tfg;
 create database tfg;
 
 drop table if EXISTS tfg.games;
-create table tfg.Games (
+create table tfg.games (
   id VARCHAR(40) primary key not null,
   type VARCHAR(40) not NULL,
   riskNumber int not NULL,
@@ -17,4 +17,4 @@ create table tfg.Games (
   cards JSON not NULL
 );
 
-select * from tfg.Games;
+select * from tfg.games;
